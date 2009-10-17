@@ -53,10 +53,18 @@
 	_matrixUniformIndex = [glProgram getUniformLocation:"mvMatrix"];
 	
 	// Define vertex and color data 
-	var vertexArray = [  0.0,  0.5,  2,
-	                    -0.5, -0.5,  2,
-	                     0.5, -0.5,  2  ];
+	var vertexArray = [   0.0,  0.5,  0,
+	                     -0.5, -0.5,  0,
+	                      0.5, -0.5,  0  ];
 	
+	var vertexArray2 = [   0.0,  0.5,  0.0,
+		                      0.0, -0.5, -0.5,
+		                      0.0, -0.5,  0.5  ];
+
+	var vertexArray3 = [   0.0, 0.0,  0.5,
+	                      -0.5, 0.0, -0.5,
+	                       0.5, 0.0, -0.5  ];
+
 	var colorArray = [  1.0, 0.0, 0.0, 1.0,
 	                    0.0, 1.0, 0.0, 1.0,
 	                    0.0, 0.0, 1.0, 1.0];
@@ -72,7 +80,9 @@
 
 	[_glContext reshape:[glView width] height:[glView height]];
 
-	var perspectiveMatrix = [[GLMatrix alloc] initWithLookat:0 eyey:1 eyez:5 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	var perspectiveMatrix = [[GLMatrix alloc] initWithLookat:0 eyey:1 eyez:-2 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+//	var perspectiveMatrix = [[GLMatrix alloc] initWithLookat2:0 eyey:2 eyez:0.01 centerx:0 centery:0 centerz:0];
+	
 	[perspectiveMatrix perspective:60 aspect:[glView width]/[glView height] zNear:1 zFar:10000];
     
 	[_glContext setUniformMatrix:[glProgram getUniformLocation:"pMatrix"] matrix:perspectiveMatrix];
@@ -93,12 +103,12 @@
 
 - (void)draw {
 	var mvMatrix = [[GLMatrix alloc] initWithRotation:_angle x:0 y:1 z:0];
-	
-	// Set rotation matrix
-	[_glContext setUniformMatrix:_matrixUniformIndex matrix:mvMatrix];
 
 	// Clear context
 	[_glContext clearBuffer];
+	
+	// Set rotation matrix
+	[_glContext setUniformMatrix:_matrixUniformIndex matrix:mvMatrix];
 
 	// Bind buffers to attributes
 	[_glContext bindBufferToAttribute:_vertexBufferIndex attributeIndex:_vertexAttributeIndex size:3];

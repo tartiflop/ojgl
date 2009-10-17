@@ -42,6 +42,16 @@
     _gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
 }
 
+- (void)introspect {
+	for (var property in _gl) {
+		if (typeof(_gl[property]) != "undefined") {
+			if (typeof(_gl[property]) == "function") {
+				CPLog.info(property)
+			}
+		}
+	}
+}
+
 - (int)createBufferFromArray:(Array)array {
 	// set up buffer to store array
 	var bufferIndex = _gl.createBuffer();
