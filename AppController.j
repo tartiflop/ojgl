@@ -81,7 +81,6 @@
 	[_glContext reshape:[glView width] height:[glView height]];
 
 	var perspectiveMatrix = [[GLMatrix alloc] initWithLookat:0 eyey:1 eyez:-2 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
-//	var perspectiveMatrix = [[GLMatrix alloc] initWithLookat2:0 eyey:2 eyez:0.01 centerx:0 centery:0 centerz:0];
 	
 	[perspectiveMatrix perspective:60 aspect:[glView width]/[glView height] zNear:1 zFar:10000];
     
