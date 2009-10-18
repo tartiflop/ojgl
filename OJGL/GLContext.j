@@ -36,6 +36,10 @@
 	_gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
 	_gl.enable(_gl.DEPTH_TEST);
 
+	_gl.frontFace(_gl.CW);
+	_gl.enable(_gl.CULL_FACE);
+	_gl.cullFace(_gl.BACK);
+
 }
 
 - (void)clearBuffer {
@@ -45,9 +49,9 @@
 - (void)introspect {
 	for (var property in _gl) {
 		if (typeof(_gl[property]) != "undefined") {
-			if (typeof(_gl[property]) == "function") {
+	//		if (typeof(_gl[property]) == "function") {
 				CPLog.info(property)
-			}
+	//		}
 		}
 	}
 }
