@@ -4,15 +4,16 @@
 @implementation GLContext : CPObject {
 
 	DOMElement _gl;
+	CPString _platform;
 	
 }
 
-- (id)initWithGL:(DOMElement)gl {
+- (id)initWithGL:(DOMElement)gl platform:(CPString)platform {
 	self = [super init];
 	
 	if (self) {
 		_gl = gl;
-		
+		_platform = platform;
 	}
 	
 	return self;
@@ -21,7 +22,6 @@
 - (GLProgram)createProgram {
 	
 	return [[GLProgram alloc] initWithGL:_gl];
-	
 }
 
 - (void)useProgram:(GLProgram)program {
@@ -32,14 +32,31 @@
 - (void)prepare:(Array)clearColor clearDepth:(float)clearDepth {
 
 	_gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-	_gl.clearDepth(clearDepth);
+	
+	// possible bug in mozilla ?
+	if (_platform != "mozilla") {
+		_gl.clearDepth(clearDepth);
+	}
 	_gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
 	_gl.enable(_gl.DEPTH_TEST);
 
-	_gl.frontFace(_gl.CW);
+}
+
+- (void)enableBackfaceCulling:(CPString)front {
+
+	if (front == @"CW") {
+		_gl.frontFace(_gl.CW);
+	
+	} else if (front == @"CCW") {
+		_gl.frontFace(_gl.CCW);
+	
+	} else {
+		CPLog.error("GLContext: unrecognised direction for front-facing triangles: " + front);
+		return;
+	}
+
 	_gl.enable(_gl.CULL_FACE);
 	_gl.cullFace(_gl.BACK);
-
 }
 
 - (void)clearBuffer {

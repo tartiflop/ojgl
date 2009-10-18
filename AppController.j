@@ -38,7 +38,8 @@
 	[glView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[glView setCenter:[contentView center]];
 	[contentView addSubview:glView];
-
+	
+	
 	// FPS label
 	_label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
 	[_label setAlignment:CPCenterTextAlignment]; 
@@ -54,14 +55,16 @@
 	// Prepare OpenGL scene
 	[self prepare:glView];
 
+	
 	// Render once
 	[self draw];
-
-	[theWindow orderFront:self];
 
 	// Timer to redraw
 	var timer = [CPTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(run) userInfo:nil repeats:YES]; 
 	var timer = [CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
+	
+	[theWindow orderFront:self];
+
 }
 
 
@@ -72,6 +75,7 @@
 	
 	// Prepare (initialise) context
 	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
+	[_glContext enableBackfaceCulling:@"CW"];
 
 	// Create a new program
 	var glProgram = [_glContext createProgram];

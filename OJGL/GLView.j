@@ -7,6 +7,8 @@
 	DOMElement _DOMCanvasElement;
 	GLContext _gl;
 	
+	CPString _platform;
+	
 }
 
 - (id)initWithFrame:(CGRect)aFrame {
@@ -21,7 +23,7 @@
 		
 		_DOMElement.appendChild(_DOMCanvasElement);
 
-		_gl = [[GLContext alloc] initWithGL:[self _context]];
+		_gl = [[GLContext alloc] initWithGL:[self _context] platform:_platform];
 	}
 	
 	return self;
@@ -56,13 +58,15 @@
 	
 	var gl;
 	try { 
-		gl = _DOMCanvasElement.getContext("webkit-3d"); 
+		gl = _DOMCanvasElement.getContext("webkit-3d");
+		_platform = "webkit";
 		return gl;
 	} catch(e) {
 	}
 
 	try { 
 		gl = _DOMCanvasElement.getContext("moz-webgl"); 
+		_platform = "mozilla";
 	} catch(e) {
 	}
 
