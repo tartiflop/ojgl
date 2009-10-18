@@ -4,13 +4,16 @@
 @import "OJGL/GLView.j"
 @import "OJGL/GLProgram.j"
 @import "OJGL/GLMatrix.j"
+@import "OJGL/GLShadersLoader.j"
 @import "primitives/Sphere.j"
 @import "utils/Framerate.j"
 
 
 @implementation AppController : CPObject {
 	CPLabel _label;
+	GLView _glView;
 	GLContext _glContext;
+	GLShadersLoader _glShadersLoader;
 
 	Sphere _sphere;
 	Framerate _framerate;
@@ -24,20 +27,20 @@
 	int _matrixUniformIndex;
 	
 	float _angle;
-	
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification {
+	
 	
 	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
 							contentView = [theWindow contentView];
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"F4F7E1"]];
 	
 	// Create GL View
-	var glView = [[GLView alloc] initWithFrame:CGRectMake(0, 0, 480, 320)];
-	[glView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
-	[glView setCenter:[contentView center]];
-	[contentView addSubview:glView];
+	_glView = [[GLView alloc] initWithFrame:CGRectMake(0, 0, 480, 320)];
+	[_glView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
+	[_glView setCenter:[contentView center]];
+	[contentView addSubview:_glView];
 	
 	
 	// FPS label
@@ -52,26 +55,19 @@
 	// Framerate
 	_framerate = [[Framerate alloc] init];
 
-	// Prepare OpenGL scene
-	[self prepare:glView];
+	// Load vertex and fragment shader source and prepare scene when completed
+	_glShadersLoader = [[GLShadersLoader alloc] initWithShader:"Resources/vertexShader.glsl" fragmentShaderURL:"Resources/fragmentShader.glsl" target:self onComplete:@selector(prepare)];
 
-	
-	// Render once
-	[self draw];
-
-	// Timer to redraw
-	var timer = [CPTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(run) userInfo:nil repeats:YES]; 
+	// Add timer for fps label update
 	var timer = [CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 	
 	[theWindow orderFront:self];
-
 }
 
-
-- (void)prepare:(GLView)glView {
+- (void)prepare {
 
 	// Get the OpenGL Context
-	_glContext = [glView glContext];
+	_glContext = [_glView glContext];
 	
 	// Prepare (initialise) context
 	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
@@ -81,8 +77,8 @@
 	var glProgram = [_glContext createProgram];
 	
 	// Add shaders to program and link
-	[glProgram addShaderScript:"vertexshader"];
-	[glProgram addShaderScript:"fragmentshader"];
+	[glProgram addShaderText:[_glShadersLoader vertexShader] shaderType:GL_VERTEX_SHADER];
+	[glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
 	[glProgram linkProgram];
    
 	// Get attribute indices
@@ -106,12 +102,18 @@
 	_indicesBufferIndex = [_glContext createBufferFromElementArray:[_sphere indexData]];
 	
 	// reshape 
-	[_glContext reshape:[glView width] height:[glView height]];
+	[_glContext reshape:[_glView width] height:[_glView height]];
 
 	// Set up camera position and perspective
 	var perspectiveMatrix = [[GLMatrix alloc] initWithLookat:0 eyey:3 eyez:-2 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
-	[perspectiveMatrix perspective:60 aspect:[glView width]/[glView height] zNear:1 zFar:10000];
+	[perspectiveMatrix perspective:60 aspect:[_glView width]/[_glView height] zNear:1 zFar:10000];
 	[_glContext setUniformMatrix:perspectiveUniformIndex matrix:perspectiveMatrix];
+	
+	// Render once
+	[self draw];
+
+	// Timer to redraw
+	var timer = [CPTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(run) userInfo:nil repeats:YES]; 
 }
 
 - (void)draw {
@@ -144,6 +146,7 @@
 	// update framerate
 	[_framerate tick];
 }
+
 - (void)fps {
 	[_label setStringValue:@"fps : " + [_framerate fps]];
 	[_label sizeToFit];

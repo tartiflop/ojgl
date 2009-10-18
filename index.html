@@ -15,36 +15,6 @@
 
         <title>NewApplication</title>
 
-<script id="fragmentshader" type="x-shader/x-fragment">
-	varying vec4 vColor;
- 
-	void main(void) {
-		gl_FragColor = vColor;
-	}
-</script>
-
-<script id="vertexshader2" type="x-shader/x-vertex" src="vertexShader.gl">
-</script>
-
-<script id="vertexshader" type="x-shader/x-vertex">
-	// model view matrix
-	uniform mat4 mvMatrix;
-
-	// perspective matrix
-	uniform mat4 pMatrix;
-
-	attribute vec4 aVertex;
-	attribute vec4 aColor;
-
-	varying vec4 vColor;
-
-	void main(void) {
-		vColor = aColor;
-//		vColor = vec4(1.0, 0.0, 0.0, 1.0);
-		gl_Position = pMatrix * mvMatrix * aVertex;
-	}
-</script>
-
         <script type = "text/javascript">
             OBJJ_MAIN_FILE = "main.j";
         </script>
