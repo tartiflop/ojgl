@@ -63,11 +63,26 @@
 	return bufferIndex;
 }
 
+- (int)createBufferFromElementArray:(Array)array {
+	// set up buffer to store array
+	var bufferIndex = _gl.createBuffer();
+	_gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, bufferIndex);
+	
+	// Copy data from local memory
+	_gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, new CanvasUnsignedShortArray(array), _gl.STATIC_DRAW);
+	
+	return bufferIndex;
+}
+
 - (void)bindBufferToAttribute:(int)bufferIndex attributeIndex:(int)attributeIndex size:(int)size {
 	// Enable attribute array and bind to buffer data 
 	_gl.enableVertexAttribArray(attributeIndex);
 	_gl.bindBuffer(_gl.ARRAY_BUFFER, bufferIndex);
 	_gl.vertexAttribPointer(attributeIndex, size, _gl.FLOAT, false, 0, 0);
+}
+
+- (void)bindElementBuffer:(int)bufferIndex {
+	_gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, bufferIndex);
 }
 
 - (void)setUniformMatrix:(int)uniformIndex matrix:(GLMatrix)matrix {
@@ -77,6 +92,12 @@
 
 - (void)draw {
 	_gl.drawArrays(_gl.TRIANGLES, 0, 3);
+	
+	_gl.flush();
+}
+
+- (void)drawElements:(int)size {
+	_gl.drawElements(_gl.TRIANGLES, size, _gl.UNSIGNED_SHORT, 0);
 	
 	_gl.flush();
 }

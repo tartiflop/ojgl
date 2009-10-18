@@ -22,7 +22,10 @@
 		gl_FragColor = vColor;
 	}
 </script>
- 
+
+<script id="vertexshader2" type="x-shader/x-vertex" src="vertexShader.gl">
+</script>
+
 <script id="vertexshader" type="x-shader/x-vertex">
 	// model view matrix
 	uniform mat4 mvMatrix;
@@ -37,6 +40,7 @@
 
 	void main(void) {
 		vColor = aColor;
+//		vColor = vec4(1.0, 0.0, 0.0, 1.0);
 		gl_Position = pMatrix * mvMatrix * aVertex;
 	}
 </script>
