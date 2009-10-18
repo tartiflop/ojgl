@@ -37,7 +37,7 @@
 	_indexData = [];
 
 	for (var latNumber = 0; latNumber <= _lats; ++latNumber) {
-		for (var longNumber = 0; longNumber <= _longs; ++longNumber) {
+		for (var longNumber = 0; longNumber < _longs; ++longNumber) {
 			var theta = latNumber * Math.PI / _lats;
 			var phi = longNumber * 2 * Math.PI / _longs;
 			
@@ -61,19 +61,21 @@
 		}
 	}
 
-	var longs = _longs + 1;
-	for (var latNumber = 0; latNumber < _lats; ++latNumber) {
-		for (var longNumber = 0; longNumber < longs; ++longNumber) {
-			var first = (latNumber * longs) + (longNumber % longs);
-			var second = first + longs;
+	for (var latNumber = 0; latNumber < _lats; latNumber++) {
+		for (var longNumber = 0; longNumber < _longs; longNumber++) {
+			
+			var first = (latNumber * _longs) + longNumber;
+			var second = first + _longs;
+			var third = (latNumber * _longs) + ((longNumber + 1) % _longs);
+			var fourth = third + _longs;
 			
 			_indexData.push(first);
 			_indexData.push(second);
-			_indexData.push(first+1);
+			_indexData.push(third);
 
 			_indexData.push(second);
-			_indexData.push(second+1);
-			_indexData.push(first+1);
+			_indexData.push(fourth);
+			_indexData.push(third);
 		}
 	}
 
