@@ -61,6 +61,7 @@
 
 	// Timer to redraw
 	var timer = [CPTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(run) userInfo:nil repeats:YES]; 
+	var timer = [CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 }
 
 
@@ -138,7 +139,10 @@
 
 	// update framerate
 	[_framerate tick];
+}
+- (void)fps {
 	[_label setStringValue:@"fps : " + [_framerate fps]];
 	[_label sizeToFit];
 }
+
 @end
