@@ -50,9 +50,9 @@
 			var y = cosTheta;
 			var z = sinPhi * sinTheta;
 			
-			_geometryData.push(_radius * x + Math.random()-0.5);
-			_geometryData.push(_radius * y + Math.random()-0.5);
-			_geometryData.push(_radius * z + Math.random()-0.5);
+			_geometryData.push(_radius * x + Math.random()/2-0.25);
+			_geometryData.push(_radius * y + Math.random()/2-0.25);
+			_geometryData.push(_radius * z + Math.random()/2-0.25);
 			
 			_colorData.push(Math.random());
 			_colorData.push(Math.random());
