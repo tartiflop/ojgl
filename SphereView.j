@@ -35,7 +35,7 @@
 	
 	// Prepare (initialise) context
 	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
-	[_glContext enableBackfaceCulling:@"CW"];
+	//[_glContext enableBackfaceCulling:@"CW"];
 
 	// Create a new program
 	var glProgram = [_glContext createProgram];
