@@ -24,11 +24,11 @@
 - (id)initWithFrame:(CGRect)aFrame {
         self = [super initWithFrame:aFrame];
 	// Load vertex and fragment shader source and prepare scene when completed
-	_glShadersLoader = [[GLShadersLoader alloc] initWithShader:"Resources/vertexShader.glsl" fragmentShaderURL:"Resources/fragmentShader.glsl" target:self onComplete:@selector(prepareOpenGL)];
+	_glShadersLoader = [[GLShadersLoader alloc] initWithShader:"Resources/vertexShader.glsl" fragmentShaderURL:"Resources/fragmentShader.glsl" target:self onComplete:@selector(loadedShaders)];
 	return self;
 }
 
-- (void)prepareOpenGL {
+- (void)loadedShaders {
 
 	// Get the OpenGL Context
 	_glContext = [self glContext];

@@ -24,11 +24,14 @@
 		_DOMElement.appendChild(_DOMCanvasElement);
 
 		_gl = [[GLContext alloc] initWithGL:[self _context] platform:_platform];
+		[self prepareOpenGL];
 	}
 	
 	return self;
 }
 
+- (void)prepareOpenGL {
+}
 
 - (GLContext)glContext {
 	return _gl;
