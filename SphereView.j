@@ -2,13 +2,13 @@
 @import "OJGL/GLProgram.j"
 @import "OJGL/GLMatrix.j"
 @import "OJGL/GLShadersLoader.j"
-@import "primitives/Sphere.j"
+@import "primitives/SphereBurst.j"
 
 @implementation SphereView : GLView {
 	GLContext _glContext;
 	GLShadersLoader _glShadersLoader;
 
-	Sphere _sphere;
+	SphereBurst _sphere;
 	
 	int _vertexBufferIndex;
 	int _colorBufferIndex;
