@@ -37,7 +37,7 @@
 	var timer = [CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 
 	// Timer to redraw
-	var timer = [CPTimer scheduledTimerWithTimeInterval:1/25 target:self selector:@selector(run) userInfo:nil repeats:YES]; 
+	var timer = [CPTimer scheduledTimerWithTimeInterval:1/25 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 	
 	[theWindow orderFront:self];
 }
@@ -47,6 +47,8 @@
 	[_framerate tick];
 //	[self draw];
 	[_sphereView setNeedsDisplay:YES];
+	// Timer to redraw
+	var timer = [CPTimer scheduledTimerWithTimeInterval:1/25 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 }
 
 - (void)fps {

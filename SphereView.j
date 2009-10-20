@@ -58,7 +58,7 @@
 //	var _sphere = [[Sphere alloc] initWithGeometry:1.5 longs:300 lats:300];
 
 	// Create a modest sphere
-	var _sphere = [[Sphere alloc] initWithGeometry:1.5 longs:50 lats:50];
+	var _sphere = [[Sphere alloc] initWithGeometry:1.5 longs:25 lats:25];
 	
 	// Create and initialise buffer data
 	_vertexBufferIndex = [_glContext createBufferFromArray:[_sphere geometryData]];
