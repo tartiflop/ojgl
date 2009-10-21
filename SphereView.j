@@ -2,14 +2,14 @@
 @import "OJGL/GLProgram.j"
 @import "OJGL/GLShadersLoader.j"
 @import "OJGL/GLU.j"
-@import "primitives/SphereBurst.j"
+@import "primitives/Sphere.j"
 @import "math/Matrix3D.j"
 
 @implementation SphereView : GLView {
 	GLContext _glContext;
 	GLShadersLoader _glShadersLoader;
 
-	SphereBurst _sphere;
+	Sphere _sphere;
 	
 	int _vertexBufferIndex;
 	int _colorBufferIndex;
@@ -36,7 +36,8 @@
 	
 	// Prepare (initialise) context
 	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
-	//[_glContext enableBackfaceCulling:@"CW"];
+	//[_glContext setFrontFaceWinding:@"CW"];
+	[_glContext enableBackfaceCulling];
 
 	// Create a new program
 	var glProgram = [_glContext createProgram];
@@ -59,7 +60,7 @@
 //	var _sphere = [[Sphere alloc] initWithGeometry:1.5 longs:300 lats:300];
 
 	// Create a modest sphere
-	var _sphere = [[SphereBurst alloc] initWithGeometry:2 longs:25 lats:25];
+	var _sphere = [[Sphere alloc] initWithGeometry:2 longs:25 lats:25];
 	
 	// Create and initialise buffer data
 	_vertexBufferIndex = [_glContext createBufferFromArray:[_sphere geometryData]];

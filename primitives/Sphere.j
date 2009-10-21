@@ -71,12 +71,12 @@
 			var fourth = third + _longs;
 			
 			_indexData.push(first);
-			_indexData.push(second);
 			_indexData.push(third);
+			_indexData.push(second);
 
 			_indexData.push(second);
-			_indexData.push(fourth);
 			_indexData.push(third);
+			_indexData.push(fourth);
 		}
 	}
 

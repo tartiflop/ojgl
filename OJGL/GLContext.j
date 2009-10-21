@@ -42,18 +42,22 @@
 
 }
 
-- (void)enableBackfaceCulling:(CPString)front {
+- (void)setFrontFaceWinding:(CPString)winding {
 
-	if (front == @"CW") {
+	if (winding == @"CW") {
 		_gl.frontFace(_gl.CW);
 	
-	} else if (front == @"CCW") {
+	} else if (winding == @"CCW") {
 		_gl.frontFace(_gl.CCW);
 	
 	} else {
-		CPLog.error("GLContext: unrecognised direction for front-facing triangles: " + front);
+		CPLog.error("GLContext: unrecognised winding for front-facing triangles: " + winding);
 		return;
 	}
+	
+}
+
+- (void)enableBackfaceCulling {
 
 	_gl.enable(_gl.CULL_FACE);
 	_gl.cullFace(_gl.BACK);
