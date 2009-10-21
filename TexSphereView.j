@@ -60,8 +60,8 @@
 	var perspectiveUniformLocation = [glProgram getUniformLocation:"pMatrix"];
 
 	// Set up the texture sampler
-	[_glContext setUniformSampler:[glProgram getUniformLocation:"sTexture"]];
 	[_glContext enableTexture];
+	[_glContext setUniformSampler:[glProgram getUniformLocation:"sTexture"]];
 	
 	// Set program to be used
 	[_glContext useProgram:glProgram];

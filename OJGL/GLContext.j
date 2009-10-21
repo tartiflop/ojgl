@@ -141,7 +141,7 @@
 }
 
 - (void)setUniformSampler:(int)samplerIndex {
-	_gl.uniform1i(samplerIndex);
+	_gl.uniform1i(samplerIndex, 0);
 }
 
 
