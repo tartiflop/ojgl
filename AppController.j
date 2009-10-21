@@ -1,11 +1,12 @@
 @import <Foundation/CPObject.j>
 @import <Foundation/CPRunLoop.j>
 @import "utils/Framerate.j"
+@import "TexSphereView.j"
 @import "SphereView.j"
 
 @implementation AppController : CPObject {
 	CPLabel _label;
-	SphereView _sphereView;
+	TexSphereView _sphereView;
 	Framerate _framerate;
 }
 
@@ -17,7 +18,7 @@
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"F4F7E1"]];
 	
 	// Create GL View
-	_sphereView = [[SphereView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	_sphereView = [[TexSphereView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
 	[_sphereView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[_sphereView setCenter:[contentView center]];
 	[contentView addSubview:_sphereView];

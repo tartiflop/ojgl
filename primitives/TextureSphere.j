@@ -9,7 +9,6 @@
 	Array _geometryData;
 	Array _normalData;
 	Array _texCoordData;
-	Array _colorData;
 	Array _indexData;
 }
 
@@ -37,7 +36,6 @@
 	_geometryData = [];
 	_normalData = [];
 	_texCoordData = [];
-	_colorData = [];
 	_indexData = [];
 
 	
@@ -67,11 +65,6 @@
 			
 			_texCoordData.push(u);
 			_texCoordData.push(v);
-			
-			_colorData.push(Math.random());
-			_colorData.push(Math.random());
-			_colorData.push(Math.random());
-			_colorData.push(1.0);
 		}
 	}
 
@@ -105,10 +98,6 @@
 
 - (Array)texCoordData {
 	return _texCoordData;
-}
-
-- (Array)colorData {
-	return _colorData;
 }
 
 - (Array)indexData {

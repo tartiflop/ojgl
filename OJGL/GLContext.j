@@ -63,6 +63,10 @@
 	_gl.cullFace(_gl.BACK);
 }
 
+- (void)enableTexture {
+	_gl.enable(_gl.TEXTURE_2D);
+}
+
 - (void)clearBuffer {
     _gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
 }
@@ -99,19 +103,45 @@
 	return bufferIndex;
 }
 
-- (void)bindBufferToAttribute:(int)bufferIndex attributeIndex:(int)attributeIndex size:(int)size {
+- (int)createTextureFromImage:(Image)image {
+	var textureIndex = _gl.createTexture();
+	   
+    _gl.enable(_gl.TEXTURE_2D);
+    _gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
+    _gl.texImage2D(_gl.TEXTURE_2D, 0, image);
+    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.LINEAR);
+    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.LINEAR_MIPMAP_LINEAR);
+    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, _gl.CLAMP_TO_EDGE);
+    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, _gl.CLAMP_TO_EDGE);
+    _gl.generateMipmap(_gl.TEXTURE_2D)
+    _gl.bindTexture(_gl.TEXTURE_2D, 0);
+    
+    return textureIndex;
+}
+
+
+- (void)bindBufferToAttribute:(int)bufferIndex attributeLocation:(int)attributeLocation size:(int)size {
 	// Enable attribute array and bind to buffer data 
-	_gl.enableVertexAttribArray(attributeIndex);
+	_gl.enableVertexAttribArray(attributeLocation);
 	_gl.bindBuffer(_gl.ARRAY_BUFFER, bufferIndex);
-	_gl.vertexAttribPointer(attributeIndex, size, _gl.FLOAT, false, 0, 0);
+	_gl.vertexAttribPointer(attributeLocation, size, _gl.FLOAT, false, 0, 0);
 }
 
 - (void)bindElementBuffer:(int)bufferIndex {
 	_gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, bufferIndex);
 }
 
+- (void)bindTexture:(int)textureIndex {
+//    _gl.activeTexture(_gl.TEXTURE0);
+	_gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
+}
+
 - (void)setUniformMatrix:(int)uniformIndex matrix:(Matrix3D)matrix {
 	_gl.uniformMatrix4fv(uniformIndex, false, [matrix getAsColumnMajorCanvasFloatArray]);
+}
+
+- (void)setUniformSampler:(int)samplerIndex {
+	_gl.uniform1i(samplerIndex);
 }
 
 
