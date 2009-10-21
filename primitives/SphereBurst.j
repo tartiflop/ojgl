@@ -1,7 +1,7 @@
 @import <Foundation/CPObject.j>
 
 
-@implementation Sphere : CPObject {
+@implementation SphereBurst : CPObject {
 	float _radius;
 	int _longs;
 	int _lats;

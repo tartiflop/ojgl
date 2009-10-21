@@ -1,5 +1,5 @@
 @import <Foundation/CPObject.j>
-@import "GLMatrix.j"
+@import "../math/Matrix3D.j"
 
 @implementation GLContext : CPObject {
 
@@ -106,8 +106,8 @@
 	_gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, bufferIndex);
 }
 
-- (void)setUniformMatrix:(int)uniformIndex matrix:(GLMatrix)matrix {
-	_gl.uniformMatrix4fv(uniformIndex, false, [matrix getAsCanvasFloatArray]);
+- (void)setUniformMatrix:(int)uniformIndex matrix:(Matrix3D)matrix {
+	_gl.uniformMatrix4fv(uniformIndex, false, [matrix getAsColumnMajorCanvasFloatArray]);
 }
 
 

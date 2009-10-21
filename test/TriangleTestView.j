@@ -1,15 +1,15 @@
-@import "OJGL/GLView.j"
-@import "OJGL/GLProgram.j"
-@import "OJGL/GLShadersLoader.j"
-@import "OJGL/GLU.j"
-@import "primitives/SphereBurst.j"
-@import "math/Matrix3D.j"
+@import "../OJGL/GLView.j"
+@import "../OJGL/GLProgram.j"
+@import "../OJGL/GLShadersLoader.j"
+@import "../OJGL/GLU.j"
+@import "../primitives/TriangleTest.j"
+@import "../math/Matrix3D.j"
 
-@implementation SphereView : GLView {
+@implementation TriangleTestView : GLView {
 	GLContext _glContext;
 	GLShadersLoader _glShadersLoader;
 
-	SphereBurst _sphere;
+	TriangleTest _triangleTest;
 	
 	int _vertexBufferIndex;
 	int _colorBufferIndex;
@@ -55,28 +55,25 @@
 	// Set program to be used
 	[_glContext useProgram:glProgram];
 	
-	// Create a whopper sphere
-//	var _sphere = [[Sphere alloc] initWithGeometry:1.5 longs:300 lats:300];
-
-	// Create a modest sphere
-	var _sphere = [[SphereBurst alloc] initWithGeometry:2 longs:25 lats:25];
+	var _triangleTest = [[TriangleTest alloc] init];
 	
 	// Create and initialise buffer data
-	_vertexBufferIndex = [_glContext createBufferFromArray:[_sphere geometryData]];
-	_colorBufferIndex = [_glContext createBufferFromArray:[_sphere colorData]];
-	_indicesBufferIndex = [_glContext createBufferFromElementArray:[_sphere indexData]];
+	_vertexBufferIndex = [_glContext createBufferFromArray:[_triangleTest geometryData]];
+	_colorBufferIndex = [_glContext createBufferFromArray:[_triangleTest colorData]];
+	_indicesBufferIndex = [_glContext createBufferFromElementArray:[_triangleTest indexData]];
 	
 	// reshape 
 	[_glContext reshape:[self width] height:[self height]];
 
-	
-	// Initialise projection matrix
-	var lookat = [GLU lookAt:2 eyey:5 eyez:3 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+
+	// Initialise camera position
+	var lookat = [GLU lookAt:2 eyey:2 eyez:3 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
 
 	var projectionMatrix = [[Matrix3D alloc] init];
 	[projectionMatrix multiply:perspective m2:lookat];
 	[_glContext setUniformMatrix:perspectiveUniformIndex matrix:projectionMatrix];
+	
 }
 
 - (void)drawRect:(CPRect)dirtyRect {
@@ -100,7 +97,7 @@
 	[_glContext bindElementBuffer:_indicesBufferIndex];
  
 	// redraw
-	[_glContext drawElements:[_sphere numberOfElements]];
+	[_glContext drawElements:[_triangleTest numberOfElements]];
 }
 
 @end

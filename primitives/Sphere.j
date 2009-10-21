@@ -36,6 +36,7 @@
 	_colorData = [];
 	_indexData = [];
 
+	
 	for (var latNumber = 0; latNumber <= _lats; ++latNumber) {
 		for (var longNumber = 0; longNumber < _longs; ++longNumber) {
 			var theta = latNumber * Math.PI / _lats;
@@ -79,13 +80,6 @@
 		}
 	}
 
-	/*
-	_geometryData.push(0.0,  0.5,  0);
-	_geometryData.push(-0.5, -0.5,  0);
-	_geometryData.push(0.5, -0.5,  0 );
-
-	_indexData.push(0, 1, 2);
-	*/
 }
 
 - (Array)geometryData {
