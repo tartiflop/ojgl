@@ -1,15 +1,14 @@
 @import "OJGL/GLView.j"
-@import "OJGL/GLProgram.j"
-@import "OJGL/GLShadersLoader.j"
 @import "OJGL/GLU.j"
 @import "OJGL/GLTexture.j"
 @import "primitives/TextureSphere.j"
 @import "math/Matrix3D.j"
+@import "SimpleTexRenderer.j"
 
 @implementation TexSphereView : GLView {
 	GLContext _glContext;
-	GLShadersLoader _glShadersLoader;
-
+	SimpleTexRenderer _renderer;
+	
 	Sphere _sphere;
 	
 	int _vertexBufferId;
@@ -17,54 +16,31 @@
 	int _indicesBufferId;
 	GLTexture _texture;
 	
-	int _vertexAttributeLocation;
-	int _texCoordAttributeLocation;
-	int _matrixUniformLocation;
-	
 	float _angle;
 }
 
 - (id)initWithFrame:(CGRect)aFrame {
 	self = [super initWithFrame:aFrame];
 	
-	// Load vertex and fragment shader source and prepare scene when completed
-	_glShadersLoader = [[GLShadersLoader alloc] initWithShader:"Resources/vertexTextureShader.glsl" fragmentShaderURL:"Resources/fragmentTextureShader.glsl" target:self onComplete:@selector(loadedShaders)];
-	return self;
-}
-
-- (void)loadedShaders {
-	
 	// Get the OpenGL Context
 	_glContext = [self glContext];
 	
+	// Initialise the renderer
+	_renderer = [[SimpleTexRenderer alloc] initWithContext:_glContext];
+	[_renderer load:self onComplete:@selector(rendererReady)]
+	
+	return self;
+}
+
+- (void)rendererReady {
+	
 	// Prepare (initialise) context
 	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
-	//[_glContext setFrontFaceWinding:@"CW"];
 	[_glContext enableBackfaceCulling];
 	[_glContext enableTexture];
 
-	// Create a new program
-	var glProgram = [_glContext createProgram];
-	
-	// Add shaders to program and link
-	[glProgram addShaderText:[_glShadersLoader vertexShader] shaderType:GL_VERTEX_SHADER];
-	[glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
-	[glProgram linkProgram];
-	
 	// Create the texture map from an image
 	_texture = [[GLTexture alloc] initWithFilename:"Resources/mars.jpg" glContext:_glContext];
-
-	// Get attribute locations
-	_vertexAttributeLocation = [glProgram getAttributeLocation:"aVertex"];
-	_texCoordAttributeLocation = [glProgram getAttributeLocation:"aTexCoord"];
-	_matrixUniformLocation = [glProgram getUniformLocation:"mvMatrix"];
-	var perspectiveUniformLocation = [glProgram getUniformLocation:"pMatrix"];
-
-	// Set up the texture sampler
-	[_glContext setUniformSampler:[glProgram getUniformLocation:"sTexture"]];
-	
-	// Set program to be used
-	[_glContext useProgram:glProgram];
 
 	// Create a modest sphere
 	var _sphere = [[TextureSphere alloc] initWithGeometry:2 longs:25 lats:25];
@@ -84,26 +60,25 @@
 	[projectionMatrix multiply:perspective m2:lookat];
 
 	// Set the projection matrix
-	[_glContext setUniformMatrix:perspectiveUniformLocation matrix:projectionMatrix];
+	[_renderer setProjectionMatrix:projectionMatrix];
 	
 }
 
 - (void)drawRect:(CPRect)dirtyRect {
+
+	// Clear context
+	[_glContext clearBuffer];
+
 	// recalculate rotation matrix
 	_angle = _angle + 2 % 360;
 
 	// Get a new rotation matrix
 	var mvMatrix = [[Matrix3D alloc] initWithRotation:_angle x:0 y:1 z:0];
+	[_renderer setModelViewMatrix:mvMatrix];
 
-	// Clear context
-	[_glContext clearBuffer];
-	
-	// Set rotation matrix
-	[_glContext setUniformMatrix:_matrixUniformLocation matrix:mvMatrix];
-
-	// Bind buffers to attributes
-	[_glContext bindBufferToAttribute:_vertexBufferId attributeLocation:_vertexAttributeLocation size:3];
-	[_glContext bindBufferToAttribute:_texCoordBufferId attributeLocation:_texCoordAttributeLocation size:2];
+	// Send the data to the renderer
+	[_renderer setVertexBufferData:_vertexBufferId];
+	[_renderer setTexCoordBufferData:_texCoordBufferId];
 	
 	// Bind element index buffer
 	[_glContext bindElementBuffer:_indicesBufferId];
