@@ -49,7 +49,7 @@
 //	[self draw];
 	[_sphereView setNeedsDisplay:YES];
 	// Timer to redraw
-	//var timer = [CPTimer scheduledTimerWithTimeInterval:1/25 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+	var timer = [CPTimer scheduledTimerWithTimeInterval:1/25 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 }
 
 - (void)fps {
