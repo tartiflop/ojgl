@@ -4,16 +4,13 @@
 @implementation GLContext : CPObject {
 
 	DOMElement _gl;
-	CPString _platform;
-	
 }
 
-- (id)initWithGL:(DOMElement)gl platform:(CPString)platform {
+- (id)initWithGL:(DOMElement)gl {
 	self = [super init];
 	
 	if (self) {
 		_gl = gl;
-		_platform = platform;
 	}
 	
 	return self;
@@ -32,11 +29,14 @@
 - (void)prepare:(Array)clearColor clearDepth:(float)clearDepth {
 
 	_gl.clearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-	
-	// possible bug in mozilla ?
-	if (_platform != "mozilla") {
-		_gl.clearDepth(clearDepth);
+
+	// Differences between mozilla and webkit: mozilla api needs updating
+	if (_gl.clearDepthf) {
+		_gl.clearDepthf(1.0);
+	} else {
+		_gl.clearDepth(1.0);
 	}
+
 	_gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
 	_gl.enable(_gl.DEPTH_TEST);
 
@@ -64,11 +64,12 @@
 }
 
 - (void)enableTexture {
+	_gl.enable(_gl.TEXTURING);
 	_gl.enable(_gl.TEXTURE_2D);
 }
 
 - (void)clearBuffer {
-    _gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
+	_gl.clear(_gl.COLOR_BUFFER_BIT | _gl.DEPTH_BUFFER_BIT);
 }
 
 - (void)introspect {
@@ -106,17 +107,15 @@
 - (int)createTextureFromImage:(Image)image {
 	var textureIndex = _gl.createTexture();
 	   
-    _gl.enable(_gl.TEXTURE_2D);
-    _gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
-    _gl.texImage2D(_gl.TEXTURE_2D, 0, image);
-    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.LINEAR);
-    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.LINEAR_MIPMAP_LINEAR);
-    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, _gl.CLAMP_TO_EDGE);
-    _gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, _gl.CLAMP_TO_EDGE);
-    _gl.generateMipmap(_gl.TEXTURE_2D)
-    _gl.bindTexture(_gl.TEXTURE_2D, 0);
-    
-    return textureIndex;
+	_gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
+	_gl.texImage2D(_gl.TEXTURE_2D, 0, image);
+	_gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MAG_FILTER, _gl.LINEAR);
+	_gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_MIN_FILTER, _gl.LINEAR_MIPMAP_LINEAR);
+	_gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_S, _gl.CLAMP_TO_EDGE);
+	_gl.texParameteri(_gl.TEXTURE_2D, _gl.TEXTURE_WRAP_T, _gl.CLAMP_TO_EDGE);
+	_gl.generateMipmap(_gl.TEXTURE_2D)
+	
+	return textureIndex;
 }
 
 
@@ -132,7 +131,7 @@
 }
 
 - (void)bindTexture:(int)textureIndex {
-//    _gl.activeTexture(_gl.TEXTURE0);
+	//_gl.activeTexture(_gl.TEXTURE0);
 	_gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
 }
 

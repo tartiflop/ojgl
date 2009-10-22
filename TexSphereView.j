@@ -41,6 +41,7 @@
 	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
 	//[_glContext setFrontFaceWinding:@"CW"];
 	[_glContext enableBackfaceCulling];
+	[_glContext enableTexture];
 
 	// Create a new program
 	var glProgram = [_glContext createProgram];
@@ -52,7 +53,7 @@
 	
 	// Create the texture map from an image
 	_texture = [[GLTexture alloc] initWithFilename:"Resources/mars.jpg" glContext:_glContext];
-   
+
 	// Get attribute locations
 	_vertexAttributeLocation = [glProgram getAttributeLocation:"aVertex"];
 	_texCoordAttributeLocation = [glProgram getAttributeLocation:"aTexCoord"];
@@ -60,7 +61,6 @@
 	var perspectiveUniformLocation = [glProgram getUniformLocation:"pMatrix"];
 
 	// Set up the texture sampler
-	[_glContext enableTexture];
 	[_glContext setUniformSampler:[glProgram getUniformLocation:"sTexture"]];
 	
 	// Set program to be used
