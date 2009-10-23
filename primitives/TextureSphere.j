@@ -1,15 +1,10 @@
-@import <Foundation/CPObject.j>
+@import "../OJGL/GLPrimitive.j"
 
 
-@implementation TextureSphere : CPObject {
+@implementation TextureSphere : GLPrimitive {
 	float _radius;
 	int _longs;
 	int _lats;
-	
-	Array _geometryData;
-	Array _normalData;
-	Array _texCoordData;
-	Array _indexData;
 }
 
 - (id)init {
@@ -32,11 +27,7 @@
 }
 
 - (void)buildPrimitive {
-
-	_geometryData = [];
-	_normalData = [];
-	_texCoordData = [];
-	_indexData = [];
+	[super buildPrimitive];
 
 	
 	for (var latNumber = 0; latNumber <= _lats; ++latNumber) {
@@ -55,16 +46,16 @@
 			var u = 1 - (longNumber / _longs);
 			var v = latNumber / _lats;
 		
-			_geometryData.push(_radius * x);
-			_geometryData.push(_radius * y);
-			_geometryData.push(_radius * z);
+			_vertices.push(_radius * x);
+			_vertices.push(_radius * y);
+			_vertices.push(_radius * z);
 			
-			_normalData.push(x);
-			_normalData.push(y);
-			_normalData.push(z);
+			_normals.push(x);
+			_normals.push(y);
+			_normals.push(z);
 			
-			_texCoordData.push(u);
-			_texCoordData.push(v);
+			_uvs.push(u);
+			_uvs.push(v);
 		}
 	}
 
@@ -76,37 +67,16 @@
 			var third = first + 1;
 			var fourth = second + 1;
 			
-			_indexData.push(first);
-			_indexData.push(third);
-			_indexData.push(second);
+			_indices.push(first);
+			_indices.push(third);
+			_indices.push(second);
 
-			_indexData.push(second);
-			_indexData.push(third);
-			_indexData.push(fourth);
+			_indices.push(second);
+			_indices.push(third);
+			_indices.push(fourth);
 		}
 	}
 
 }
-
-- (Array)geometryData {
-	return _geometryData;
-}
-
-- (Array)normalData {
-	return _normalData;
-}
-
-- (Array)texCoordData {
-	return _texCoordData;
-}
-
-- (Array)indexData {
-	return _indexData;
-}
-
-- (int)numberOfElements {
-	return _indexData.length;
-}
-
 
 @end

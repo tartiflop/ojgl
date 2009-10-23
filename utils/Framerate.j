@@ -14,7 +14,7 @@
 	
 	if (self) {
 		_lastTime = new Date().getTime();
-		_size = 20;
+		_size = 25;
 		_currentIndex = 0;
 		_rates = [];
 		

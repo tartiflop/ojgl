@@ -146,13 +146,13 @@
 
 - (void)draw {
 	_gl.drawArrays(_gl.TRIANGLES, 0, 3);
-	
-	_gl.flush();
 }
 
 - (void)drawElements:(int)size {
 	_gl.drawElements(_gl.TRIANGLES, size, _gl.UNSIGNED_SHORT, 0);
-	
+}
+
+- (void)flush {
 	_gl.flush();
 }
 
