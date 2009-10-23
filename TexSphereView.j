@@ -49,7 +49,7 @@
 	[_glContext reshape:[self width] height:[self height]];
 
 	// Initialise projection matrix
-	var lookat = [GLU lookAt:10 eyey:40 eyez:40 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	var lookat = [GLU lookAt:1 eyey:4 eyez:4 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
 	var projectionMatrix = [[Matrix3D alloc] init];
 	[projectionMatrix multiply:perspective m2:lookat];
