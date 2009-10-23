@@ -27,6 +27,11 @@
 	return self;
 }
 
+- (void)setNeedsDisplay:(BOOL)aFlag
+{
+  [self drawRect:nil]; // Because the right way to do it is too slow.
+}
+
 - (void)prepareOpenGL {
 }
 
