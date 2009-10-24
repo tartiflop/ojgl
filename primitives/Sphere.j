@@ -1,23 +1,19 @@
-@import <Foundation/CPObject.j>
+@import "../OJGL/GLPrimitive.j"
 
 
-@implementation Sphere : CPObject {
+@implementation Sphere : GLPrimitive {
 	float _radius;
 	int _longs;
 	int _lats;
-	
-	Array _geometryData;
-	Array _colorData;
-	Array _indexData;
 }
 
-- (id)init {
-	return [self initWithGeometry:0.5 longs:6 lats:6];
+- (id)init:(GLMaterial)material {
+	return [self initWithGeometry:material radius:0.5 longs:6 lats:6];
 }
 
 
-- (id)initWithGeometry:(float)radius longs:(int)longs lats:(int)lats {
-	self = [super init];
+- (id)initWithGeometry:(GLMaterial)material radius:(float)radius longs:(int)longs lats:(int)lats {
+	self = [super init:material];
 	
 	if (self) {
 		_radius = radius;
@@ -31,14 +27,11 @@
 }
 
 - (void)buildPrimitive {
-
-	_geometryData = [];
-	_colorData = [];
-	_indexData = [];
+	[super buildPrimitive];
 
 	
 	for (var latNumber = 0; latNumber <= _lats; ++latNumber) {
-		for (var longNumber = 0; longNumber < _longs; ++longNumber) {
+		for (var longNumber = 0; longNumber <= _longs; ++longNumber) {
 			var theta = latNumber * Math.PI / _lats;
 			var phi = longNumber * 2 * Math.PI / _longs;
 			
@@ -50,53 +43,40 @@
 			var x = cosPhi * sinTheta;
 			var y = cosTheta;
 			var z = sinPhi * sinTheta;
+			var u = 1 - (longNumber / _longs);
+			var v = latNumber / _lats;
+		
+			_vertices.push(_radius * x);
+			_vertices.push(_radius * y);
+			_vertices.push(_radius * z);
 			
-			_geometryData.push(_radius * x);
-			_geometryData.push(_radius * y);
-			_geometryData.push(_radius * z);
+			_normals.push(x);
+			_normals.push(y);
+			_normals.push(z);
 			
-			_colorData.push(Math.random());
-			_colorData.push(Math.random());
-			_colorData.push(Math.random());
-			_colorData.push(1.0);
+			_uvs.push(u);
+			_uvs.push(v);
 		}
 	}
 
 	for (var latNumber = 0; latNumber < _lats; latNumber++) {
 		for (var longNumber = 0; longNumber < _longs; longNumber++) {
 			
-			var first = (latNumber * _longs) + longNumber;
-			var second = first + _longs;
-			var third = (latNumber * _longs) + ((longNumber + 1) % _longs);
-			var fourth = third + _longs;
+			var first = (latNumber * (_longs + 1)) + longNumber;
+			var second = first + (_longs + 1);
+			var third = first + 1;
+			var fourth = second + 1;
 			
-			_indexData.push(first);
-			_indexData.push(third);
-			_indexData.push(second);
+			_indices.push(first);
+			_indices.push(third);
+			_indices.push(second);
 
-			_indexData.push(second);
-			_indexData.push(third);
-			_indexData.push(fourth);
+			_indices.push(second);
+			_indices.push(third);
+			_indices.push(fourth);
 		}
 	}
 
 }
-
-- (Array)geometryData {
-	return _geometryData;
-}
-
-- (Array)colorData {
-	return _colorData;
-}
-
-- (Array)indexData {
-	return _indexData;
-}
-
-- (int)numberOfElements {
-	return _indexData.length;
-}
-
 
 @end

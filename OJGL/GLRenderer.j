@@ -67,7 +67,13 @@
 - (void)setTexCoordBufferData:(int)bufferId {
 }
 
+- (void)setColorBufferData:(int)bufferId {
+}
+
 - (void)setElementBufferData:(int)bufferId {
+}
+
+- (void)setTexture:(int)textureId {
 }
 
 @end

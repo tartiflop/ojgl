@@ -1,107 +1,107 @@
 @import "OJGL/GLView.j"
-@import "OJGL/GLProgram.j"
-@import "OJGL/GLShadersLoader.j"
 @import "OJGL/GLU.j"
 @import "primitives/Sphere.j"
+@import "materials/TextureMaterial.j"
+@import "materials/RandomColorMaterial.j"
 @import "math/Matrix3D.j"
+@import "renderers/SimpleTexRenderer.j"
+@import "renderers/SimpleColorRenderer.j"
 
 @implementation SphereView : GLView {
 	GLContext _glContext;
-	GLShadersLoader _glShadersLoader;
-
-	Sphere _sphere;
-
-	int _vertexBufferIndex;
-	int _colorBufferIndex;
-	int _indicesBufferIndex;
-
-	int _vertexAttributeIndex;
-	int _colorAttributeIndex;
-	int _matrixUniformIndex;
-
+	SimpleTexRenderer _textureRenderer;
+	SimpleColorRenderer _colorRenderer;
+	
+	Sphere _textureSphere;
+	Sphere _colorSphere;
 	float _angle;
+	int _rendererCount;
+	
+	Matrix3D _projectionMatrix;
 }
 
 - (id)initWithFrame:(CGRect)aFrame {
 	self = [super initWithFrame:aFrame];
-	//	Load vertex and fragment shader source and prepare scene when completed
-	_glShadersLoader = [[GLShadersLoader alloc] initWithShader:"Resources/vertexShader.glsl" fragmentShaderURL:"Resources/fragmentShader.glsl" target:self onComplete:@selector(loadedShaders)];
+	
+	if (self) {
+		_rendererCount = 0;
+		
+		// Get the OpenGL Context
+		_glContext = [self glContext];
+
+		_colorRenderer = [[SimpleColorRenderer alloc] initWithContext:_glContext];
+		[_colorRenderer load:self onComplete:@selector(initScene)]
+		
+		// Initialise the renderer
+		_textureRenderer = [[SimpleTexRenderer alloc] initWithContext:_glContext];
+		[_textureRenderer load:self onComplete:@selector(initScene)]
+	}
+	
 	return self;
 }
 
-- (void)loadedShaders {
-
-	//	Get the OpenGL Context
-	_glContext = [self glContext];
-
-	//	Prepare (initialise) context
-	[_glContext prepare:[0.2, 0.2, 0.2, 1] clearDepth:1.0];
-	//	[_glContext setFrontFaceWinding:@"CW"];
+- (void)initScene {
+	
+	_rendererCount++;
+	if (_rendererCount != 2) {
+		return;
+	}
+		
+	// Prepare (initialise) context
+	[_glContext prepare:[0.0, 0.0, 0.0, 1] clearDepth:1.0];
 	[_glContext enableBackfaceCulling];
+	[_glContext enableTexture];
 
-	//	Create a new program
-	var glProgram = [_glContext createProgram];
-
-	//	Add shaders to program and link
-	[glProgram addShaderText:[_glShadersLoader vertexShader] shaderType:GL_VERTEX_SHADER];
-	[glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
-	[glProgram linkProgram];
-
-	//	Get attribute indices
-	_vertexAttributeIndex = [glProgram getAttributeLocation:"aVertex"];
-	_colorAttributeIndex = [glProgram getAttributeLocation:"aColor"];
-	_matrixUniformIndex = [glProgram getUniformLocation:"mvMatrix"];
-	var perspectiveUniformIndex = [glProgram getUniformLocation:"pMatrix"];
-
-	//	Set program to be used
-	[_glContext useProgram:glProgram];
-
-	//	Create a whopper sphere
-	//	var _sphere = [[Sphere alloc] initWithGeometry:1.5 longs:300 lats:300];
-
-	//	Create a modest sphere
-	var _sphere = [[Sphere alloc] initWithGeometry:2 longs:25 lats:25];
-
-	//	Create and initialise buffer data
-	_vertexBufferIndex = [_glContext createBufferFromArray:[_sphere geometryData]];
-	_colorBufferIndex = [_glContext createBufferFromArray:[_sphere colorData]];
-	_indicesBufferIndex = [_glContext createBufferFromElementArray:[_sphere indexData]];
-
-	//	reshape
+	// Create the texture material
+	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/mars.jpg"];
+	var colorMaterial = [[RandomColorMaterial alloc] init];
+	
+	// Create a modest sphere, associate with Texture material
+	var _textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:2 longs:25 lats:25];
+	[_textureSphere prepareGL:_glContext];
+	
+	var _colorSphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:2 longs:25 lats:25];
+	[_colorSphere prepareGL:_glContext];
+	
+	// reshape 
 	[_glContext reshape:[self width] height:[self height]];
 
-
-	//	Initialise projection matrix
-	var lookat = [GLU lookAt:2 eyey:5 eyez:3 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	// Initialise projection matrix
+	var lookat = [GLU lookAt:0 eyey:7 eyez:7 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
+	_projectionMatrix = [[Matrix3D alloc] init];
+	[_projectionMatrix multiply:perspective m2:lookat];
 
-	var projectionMatrix = [[Matrix3D alloc] init];
-	[projectionMatrix multiply:perspective m2:lookat];
-	[_glContext setUniformMatrix:perspectiveUniformIndex matrix:projectionMatrix];
 }
 
 - (void)drawRect:(CPRect)dirtyRect {
-	// recalculate rotation matrix
-	_angle = _angle + 4 % 360;
+	
+	try {
+		// recalculate rotation matrix
+		_angle = _angle + 2 % 360;
+		[_textureSphere setRotation:_angle];
+		[_textureSphere translate:-3 y:0 z:0];
+		[_colorSphere setRotation:_angle];
+		[_colorSphere translate:3 y:0 z:0];
+	
+		// Clear context
+		[_glContext clearBuffer];
+		
+		// Activate the texture renderer with the projection matrix and render the texture sphere
+		[_textureRenderer setActive];
+		[_textureRenderer setProjectionMatrix:_projectionMatrix];
+		[_textureSphere render:_textureRenderer];
 
-	//	Get a new rotation matrix
-	var mvMatrix = [[Matrix3D alloc] initWithRotation:_angle x:0 y:1 z:0];
-
-	//	Clear context
-	[_glContext clearBuffer];
-
-	//	Set rotation matrix
-	[_glContext setUniformMatrix:_matrixUniformIndex matrix:mvMatrix];
-
-	//	Bind buffers to attributes
-	[_glContext bindBufferToAttribute:_vertexBufferIndex attributeLocation:_vertexAttributeIndex size:3];
-	[_glContext bindBufferToAttribute:_colorBufferIndex attributeLocation:_colorAttributeIndex size:4];
-
-	//	Bind element index buffer
-	[_glContext bindElementBuffer:_indicesBufferIndex];
-
-	//	redraw
-	[_glContext drawElements:[_sphere numberOfElements]];
+		// Activate the color renderer with the projection matrix and render the color sphere
+		[_colorRenderer setActive];
+		[_colorRenderer setProjectionMatrix:_projectionMatrix];
+		[_colorSphere render:_colorRenderer];
+		
+		// flush
+		[_glContext flush];
+	} catch (e) {
+		CPLog.error("Caught exception during rendering: " + e)
+	}
 }
 
 @end

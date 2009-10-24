@@ -1,5 +1,5 @@
-@import "OJGL/GLRenderer.j"
-@import "math/Matrix3D.j"
+@import "../OJGL/GLRenderer.j"
+@import "../math/Matrix3D.j"
 
 @implementation SimpleTexRenderer : GLRenderer {
 	int _vertexAttributeLocation;
@@ -59,9 +59,18 @@
 	[_glContext bindBufferToAttribute:bufferId attributeLocation:_texCoordAttributeLocation size:2];
 }
 
+- (void)setColorBufferData:(int)bufferId {
+	CPLog.error("setTexCoordBufferData not available in SimpleColorRenderer")
+}
+
 - (void)setElementBufferData:(int)bufferId {
 	// Bind element index buffer
 	[_glContext bindElementBuffer:bufferId];
+}
+
+- (void)setTexture:(int)textureId {
+	// Bind the texture
+	[_glContext bindTexture:textureId];
 }
 
 @end
