@@ -60,7 +60,7 @@
 }
 
 - (void)setColorBufferData:(int)bufferId {
-	CPLog.error("setTexCoordBufferData not available in SimpleColorRenderer")
+	CPLog.error("setColorBufferData not available in SimpleTexRenderer")
 }
 
 - (void)setElementBufferData:(int)bufferId {
