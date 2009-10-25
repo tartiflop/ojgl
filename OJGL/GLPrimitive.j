@@ -75,13 +75,29 @@
 	return _uvBufferId;
 }
 
-- (void)setRotation:(float)angle {
-	// Initialises a new transformation with a rotation: temporary
-	_transformation = Matrix4D.RotationMatrix(angle, 0, 1, 0);
+/**
+ * Rotates by given angle about given vector
+ */
+- (void)rotate:(float)angle x:(float)x y:(float)y z:(float)z {
+	_transformation.rotate(angle, x, y, z);
 }
 
+/**
+ * Translates along given vector
+ */
 - (void)translate:(float)x y:(float)y z:(float)z {
 	_transformation.translate(x, y, z);
+}
+
+/**
+ * Translates to given position
+ */
+- (void)translateTo:(float)x y:(float)y z:(float)z {
+	_transformation.translateTo(x, y, z);
+}
+
+- (void)resetTransformation {
+	_transformation.makeIdentity();
 }
 
 - (Array)vertices {

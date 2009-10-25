@@ -99,25 +99,11 @@ Matrix4D.prototype.getAsArray = function() {
 
 
 Matrix4D.prototype.makeIdentity = function() {
-	this.sxx = 1;
-	this.sxy = 0;
-	this.sxz = 0;
-	this.tx  = 0;
-	
-	this.syx = 0;
-	this.syy = 1;
-	this.syz = 0;
-	this.ty  = 0;
-	
-	this.szx = 0;
-	this.szy = 0;
-	this.szz = 1;
-	this.tz  = 0;
-	
-	this.swx = 0;
-	this.swy = 0;
-	this.swz = 0;
-	this.tw  = 1;
+	this.sxx = this.syy = this.szz = this.tw = 1;
+	this.sxy = this.sxz = this.tx  = 0;
+	this.syx = this.syz = this.ty  = 0;
+	this.szx = this.szy = this.tz  = 0;
+	this.swx = this.swy = this.swz = 0;
 }
 
 Matrix4D.prototype.rotate = function(angle, x, y, z) {
@@ -226,6 +212,13 @@ Matrix4D.prototype.translate = function(x, y, z) {
 	 this._multiplyOnLeft(matrix);
 }
 
+Matrix4D.prototype.translateTo = function(x, y, z) {
+
+	this.tx = x;
+	this.ty = y;
+	this.tz = z;
+}
+
 
 /**
  * Returns the determinant of the matrix
@@ -240,16 +233,6 @@ Matrix4D.prototype.determinant = function() {
 			+ (this.szx * this.swy - this.swx * this.szy) * (this.sxz * this.ty - this.syz * this.tx);
 }
 
-
-
-/**
- * Scales the 3d matrix by the given amount in each dimension
- * 
- * @param	m	The 3d matrix to scale from.
- * @param	x	The scale value along the x axis.
- * @param	y	The scale value along the y axis.
- * @param	z	The scale value along the z axis.
- */
 Matrix4D.prototype.scale = function(x, y, z) {
 	
 	this.sxx *= x;
@@ -265,7 +248,6 @@ Matrix4D.prototype.scale = function(x, y, z) {
 	this.szz *= z;
 	this.tz  *= z;
 }
-
 
 
 /**
