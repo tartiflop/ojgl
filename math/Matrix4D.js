@@ -292,6 +292,33 @@ Matrix4D.prototype.scale = function(x, y, z) {
 	this.tz  *= z;
 }
 
+Matrix4D.prototype.transpose = function() {
+
+	var tmp = this.sxy;
+    this.sxy = this.syx;
+    this.syx = tmp;
+    
+    tmp = this.sxz;
+    this.sxz = this.szx;
+    this.szx = tmp;
+    
+    tmp = this.tx;
+    this.tx = this.swx;
+    this.swx = tmp;
+    
+    tmp = this.syz;
+    this.syz = this.szy;
+    this.szy = tmp;
+    
+    tmp = this.ty;
+    this.ty = this.swy;
+    this.swy = tmp;
+    
+    tmp = this.tz;
+    this.tz = this.swz;
+    this.swz = tmp;
+}
+
 Matrix4D.prototype.translateTo = function(x, y, z) {
 
 	this.tx = x;
@@ -415,6 +442,13 @@ Matrix4D.prototype._multiplyOnLeft = function(matrix) {
 	this.tw  = m141 * m214 + m142 * m224 + m143 * m234 + m144 * m244;
 }
 
+Matrix4D.InverseMatrix = function (matrix) {
+	var matrix = new Matrix4D(matrix);
+	matrix.invert();
+	
+	return matrix;
+}
+
 Matrix4D.RotationMatrix = function (angle, x, y, z) {
 	var matrix = new Matrix4D();
 	matrix.rotate(angle, x, y, z);
@@ -436,9 +470,9 @@ Matrix4D.ScaleMatrix = function (x, y, z) {
 	return matrix;
 }
 
-Matrix4D.InverseMatrix = function (matrix) {
+Matrix4D.TransposeMatrix = function (matrix) {
 	var matrix = new Matrix4D(matrix);
-	matrix.invert();
+	matrix.transpose();
 	
 	return matrix;
 }

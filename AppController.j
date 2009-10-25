@@ -10,7 +10,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification {
-	
+
 	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
 							contentView = [theWindow contentView];
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"F4F7E1"]];
@@ -47,7 +47,7 @@
 //	[self draw];
 	[_sphereView setNeedsDisplay:YES];
 	// Timer to redraw
-	var timer = [CPTimer scheduledTimerWithTimeInterval:1/100 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+	//var timer = [CPTimer scheduledTimerWithTimeInterval:1/100 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 }
 
 - (void)fps {

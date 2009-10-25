@@ -62,8 +62,9 @@
 	[_glContext reshape:[self width] height:[self height]];
 
 	// Initialise projection matrix
-	var lookat = [GLU lookAt:3.5 eyey:4 eyez:20 centerx:0 centery:-5 centerz:-25 upx:0 upy:1 upz:0];
+	var lookat = [GLU lookAt:3.5 eyey:4 eyez:20 centerx:0 centery:-3 centerz:-25 upx:0 upy:1 upz:0];
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
+//	var ortho = [GLU ortho:-16 right:16 bottom:-12 top:12 near:1 far:10000];
 
 	var projectionMatrix = new Matrix4D(perspective);
 	projectionMatrix.multiply(lookat);
