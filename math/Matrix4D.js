@@ -106,6 +106,70 @@ Matrix4D.prototype.makeIdentity = function() {
 	this.swx = this.swy = this.swz = 0;
 }
 
+/**
+* Returns the determinant of the matrix
+*/
+Matrix4D.prototype.determinant = function() {
+	
+	return	(this.sxx * this.syy - this.syx * this.sxy) * (this.szz * this.tw - this.swz * this.tz) 
+			- (this.sxx * this.szy - this.szx * this.sxy) * (this.syz * this.tw - this.swz * this.ty) 
+			+ (this.sxx * this.swy - this.swx * this.sxy) * (this.syz * this.tz - this.szz * this.ty) 
+			+ (this.syx * this.szy - this.szx * this.syy) * (this.sxz * this.tw - this.swz * this.tx) 
+			- (this.syx * this.swy - this.swx * this.syy) * (this.sxz * this.tz - this.szz * this.tx) 
+			+ (this.szx * this.swy - this.swx * this.szy) * (this.sxz * this.ty - this.syz * this.tx);
+}
+
+Matrix4D.prototype.invert = function() {
+	// If the determinant is zero then no inverse exists
+	var det = this.determinant();
+
+	if (Math.abs(det) < 1e-8) {
+		CPLog.error("Matrix4D: matrix invert request fails")
+		return;
+	}
+	
+	var invDet = 1 / det;
+
+	var m11 = this.sxx;
+	var m12 = this.sxy;
+	var m13 = this.sxz;
+	var m14 = this.tx;
+	var m21 = this.syx;
+	var m22 = this.syy;
+	var m23 = this.syz;
+	var m24 = this.ty;
+	var m31 = this.szx;
+	var m32 = this.szy;
+	var m33 = this.szz;
+	var m34 = this.tz; 
+	var m41 = this.swx;
+	var m42 = this.swy;
+	var m43 = this.swz;
+	var m44 = this.tw;
+	
+	this.sxx =  invDet * (m22 * (m33 * m44 - m43 * m34) - m32 * (m23 * m44 - m43 * m24) + m42 * (m23 * m34 - m33 * m24));
+	this.sxy = -invDet * (m12 * (m33 * m44 - m43 * m34) - m32 * (m13 * m44 - m43 * m14) + m42 * (m13 * m34 - m33 * m14));
+	this.sxz =  invDet * (m12 * (m23 * m44 - m43 * m24) - m22 * (m13 * m44 - m43 * m14) + m42 * (m13 * m24 - m23 * m14));
+	this.tx  = -invDet * (m12 * (m23 * m34 - m33 * m24) - m22 * (m13 * m34 - m33 * m14) + m32 * (m13 * m24 - m23 * m14));
+
+	this.syx = -invDet * (m21 * (m33 * m44 - m43 * m34) - m31 * (m23 * m44 - m43 * m24) + m41 * (m23 * m34 - m33 * m24));
+	this.syy =  invDet * (m11 * (m33 * m44 - m43 * m34) - m31 * (m13 * m44 - m43 * m14) + m41 * (m13 * m34 - m33 * m14));
+	this.syz = -invDet * (m11 * (m23 * m44 - m43 * m24) - m21 * (m13 * m44 - m43 * m14) + m41 * (m13 * m24 - m23 * m14));
+	this.ty  =  invDet * (m11 * (m23 * m34 - m33 * m24) - m21 * (m13 * m34 - m33 * m14) + m31 * (m13 * m24 - m23 * m14));
+
+	this.szx =  invDet * (m21 * (m32 * m44 - m42 * m34) - m31 * (m22 * m44 - m42 * m24) + m41 * (m22 * m34 - m32 * m24));
+	this.szy = -invDet * (m11 * (m32 * m44 - m42 * m34) - m31 * (m12 * m44 - m42 * m14) + m41 * (m12 * m34 - m32 * m14));
+	this.szz =  invDet * (m11 * (m22 * m44 - m42 * m24) - m21 * (m12 * m44 - m42 * m14) + m41 * (m12 * m24 - m22 * m14));
+	this.tz  = -invDet * (m11 * (m22 * m34 - m32 * m24) - m21 * (m12 * m34 - m32 * m14) + m31 * (m12 * m24 - m22 * m14));
+
+	this.swx = -invDet * (m21 * (m32 * m43 - m42 * m33) - m31 * (m22 * m43 - m42 * m23) + m41 * (m22 * m33 - m32 * m23));
+	this.swy =  invDet * (m11 * (m32 * m43 - m42 * m33) - m31 * (m12 * m43 - m42 * m13) + m41 * (m12 * m33 - m32 * m13));
+	this.swz = -invDet * (m11 * (m22 * m43 - m42 * m23) - m21 * (m12 * m43 - m42 * m13) + m41 * (m12 * m23 - m22 * m13));
+	this.tw  =  invDet * (m11 * (m22 * m33 - m32 * m23) - m21 * (m12 * m33 - m32 * m13) + m31 * (m12 * m23 - m22 * m13));	
+	
+}
+
+
 Matrix4D.prototype.rotate = function(angle, x, y, z) {
 	
 	// angles are in degrees. Switch to radians
@@ -212,27 +276,6 @@ Matrix4D.prototype.translate = function(x, y, z) {
 	 this._multiplyOnLeft(matrix);
 }
 
-Matrix4D.prototype.translateTo = function(x, y, z) {
-
-	this.tx = x;
-	this.ty = y;
-	this.tz = z;
-}
-
-
-/**
- * Returns the determinant of the matrix
- */
-Matrix4D.prototype.determinant = function() {
-	
-	return    (this.sxx * this.syy - this.syx * this.sxy) * (this.szz * this.tw - this.swz * this.tz) 
-			- (this.sxx * this.szy - this.szx * this.sxy) * (this.syz * this.tw - this.swz * this.ty) 
-			+ (this.sxx * this.swy - this.swx * this.sxy) * (this.syz * this.tz - this.szz * this.ty) 
-			+ (this.syx * this.szy - this.szx * this.syy) * (this.sxz * this.tw - this.swz * this.tx) 
-			- (this.syx * this.swy - this.swx * this.syy) * (this.sxz * this.tz - this.szz * this.tx) 
-			+ (this.szx * this.swy - this.swx * this.szy) * (this.sxz * this.ty - this.syz * this.tx);
-}
-
 Matrix4D.prototype.scale = function(x, y, z) {
 	
 	this.sxx *= x;
@@ -247,6 +290,13 @@ Matrix4D.prototype.scale = function(x, y, z) {
 	this.szy *= z;
 	this.szz *= z;
 	this.tz  *= z;
+}
+
+Matrix4D.prototype.translateTo = function(x, y, z) {
+
+	this.tx = x;
+	this.ty = y;
+	this.tz = z;
 }
 
 
@@ -386,3 +436,9 @@ Matrix4D.ScaleMatrix = function (x, y, z) {
 	return matrix;
 }
 
+Matrix4D.InverseMatrix = function (matrix) {
+	var matrix = new Matrix4D(matrix);
+	matrix.invert();
+	
+	return matrix;
+}
