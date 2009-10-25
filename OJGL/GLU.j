@@ -44,13 +44,12 @@
 	var yz =  zx * xy - zy * xx;
 
 	// Create rotation matrix from new coorinate system
-	var rotationMatrix = new Matrix4D([xx, xy, xz, 0, yx, yy, yz, 0, zx, zy, zz, 0, 0, 0, 0, 1]);
+	var lookatMatrix = new Matrix4D([xx, xy, xz, 0, yx, yy, yz, 0, zx, zy, zz, 0, 0, 0, 0, 1]);
 	
 	// create translation matrix
 	var translationMatrix = new Matrix4D([1, 0, 0, -eyex, 0, 1, 0, -eyey, 0, 0, 1, -eyez, 0, 0, 0, 1]);
 	
-	// calculate lookat (projection) matrix from combination of both
-	var lookatMatrix = new Matrix4D(rotationMatrix);
+	// calculate final lookat (projection) matrix from combination of both rotation and translation
 	lookatMatrix.multiply(translationMatrix);
 	
 	return lookatMatrix;
@@ -68,28 +67,54 @@
 	var C = -(far + near) / (far - near);
 	var D = -(2 * far * near) / (far - near);
 	
-	var sxx = (2 * near) / (right - left);
-	var syx = 0;
-	var szx = 0;
-	var swx = 0;
+	var matrix = new Matrix4D();
+	matrix.sxx = (2 * near) / (right - left);
+	matrix.syx = 0;
+	matrix.szx = 0;
+	matrix.swx = 0;
 	
-	var sxy = 0;
-	var syy = 2 * near / (top - bottom);
-	var szy = 0;
-	var swy = 0;
+	matrix.sxy = 0;
+	matrix.syy = 2 * near / (top - bottom);
+	matrix.szy = 0;
+	matrix.swy = 0;
 	
-	var sxz = A;
-	var syz = B;
-	var szz = C;
-	var swz = -1;
+	matrix.sxz = A;
+	matrix.syz = B;
+	matrix.szz = C;
+	matrix.swz = -1;
 	
-	var tx = 0;
-	var ty = 0;
-	var tz = D;
-	var tw = 0;
+	matrix.tx = 0;
+	matrix.ty = 0;
+	matrix.tz = D;
+	matrix.tw = 0;
 	
-	return new Matrix4D([sxx, sxy, sxz, tx, syx, syy, syz, ty, szx, szy, szz, tz, swx, swy, swz, tw]);
+	return matrix;
 }
 
++ (Matrix4D)ortho:(float)left right:(float)right bottom:(float)bottom top:(float)top near:(float)near far:(float)far {
+	var tx = (left + right) / (right - left);
+	var ty = (top + bottom) / (top - bottom);
+	var tz = (far + near) / (far - near);
+	
+	var matrix = new Matrix4D();
+	matrix.sxx = 2 / (right - left);
+	matrix.sxy = 0;
+	matrix.sxz = 0;
+	matrix.tx  = tx;
+	matrix.syx = 0;
+	matrix.syy = 2 / (top - bottom);
+	matrix.syz = 0;
+	matrix.ty  = ty;
+	matrix.szx = 0;
+	matrix.szy = 0;
+	matrix.szz = -2 / (far - near);
+	matrix.tz  = -tz;
+	matrix.swx = 0;
+	matrix.swy = 0;
+	matrix.swz = 0;
+	matrix.tw  = 1;
+	
+	return matrix;
+}
 
 @end
