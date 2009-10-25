@@ -1,5 +1,4 @@
 @import <Foundation/CPObject.j>
-@import "../math/Matrix3D.j"
 
 @implementation GLContext : CPObject {
 
@@ -135,8 +134,8 @@
 	_gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
 }
 
-- (void)setUniformMatrix:(int)uniformIndex matrix:(Matrix3D)matrix {
-	_gl.uniformMatrix4fv(uniformIndex, false, [matrix getAsColumnMajorCanvasFloatArray]);
+- (void)setUniformMatrix:(int)uniformIndex matrix:(Matrix4D)matrix {
+	_gl.uniformMatrix4fv(uniformIndex, false, matrix.getAsColumnMajorCanvasFloatArray());
 }
 
 - (void)setUniformSampler:(int)samplerIndex {

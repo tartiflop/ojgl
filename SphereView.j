@@ -3,7 +3,6 @@
 @import "primitives/Sphere.j"
 @import "materials/TextureMaterial.j"
 @import "materials/RandomColorMaterial.j"
-@import "math/Matrix3D.j"
 @import "renderers/SimpleTexRenderer.j"
 @import "renderers/SimpleColorRenderer.j"
 
@@ -65,9 +64,10 @@
 	// Initialise projection matrix
 	var lookat = [GLU lookAt:3.5 eyey:4 eyez:20 centerx:0 centery:-5 centerz:-25 upx:0 upy:1 upz:0];
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
-	var projectionMatrix = [[Matrix3D alloc] init];
-	[projectionMatrix multiply:perspective m2:lookat];
 
+	var projectionMatrix = new Matrix4D(perspective);
+	projectionMatrix.multiply(lookat);
+	
 	// Send projection matrices to the renderers (shaders)
 	[_textureRenderer setActive];
 	[_textureRenderer setProjectionMatrix:projectionMatrix];
@@ -86,8 +86,6 @@
 	
 	// recalculate rotation matrix
 	_angle = _angle + 2 % 360;
-	[_textureSphere setRotation:_angle];
-	[_colorSphere setRotation:_angle];
 
 	// Clear context
 	[_glContext clearBuffer];

@@ -1,5 +1,4 @@
 @import "../OJGL/GLRenderer.j"
-@import "../math/Matrix3D.j"
 
 @implementation SimpleTexRenderer : GLRenderer {
 	int _vertexAttributeLocation;
@@ -38,13 +37,13 @@
 }
 
 
-- (void)setProjectionMatrix:(Matrix3D)projectionMatrix {
+- (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
 	// Set the projection matrix
 	[_glContext setUniformMatrix:_perspectiveUniformLocation matrix:projectionMatrix];
 
 }
 
-- (void)setModelViewMatrix:(Matrix3D)mvMatrix {
+- (void)setModelViewMatrix:(Matrix4D)mvMatrix {
 	// Set rotation matrix
 	[_glContext setUniformMatrix:_matrixUniformLocation matrix:mvMatrix];
 }

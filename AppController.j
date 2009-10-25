@@ -11,7 +11,6 @@
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification {
 	
-	
 	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
 							contentView = [theWindow contentView];
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"F4F7E1"]];

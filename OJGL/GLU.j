@@ -1,5 +1,4 @@
 @import <Foundation/CPObject.j>
-@import "../math/Matrix3D.j"
 
 @implementation GLU : CPObject {
 
@@ -14,7 +13,7 @@
 	return self;
 }
 
-+ (Matrix3D)lookAt:(float)eyex eyey:(float)eyey eyez:(float)eyez centerx:(float)centerx centery:(float)centery centerz:(float)centerz upx:(float)upx upy:(float)upy upz:(float)upz {
++ (Matrix4D)lookAt:(float)eyex eyey:(float)eyey eyez:(float)eyez centerx:(float)centerx centery:(float)centery centerz:(float)centerz upx:(float)upx upy:(float)upy upz:(float)upz {
 	
 	// remember: z out of screen
 	var zx = eyex - centerx;
@@ -45,19 +44,19 @@
 	var yz =  zx * xy - zy * xx;
 
 	// Create rotation matrix from new coorinate system
-	var rotationMatrix = [[Matrix3D alloc] initFromArray:[xx, xy, xz, 0, yx, yy, yz, 0, zx, zy, zz, 0, 0, 0, 0, 1]];
+	var rotationMatrix = new Matrix4D([xx, xy, xz, 0, yx, yy, yz, 0, zx, zy, zz, 0, 0, 0, 0, 1]);
 	
 	// create translation matrix
-	var translationMatrix = [[Matrix3D alloc] initFromArray:[1, 0, 0, -eyex, 0, 1, 0, -eyey, 0, 0, 1, -eyez, 0, 0, 0, 1]];
+	var translationMatrix = new Matrix4D([1, 0, 0, -eyex, 0, 1, 0, -eyey, 0, 0, 1, -eyez, 0, 0, 0, 1]);
 	
 	// calculate lookat (projection) matrix from combination of both
-	var lookatMatrix = [[Matrix3D alloc] init];
-	[lookatMatrix multiply:rotationMatrix m2:translationMatrix];
+	var lookatMatrix = new Matrix4D(rotationMatrix);
+	lookatMatrix.multiply(translationMatrix);
 	
 	return lookatMatrix;
 }
 
-+ (Matrix3D)perspective:(float)fovy aspect:(float)aspect near:(float)near far:(float)far {
++ (Matrix4D)perspective:(float)fovy aspect:(float)aspect near:(float)near far:(float)far {
 
 	var top = Math.tan(fovy * Math.PI / 360) * near;
 	var bottom = -top;
@@ -89,7 +88,7 @@
 	var tz = D;
 	var tw = 0;
 	
-	return [[Matrix3D alloc] initFromArray:[sxx, sxy, sxz, tx, syx, syy, syz, ty, szx, szy, szz, tz, swx, swy, swz, tw]];
+	return new Matrix4D([sxx, sxy, sxz, tx, syx, syy, syz, ty, szx, szy, szz, tz, swx, swy, swz, tw]);
 }
 
 

@@ -55,10 +55,10 @@
 
 }
 
-- (void)setProjectionMatrix:(Matrix3D)projectionMatrix {
+- (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
 }
 
-- (void)setModelViewMatrix:(Matrix3D)mvMatrix {
+- (void)setModelViewMatrix:(Matrix4D)mvMatrix {
 }
 
 - (void)setVertexBufferData:(int)bufferId {

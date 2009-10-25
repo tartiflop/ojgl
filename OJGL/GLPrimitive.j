@@ -2,7 +2,6 @@
 @import "GLContext.j"
 @import "GLRenderer.j"
 @import "GLMaterial.j"
-@import "../math/Matrix3D.J"
 
 @implementation GLPrimitive : CPObject {
 	Array _vertices;
@@ -15,7 +14,7 @@
 	int _indicesBufferId;
 
 	GLMaterial _material;
-	Matrix3D _transformation;
+	Matrix4D _transformation;
 }
 
 - (id)init:(GLMaterial)material {
@@ -24,6 +23,8 @@
 	if (self) {
 		_material = material;
 		[_material setPrimitive:self];
+		
+		_transformation = new Matrix4D();
 	}
 	
 	return self;
@@ -75,12 +76,12 @@
 }
 
 - (void)setRotation:(float)angle {
-	_transformation = [[Matrix3D alloc] initWithRotation:angle x:0 y:1 z:0];
+	// Initialises a new transformation with a rotation: temporary
+	_transformation = Matrix4D.RotationMatrix(angle, 0, 1, 0);
 }
 
 - (void)translate:(float)x y:(float)y z:(float)z {
-	var translation = [[Matrix3D alloc] initWithTranslation:x y:y z:z];
-	[_transformation multiply:translation m2:_transformation];
+	_transformation.translate(x, y, z);
 }
 
 - (Array)vertices {
