@@ -127,7 +127,8 @@
 	}		
 	
 	// flush
-	[_glContext flush];
+//	[_glContext flush];
+// Flush performed in GLView?
 }
 
 
