@@ -84,7 +84,6 @@
 	if (!_ready) {
 		return;
 	}
-	
 	// recalculate rotation matrix
 	_angle = _angle + 2 % 360;
 	[_textureSphere resetTransformation];
