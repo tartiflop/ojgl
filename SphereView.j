@@ -89,21 +89,18 @@
 	[_textureSphere resetTransformation];
 	[_textureSphere rotate:_angle x:0 y:1 z:0];
 	[_colorSphere resetTransformation];
-	[_colorSphere rotate:_angle x:0 y:1 z:0];
+	[_colorSphere rotate:-_angle x:0 y:1 z:0];
 
 	// Clear context
 	[_glContext clearBuffer];
-
-
 	// Multiple renderings of texture sphere
 	[_textureRenderer setActive];
-	for (var k = 0; k < 4; k++) {
-		for (var j = 0; j < 4; j++) {
-			for (var i = 0; i < 4; i++) {
-				
-				if ((i + j + k) % 2 == 0) {
+	for (var k = 0; k < 5; k++) {
+		for (var j = 0; j < 5; j++) {
+			for (var i = 0; i < 5; i++) {
+                if ((i + j + k) % 2 == 0) {
 					// Translate sphere, activate the texture renderer and render the texture sphere
-					[_textureSphere translateTo:((i - 1.5) * 4) y:((j - 1.5) * 4) z:(-k * 5)];
+                    [_textureSphere translateTo:((i - 2) * 4) y:((j - 1) * 3) z:(k * 5)];
 					[_textureSphere render:_textureRenderer];
 				}
 			}
@@ -112,13 +109,13 @@
 	
 	// Multiple renderings of color sphere
 	[_colorRenderer setActive];
-	for (var k = 0; k < 4; k++) {
-		for (var j = 0; j < 4; j++) {
-			for (var i = 0; i < 4; i++) {
-				
+	[_colorSphere translateTo:-6 y:-6 z:0];
+	for (var k = 0; k < 5; k++) {
+		for (var j = 0; j < 5; j++) {
+			for (var i = 0; i < 5; i++) {
 				if ((i + j + k) % 2 == 1) {
 					// Translate sphere, activate the color renderer and render the color sphere
-					[_colorSphere translateTo:((i - 1.5) * 4) y:((j - 1.5) * 4) z:(-k * 5)];
+					[_colorSphere translateTo:((i - 2) * 4) y:((j - 1) * 3) z:(k * 5)];
 					[_colorSphere render:_colorRenderer];
 				}
 			}
