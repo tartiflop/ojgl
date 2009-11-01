@@ -62,13 +62,13 @@
 
 - (void)setViewMatrix:(Matrix4D)viewMatrix {
     _viewMatrix = viewMatrix;
-    var mvMatrix = _viewMatrix; mvMatrix.multiply(_modelMatrix);
+    var mvMatrix = _modelMatrix; mvMatrix.multiply(_viewMatrix);
 	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
 }
 
 - (void)setModelMatrix:(Matrix4D)modelMatrix {
     _modelMatrix = modelMatrix;
-    var mvMatrix = _viewMatrix; mvMatrix.multiply(_modelMatrix);
+    var mvMatrix = _modelMatrix; mvMatrix.multiply(_viewMatrix);
 	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
 }
 

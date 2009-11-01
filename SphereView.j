@@ -63,18 +63,17 @@
 	[_glContext reshape:[self width] height:[self height]];
 
 	// Initialise projection matrix
-	var lookat = [GLU lookAt:3.5 eyey:4 eyez:20 centerx:0 centery:-3 centerz:-25 upx:0 upy:1 upz:0];
-	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
 //	var ortho = [GLU ortho:-16 right:16 bottom:-12 top:12 near:1 far:10000];
-
-	var projectionMatrix = new Matrix4D(perspective);
-	projectionMatrix.multiply(lookat);
+	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
+    var lookat = new Matrix4D(); lookat.tz = -25;
+    [_textureRenderer setActive];
+	[_textureRenderer setProjectionMatrix:perspective];
+	[_textureRenderer setViewMatrix:lookat];
 	
 	// Send projection matrices to the renderers (shaders)
-	[_textureRenderer setActive];
-	[_textureRenderer setProjectionMatrix:projectionMatrix];
 	[_colorRenderer setActive];
-	[_colorRenderer setProjectionMatrix:projectionMatrix];
+	[_colorRenderer setProjectionMatrix:perspective];
+	[_colorRenderer setViewMatrix:lookat];
 
 	_ready = YES;
 }
@@ -86,11 +85,11 @@
 		return;
 	}
 	// recalculate rotation matrix
-	_angle = _angle + 2 % 360;
+	_angle = (_angle + 0.5) % 90;
 	[_textureSphere resetTransformation];
-	[_textureSphere rotate:_angle x:0 y:1 z:0];
+	[_textureSphere rotate:_angle-45 x:0 y:1 z:0];
 	[_colorSphere resetTransformation];
-	[_colorSphere rotate:-_angle x:0 y:1 z:0];
+	[_colorSphere rotate:_angle-45 x:0 y:1 z:0];
 
 	// Clear context
 	[_glContext clearBuffer];
