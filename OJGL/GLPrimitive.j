@@ -59,7 +59,9 @@
 	[_material prepareRenderer:renderer];
 	
 	// Set model view matrix
-	[renderer setModelViewMatrix:_transformation];
+	[renderer setViewMatrix:new Matrix4D()];
+	// Set model view matrix
+	[renderer setModelMatrix:_transformation];
 
 	// Send the vertex data to the renderer
 	[renderer setVertexBufferData:_vertexBufferId];

@@ -1,6 +1,7 @@
 @import "OJGL/GLView.j"
 @import "OJGL/GLU.j"
 @import "primitives/Sphere.j"
+@import "primitives/SphereBurst.j"
 @import "materials/TextureMaterial.j"
 @import "materials/RandomColorMaterial.j"
 @import "renderers/SimpleTexRenderer.j"
@@ -12,7 +13,7 @@
 	SimpleColorRenderer _colorRenderer;
 	
 	Sphere _textureSphere;
-	Sphere _colorSphere;
+	SphereBurst _colorSphere;
 	float _angle;
 	BOOL _ready;
 }
@@ -55,7 +56,7 @@
 	
 	// Create sphere with Color material
 	var colorMaterial = [[RandomColorMaterial alloc] init];
-	var _colorSphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:1.2 longs:25 lats:25];
+	var _colorSphere = [[SphereBurst alloc] initWithGeometry:colorMaterial radius:1.2 longs:25 lats:25];
 	[_colorSphere prepareGL:_glContext];
 	
 	// reshape 
