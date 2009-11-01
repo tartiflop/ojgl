@@ -12,6 +12,8 @@
 
 	CPString _vertexShaderFile;
 	CPString _fragmentShaderFile;
+    Matrix4D _viewMatrix;
+    Matrix4D _modelMatrix;
 }
 
 - (id)initWithContext:(GLContext)context vertexShaderFile:(CPString)vertexShaderFile fragmentShaderFile:(CPString)fragmentShaderFile {
@@ -22,6 +24,7 @@
 		_glProgram = [_glContext createProgram];
 		_vertexShaderFile = vertexShaderFile;
 		_fragmentShaderFile = fragmentShaderFile;
+       	_modelMatrix = new Matrix4D(); _viewMatrix = new Matrix4D();
 	}
 	
 	return self;
@@ -52,16 +55,21 @@
 - (void)drawElements:(int)numberOfElements {
 	// redraw
 	[_glContext drawElements:numberOfElements];
-
 }
 
 - (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
 }
 
-- (void)setViewMatrix:(Matrix4D)mvMatrix {
+- (void)setViewMatrix:(Matrix4D)viewMatrix {
+    _viewMatrix = viewMatrix;
+    var mvMatrix = _viewMatrix; mvMatrix.multiply(_modelMatrix);
+	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
 }
 
-- (void)setModelMatrix:(Matrix4D)mvMatrix {
+- (void)setModelMatrix:(Matrix4D)modelMatrix {
+    _modelMatrix = modelMatrix;
+    var mvMatrix = _viewMatrix; mvMatrix.multiply(_modelMatrix);
+	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
 }
 
 - (void)setVertexBufferData:(int)bufferId {

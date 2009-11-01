@@ -6,8 +6,6 @@
 	int _mvMatrixUniformLocation;
 	int _perspectiveUniformLocation;
 	int _samplerUniformLocation;
-    Matrix4D _viewMatrix;
-    Matrix4D _modelMatrix;
 }
 
 - (id)initWithContext:(GLContext)context {
@@ -32,8 +30,6 @@
 	// Set up the texture sampler
 	[_glContext setUniformSampler:[_glProgram getUniformLocation:"sTexture"]];
 
-	_modelMatrix = new Matrix4D(); _viewMatrix = new Matrix4D();
-
 	// Callback
 	[super callback]
 }
@@ -43,18 +39,6 @@
 	// Set the projection matrix
 	[_glContext setUniformMatrix:_perspectiveUniformLocation matrix:projectionMatrix];
 
-}
-
-- (void)setViewMatrix:(Matrix4D)viewMatrix {
-    _viewMatrix = viewMatrix;
-    var mvMatrix = _viewMatrix; mvMatrix.multiply(_modelMatrix);
-	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
-}
-
-- (void)setModelMatrix:(Matrix4D)modelMatrix {
-    _modelMatrix = modelMatrix;
-    var mvMatrix = _viewMatrix; mvMatrix.multiply(_modelMatrix);
-	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
 }
 
 - (void)setVertexBufferData:(int)bufferId {
