@@ -46,7 +46,7 @@ app = self;
 	// update framerate
 	[_framerate tick];
 	[_sphereView setNeedsDisplay:YES];
-	[CPTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+	[CPTimer scheduledTimerWithTimeInterval:1/32 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 }
 
 - (void)fps {
