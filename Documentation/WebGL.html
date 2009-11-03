@@ -1,0 +1,2162 @@
+<html>
+<head>
+<title>WebGL Cheat Sheet</title>
+
+<style>
+
+#header-note {
+  border : 1px dashed #666;
+  padding : 0.5em;
+  margin-top : 0.3em;
+}
+
+body {
+  font-family : Trebuchet MS, Arial;
+  font-size : 8pt;
+}
+
+h1 {
+  font-size : 16pt;
+  margin-bottom : 0;
+  margin-top : 0;
+}
+h2 {
+  margin-bottom : 0.4em;
+  margin-top : 0.4em;
+  font-size : 12pt;
+  background-color : rgb(64,64,64);
+  color : white;
+  padding-left : 0.5em;
+  padding-bottom : 0.2em;
+  padding-top : 0.2em;
+}
+
+ul {
+  margin-left : 0;
+  margin-top : 0.2em;
+  margin-bottom : 0;
+}
+
+li {
+  margin-left : 0;
+  padding-left : 0;
+}
+
+.page {
+  width : 18cm;
+  height : 27cm;
+  height : auto;
+  overflow : hidden;
+  margin-left : 0.1cm;
+  /* display : inline-block; */
+  /* border : 1px solid black; */
+}
+
+.footer {
+  clear : both;
+  display : block;
+  width : 18cm;
+}
+
+.footer-space {
+  height : 10px;
+}
+
+.column {
+  width : 8.5cm;
+  display : block;
+}
+
+.column-left {
+  float : left;
+}
+
+.column-right {
+  float : right;
+}
+
+.method.ff-notimp .name:after,
+.method.webkit-notimp .name:after {
+}
+
+.attr, .attr-hdr, .method, .method-hdr {
+  display : block;
+  margin-left : 1em;
+}
+
+.method-hdr {
+  display : none;
+}
+.comment {
+  display : inline-block;
+  /* display : none; */
+  color : rgb(80,80,80);
+  margin-left : 1.16cm;
+}
+
+
+.comment ul {
+  list-style : none;
+  padding : 0;
+  margin-left : 1em;
+  margin-bottom : 0.2em;
+}
+.comment ul.compact,
+.comment ul.really-compact,
+.comment ul.ultra-compact {
+  padding : 0;
+  margin-bottom : 0.2em;
+}
+
+.comment ul li,
+.method .arg-name, 
+.method .arg-inline-value {
+  cursor : default;
+}
+
+.comment ul li:hover,
+.method .arg-name:hover, 
+.method .arg-inline-value:hover {
+  /* background-color : rgb(230,230,230); */
+}
+
+
+.comment ul.compact li {
+  display : inline-block;
+  width : 3.3cm;
+}
+
+.comment ul.really-compact li {
+  display : inline-block;
+  width : 2.0cm;
+}
+
+.comment ul.ultra-compact li {
+  display : inline-block;
+  width : 1.5cm;
+}
+
+.method-hdr .return, .method-hdr name,
+.method .return, .method name {
+  display : inline-block;
+  vertical-align : top;
+}
+
+.method .return, .arg-type {
+  font-style : italic;
+}
+
+.method .return {
+  margin-top : 1px;
+}
+
+
+.method .args {
+  display : inline-block;
+  margin-left : 1.7cm;
+}
+
+
+.method .args .arg-name, .method .args-small .arg-name {
+  font-weight : bold;
+}
+
+
+.method .args-small {
+}
+
+
+.method.with-note sup,
+.method.ff-notimp sup,
+.method.webkit-notimp sup {
+  display : inline-block;
+  margin-top : -4px;
+}
+
+
+.method .name:after {
+  content : "(";
+}
+.method .args:after, .method .args-small:after {
+  content : " )";
+  font-weight : bold;
+}
+
+.method .args-small.args-first-line:after {
+  content : ""
+}
+
+.attr .values:before {
+  content : "Supports any of the following values:";
+}
+
+.method .return {
+  width : 0.9cm;
+}
+
+.attr .name, .method .name {
+  font-weight : bold;
+  font-size : 9pt;
+}
+
+cite {
+  font-size : 8pt;
+}
+
+
+#sources, #notes {
+  display:inline-block;
+  vertical-align:top;
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+#sources a {
+  color : black;
+  text-decoration : none;
+}
+
+#sources a:hover {
+  text-decoration : underline;
+}
+
+#header-url {
+  float:right;
+  margin-top:0.2em;
+  font-size:12pt;
+}
+
+
+/* 
+.method {
+  margin-bottom : 4px;
+}
+.comment {
+  display : none;
+}
+*/
+</style>
+
+</head>
+<body>
+
+
+<div class="page">
+
+<span id="header-url">http://blog.nihilogic.dk/</span>
+
+<h1>WebGL Cheat Sheet <span style="font-size:60%;">v0.1</span></h1>
+
+<div id="header-note">Note: It is implied that all functions and symbolic names are methods and properties on a WebGL context object</div>
+
+
+<span class="column column-left">
+
+<h2>Buffers</h2>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createBuffer</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span><br/>
+	<span class="comment">Create a buffer object</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">deleteBuffer</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the buffer object to be deleted.">buffer</span>
+	</span>
+	<span class="comment">Delete a buffer object.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bindBuffer</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target to which the buffer object is bound.">target</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the buffer object.">buffer</span>
+	</span>
+	<span class="comment">Bind a buffer object. Accepted values for target are:
+		<ul class="compact">
+			<li>ARRAY_BUFFER</li>
+			<li>ELEMENT_ARRAY_BUFFER</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bufferData</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target to which the buffer object is bound.">target</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the data that will be copied into the data store for initialization, or NULL if no data is to be copied.">dta</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the expected usage pattern of the data store.">usage</span>
+	</span>
+	<span class="comment">Create and initialize a buffer object's data store. Accepted values for usage are:
+		<ul class="compact">
+			<li title="The data store contents will be modified once and used at most a few times.">STREAM_DRAW</li>
+			<li title="The data store contents will be modified once and used many times.">STATIC_DRAW</li>
+			<li title="The data store contents will be modified repeatedly and used many times.">DYNAMIC_DRAW</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bufferSubData</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target buffer object.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.">offset</span>,
+	</span><span class="args">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the new data that will be copied into the data store.">data</span>
+	</span>
+	<span class="comment">Update a subset of a buffer object's data store.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">getBufferParameteri</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target buffer object.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a buffer object parameter.">value</span>
+	</span>
+	<span class="comment">Return parameter, pname, of a buffer object:
+		<ul class="compact">
+			<li title="Returns the size of the buffer object, measured in bytes. The initial value is 0.">BUFFER_SIZE</li>
+			<li title="Returns the buffer object's usage pattern. The initial value is STATIC_DRAW.">BUFFER_USAGE</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">bool</span>
+	<span class="name">isBuffer</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies a potential buffer object.">buffer</span>
+	</span>
+	<span class="comment">Determine if an object is a buffer object.</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul>
+			<li title="Returns a single value, the name of the buffer object currently bound to the target ARRAY_BUFFER. If no buffer object is bound to this target, 0 is returned.  The initial value is 0. See bindBuffer.">ARRAY_BUFFER_BINDING</li>
+			<li title="Returns a single value, the name of the buffer object currently bound to the target ELEMENT_ARRAY_BUFFER. If no buffer object is bound to this target, 0 is returned.  The initial value is 0. See bindBuffer.">ELEMENT_ARRAY_BUFFER_BINDING</li>
+		</ul>
+	</span>
+</span>
+
+
+
+<h2>Renderbuffers</h2>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createRenderbuffer</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span>
+	<span class="comment">Create a renderbuffer object</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">deleteRenderbuffer</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the renderbuffer object to be deleted.">buffer</span>
+	</span>
+	<span class="comment">Delete a renderbuffer object.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bindRenderbuffer</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target to which the renderbuffer object is bound.">target</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the renderbuffer object.">buffer</span>
+	</span>
+	<span class="comment">Bind a renderbuffer object, target must be RENDERBUFFER.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">getRenderbufferParameteri</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target to which the renderbuffer object is bound.">target</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a renderbuffer object parameter.">pname</span>
+	</span>
+	<span class="comment">Return parameter, pname, of a renderbuffer object:
+		<ul>
+			<li title="Returns the width in pixels of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_WIDTH</li>
+			<li title="Returns the height in pixels of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_HEIGHT</li>
+			<li title="Returns the internal format of the image of the currently bound renderbuffer. The initial value is RGBA4.">RENDERBUFFER_INTERNAL_FORMAT</li>
+			<li title="Returns the resolution in bits for the red component of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_RED_SIZE</li>
+			<li title="Returns the resolution in bits for the green component of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_GREEN_SIZE</li>
+			<li title="Returns the resolution in bits for the blue component of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_BLUE_SIZE</li>
+			<li title="Returns the resolution in bits for the alpha component of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_ALPHA_SIZE</li>
+			<li title="Returns the resolution in bits for the depth component of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_DEPTH_SIZE</li>
+			<li title="Returns the resolution in bits for the stencil component of the image of the currently bound renderbuffer. The initial value is 0.">RENDERBUFFER_STENCIL_SIZE</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">renderbufferStorage</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the renderbuffer target.">target</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the color-renderable, depth-renderable, or stencil-renderable format of the renderbuffer.">format</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the width of the renderbuffer in pixels.">width</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the height of the renderbuffer in pixels.">height</span>
+	</span>
+	<span class="comment">Create and initialize a renderbuffer object's data store. Accepted values for format are:
+		<ul>
+			<li title="">RGBA4</li>
+			<li title="">RGB565</li>
+			<li title="">RGB5_A1</li>
+			<li title="">DEPTH_COMPONENT16</li>
+			<li title="">STENCIL_INDEX8</li>
+		</ul>
+	</span>
+</span>
+
+
+
+<span class="method">
+	<span class="return">bool</span>
+	<span class="name">isRenderbuffer</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies a potential renderbuffer object.">buffer</span>
+	</span>
+	<span class="comment">Determine if an object is a renderbuffer object.</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul>
+			<li title="Returns a single value, the name of the currently bound renderbuffer. The initial value is 0, indicating no renderbuffer is bound. See bindRenderbuffer.">RENDERBUFFER_BINDING</li>
+			<li title="Returns one value. The value indicates the largest renderbuffer width and height that the GL can handle. The value must be at least 1. See renderbufferStorage.">MAX_RENDERBUFFER_SIZE</li>
+
+		</ul>
+	</span>
+</span>
+
+
+
+</span>
+<span class="column column-right">
+
+
+<h2>Framebuffers</h2>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createFramebuffer</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span>
+	<span class="comment">Create a framebuffer object</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">deleteFramebuffer</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the framebuffer object to be deleted.">buffer</span>
+	</span>
+	<span class="comment">Delete a framebuffer object.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bindFramebuffer</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target to which the framebuffer object is bound.">target</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the framebuffer object.">buffer</span>
+	</span>
+	<span class="comment">Bind a framebuffer, target must be FRAMEBUFFER.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">checkFramebufferStatus</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the framebuffer target.">target</span>
+	</span>
+	<span class="comment">Return the framebuffer completeness status of a framebuffer object. Return values are:
+		<ul>
+			<li title="The framebuffer is complete.">FRAMEBUFFER_COMPLETE</li>
+			<li title="Not all framebuffer attachment points are framebuffer attachment complete. This means that at least one attachment point with a renderbuffer or texture attached has its attached object no longer in existence or has an attached image with a width or height of zero, or the color attachment point has a non-color-renderable image attached, or the depth attachment point has a non-depth-renderable image attached, or the stencil attachment point has a non-stencil-renderable image attached.">FRAMEBUFFER_INCOMPLETE_ATTACHMENT</li>
+			<li title="No images are attached to the framebuffer.">FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT</li>
+			<li title="Not all attached images have the same width and height.">FRAMEBUFFER_INCOMPLETE_DIMENSIONS</li>
+			<li title="The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.">FRAMEBUFFER_UNSUPPORTED</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">framebufferRenderbuffer</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the framebuffer target.">target</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the attachment point to which renderbuffer should be attached.">att</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the renderbuffer target. Must be RENDERBUFFER.">rbtarget</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the renderbuffer object that is to be attached.">rbuffer</span>
+	</span>
+	<span class="comment">Attach a renderbuffer object to a framebuffer object. Accepted values for attachment are:
+		<ul class="compact">
+			<li title="">DEPTH_ATTACHMENT</li>
+			<li title="">COLOR_ATTACHMENT0</li>
+			<li title="">STENCIL_ATTACHMENT</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">getFramebufferAttachmentParameteri</span>
+	<span class="args-small args-first-line">
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the framebuffer target.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the attachment point to which renderbuffer should be attached.">attachment</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the renderbuffer target. Must be RENDERBUFFER.">pname</span>
+	</span>
+	<span class="comment">Return attachment parameters of a framebuffer object. Accepted values for attachment are:
+		<ul>
+			<li title="Returns the type of object which contains the attached image, either RENDERBUFFER, TEXTURE, or if no image is  attached, NONE. The initial value is NONE.">FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE</li>
+			<li title="If the value of FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE is RENDERBUFFER, params returns the name of the renderbuffer object which contains the attached image. If the value of FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE is TEXTURE, params returns the name of the texture object which contains the attached image. The initial value is zero.">FRAMEBUFFER_ATTACHMENT_OBJECT_NAME</li>
+			<li title="If the value of FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE is TEXTURE, params returns the mipmap level of the texture object which contains the attached image. The initial value is zero.">FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL</li>
+			<li title="If the value of FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE is TEXTURE and FRAMEBUFFER_ATTACHMENT_OBJECT_NAME is the name of a cube-map texture, params returns the cube map face of the cube-map texture object which contains the attached image. If the attached image is from a texture object but not a cube-map, params returns 0. The initial value is TEXTURE_CUBE_MAP_POSITIVE_X">FRAMEBUFFER_ATTACHMENT_TEXTURE_</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CUBE_MAP_FACE</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">framebufferTexture2D</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the framebuffer target.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the attachment point to which an image from texture should be attached.">att</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the texture target.">textarget</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the texture.">tex</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the mipmap level of the texture image to be attached, which must be 0.">level</span>
+	</span>
+	<span class="comment">Attach a texture image to a framebuffer object. Accepted values for textarget are:
+		<ul>
+			<li title="">TEXTURE_2D</li>
+			<li title="">TEXTURE_CUBE_MAP_POSITIVE_X</li>
+			<li title="">TEXTURE_CUBE_MAP_NEGATIVE_X</li>
+			<li title="">TEXTURE_CUBE_MAP_POSITIVE_Y</li>
+			<li title="">TEXTURE_CUBE_MAP_NEGATIVE_Y</li>
+			<li title="">TEXTURE_CUBE_MAP_POSITIVE_Z</li>
+			<li title="">TEXTURE_CUBE_MAP_NEGATIVE_Z</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">pixelStorei</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the parameter to be set. One value affects the packing of pixel data into memory: PACK_ALIGNMENT. The other affects the unpacking of pixel data from memory: UNPACK_ALIGNMENT.">pname</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the value that pname is set to.">param</span>
+	</span>
+	<span class="comment">Set pixel storage modes. Accepted pname values are:
+		<ul class="compact">
+			<li title="Specifies the alignment requirements for the start of each pixel row in memory. The allowable values are 1 (byte-alignment), 2 (rows aligned to even-numbered bytes), 4 (word-alignment), and 8 (rows start on double-word boundaries).">PACK_ALIGNMENT</li>
+			<li title="Specifies the alignment requirements for the start of each pixel row in memory. The allowable values are 1 (byte-alignment), 2 (rows aligned to even-numbered bytes), 4 (word-alignment), and 8 (rows start on double-word boundaries).">UNPACK_ALIGNMENT</li>
+		</ul>
+	</span>
+</span>
+
+
+
+<span class="method">
+	<span class="return">Array</span>
+	<span class="name">readPixels</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the window coordinates of the first pixel that is read from the frame buffer. This location is the lower left corner of a rectangular block of pixels.">x</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the window coordinates of the first pixel that is read from the frame buffer. This location is the lower left corner of a rectangular block of pixels.">y</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specify the width of the pixel rectangle.">width</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specify the height of the pixel rectangle.">height</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the format of the pixel data.">format</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the data type of the pixel data.">type</span>
+	</span>
+	<span class="comment">Read a block of pixels from the frame buffer. Accepted format values are:
+		<ul class="really-compact">
+			<li title="">ALPHA</li>
+			<li title="">RGB</li>
+			<li title="">RGBA</li>
+		</ul>
+		Accepted type values are:
+		<ul>
+			<li title="">UNSIGNED_BYTE</li>
+			<li title="">UNSIGNED_SHORT_4_4_4_4</li>
+			<li title="">UNSIGNED_SHORT_5_5_5_1</li>
+			<li title="">UNSIGNED_SHORT_5_6_5</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">bool</span>
+	<span class="name">isFramebuffer</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies a potential framebuffer object.">buffer</span>
+	</span>
+	<span class="comment">Determine if an object is a framebuffer object.</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul class="compact">
+			<li title="Returns one value, the number of red bitplanes in the color buffer of the currently bound framebuffer.">RED_BITS</li>
+			<li title="Returns one value, the number of green bitplanes in the color buffer of the currently bound framebuffer.">GREEN_BITS</li>
+			<li title="Returns one value, the number of blue bitplanes in the color buffer of the currently bound framebuffer.">BLUE_BITS</li>
+			<li title="Returns one value, the number of alpha bitplanes in the color buffer of the currently bound framebuffer.">ALPHA_BITS</li>
+			<li title="Returns a single value, the name of the currently bound framebuffer. The initial value is 0, indicating the default framebuffer. See bindFramebuffer.">FRAMEBUFFER_BINDING</li>
+		</ul>
+	</span>
+</span>
+
+
+</span>
+</div>
+
+
+
+
+<div class="page">
+
+
+<span class="column column-left">
+
+
+
+
+<h2>Program objects</h2>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createProgram</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span>
+	<span class="comment">Create a program object</span>
+</span>
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">validateProgram</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be validated.">program</span>
+	</span>
+	<span class="comment">Validate a program object</span>
+</span>
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">linkProgram</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be linked.">program</span>
+	</span>
+	<span class="comment">Link a program object</span>
+</span>
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">useProgram</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the program object whose executables are to be used as part of current rendering state.">program</span>
+	</span>
+	<span class="comment">Install a program as part of current rendering state</span>
+</span>
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">deleteProgram</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be deleted.">program</span>
+	</span>
+	<span class="comment">Delete a program object</span>
+</span>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">getProgrami</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried">program</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the object parameter">pname</span>
+	</span>
+	<span class="comment">Return parameter, pname, from a program object: 
+		<ul class="compact">
+			<li title="Returns TRUE if the last link operation on [program] was successful, and FALSE otherwise">LINK_STATUS</li>
+			<li title="Returns the number of characters in the information log for [program] including the null termination character (i.e., the size of the character buffer required to store the information log). If program has no information log, a value of 0 is returned">INFO_LOG_LENGTH</li>
+			<li title="Returns TRUE if [program] is currently flagged for deletion, and FALSE otherwise">DELETE_STATUS</li>
+			<li title="Returns TRUE or if the last validation operation on [program] was successful, and FALSE otherwise">VALIDATE_STATUS</li>
+			<li title="Returns the number of shader objects attached to [program]">ATTACHED_SHADERS</li>
+			<li title="Returns the number of active uniform variables for [program]">ACTIVE_UNIFORMS</li>
+			<li title="Returns the number of active attribute variables for [program]">ACTIVE_ATTRIBUTES</li>
+			<li style="display:block;" title="Returns the length of the longest active attribute name for [program], including the null termination character (i.e., the size of the character buffer required to store the longest attribute name). If no active attributes exist, 0 is returned">ACTIVE_ATTRIBUTE_MAX_LENGTH</li>
+			<li style="display:block;" title="Returns the length of the longest active uniform variable name for [program], including the null termination character (i.e., the size of the character buffer required to store the longest uniform variable name). If no active uniform variables exist, 0 is returned">ACTIVE_UNIFORM_MAX_LENGTH</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">string</span>
+	<span class="name">getProgramInfoLog</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object whose information log is to be queried.">program</span>
+	</span>
+	<span class="comment">Return the information log for a program object</span>
+</span>
+
+<span class="method">
+	<span class="return">bool</span>
+	<span class="name">isProgram</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies a potential program object.">program</span>
+	</span>
+	<span class="comment">Determine if an object is a program object.</span>
+</span>
+
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<span class="arg-inline-value" title="Returns one value, the name of the program object that is currently active, or 0 if no program object is active. See useProgram.">CURRENT_PROGRAM</span>
+	</span>
+</span>
+
+<h2>Shaders</h2>
+
+<span class="method-hdr">
+	<span class="return">Return</span>
+	<span class="name">Name</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createShader</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the type of shader to be created.">shaderType</span>
+	</span>
+	<span class="comment">Create a shader object. Parameter shaderType must be VERTEX_SHADER or FRAGMENT_SHADER.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">compileShader</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object to be compiled.">shader</span>
+	</span>
+	<span class="comment">Compile a shader object</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">attachShader</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to which a shader object will be attached.">program</span>, 
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object that is to be attached.">shader</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">detachShader</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object from which to detach the shader object.">program</span>, 
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object to be detached.">shader</span>
+	</span>
+	<span class="comment">Attach/detach a shader object.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">deleteShader</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object to be deleted.">shader</span>
+	</span>
+	<span class="comment">Delete a shader object</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">getShaderi</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object to be queried.">shader</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the object parameter.">pname</span>
+	</span>
+	<span class="comment">Return parameter, pname, from a shader object:
+		<ul class="compact">
+			<li title="Returns VERTEX_SHADER if shader is a vertex shader object, and FRAGMENT_SHADER if shader is a fragment shader object.">SHADER_TYPE</li>
+			<li title="Returns TRUE if shader is currently flagged for deletion, and FALSE otherwise.">DELETE_STATUS</li>
+			<li title="For implementations that support a shader compiler, params returns TRUE if the last compile operation on shader was successful, and FALSE otherwise.">COMPILE_STATUS</li>
+			<li title="For implementations that support a shader compiler, params returns the number of characters in the information log for shader including the null termination character (i.e., the size of the character buffer required to store the information log). If shader has no information log, a value of 0 is returned.">INFO_LOG_LENGTH</li>
+			<li title="For implementations that support a shader compiler, params returns the length of the concatenation of the source strings that make up the shader source for the shader, including the null termination character. (i.e., the size of the character buffer required to store the shader source). If no source code exists, 0 is returned.">SHADER_SOURCE_LENGTH</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">string</span>
+	<span class="name">getShaderInfoLog</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object whose information log is to be queried.">shader</span>
+	</span>
+	<span class="comment">Return the information log for a shader object</span>
+</span>
+
+<span class="method">
+	<span class="return">string</span>
+	<span class="name">getShaderSource</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object to be queried.">shader</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">shaderSource</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the shader object whose source code is to be replaced.">shader</span>, 
+		<span class="arg-type">string</span> <span class="arg-name" title="Specifies the string containing the source code to be loaded into the shader.">source</span>
+	</span>
+	<span class="comment">Get/set the source code in a shader object</span>
+</span>
+
+<span class="method ff-notimp webkit-notimp">
+	<span class="return">Array</span>
+	<span class="name">getAttachedShaders<sup>2</sup></span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried.">program</span>
+	</span>
+	<span class="comment">Return the shader objects attached to a program object.</span>
+</span>
+
+<span class="method">
+	<span class="return">bool</span>
+	<span class="name">isShader</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies a potential shader object.">shader</span>
+	</span>
+	<span class="comment">Determine if an object is a shader object.</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul class="compact">
+			<li title="Returns a single boolean value indicating whether a shader compiler is supported. FALSE indicates that any call to shaderSource or compileShader will result in a INVALID_OPERATION error being generated.">SHADER_COMPILER</li>
+			<li title="Returns one value, the maximum number four-element floating-point vectors available for interpolating varying variables used by vertex and fragment shaders. Varying variables declared as matrices or arrays will consume multiple interpolators. The value must be at least 8.">MAX_VARYING_VECTORS</li>
+		</ul>
+	</span>
+</span>
+
+
+<h2>Culling</h2>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small">
+		<span class="arg-value">CULL_FACE</span>
+	</span>
+	<span class="comment" style="display:none;">Enable/disable polygon culling.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">cullFace</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies whether front- or back-facing facets are candidates for culling.">mode</span>
+	</span>
+	<span class="comment">Specify facet culling mode, accepted values are:
+		<ul class="really-compact">
+			<li title="">FRONT</li>
+			<li title="">BACK</li>
+			<li title="">FRONT_AND_BACK</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">frontFace</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies whether front- or back-facing facets are candidates for culling.">mode</span>
+	</span>
+	<span class="comment">Define front/back-facing mode:
+		<span class="arg-inline-value" title="Clockwise polygons are taken to be front-facing.">CW</span> or
+		<span class="arg-inline-value" title="Counterclockwise polygons are taken to be front-facing.">CCW</span>
+	</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Parameters: 
+		<span class="arg-inline-value" title="Returns one value, a symbolic constant indicating which polygon faces are to be culled. The initial value is BACK. See cullFace.">CULL_FACE_MODE</span> or 
+		<span class="arg-inline-value" title="Returns one value, a symbolic constant indicating whether clockwise or counterclockwise polygon winding is treated as front-facing. The initial value is CCW. See frontFace.">FRONT_FACE</span>
+	</span>
+</span>
+
+
+
+
+
+</span>
+<span class="column column-right">
+
+
+<h2>Uniform variables</h2>
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">getUniformLocation</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried.">program</span>, 
+	</span><span class="args">
+		<span class="arg-type">string</span> <span class="arg-name" title="Specifies a string containing the name of the uniform variable whose location is to be queried.">name</span>
+	</span>
+	<span class="comment">Return the location of a uniform variable.</span>
+</span>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">getActiveUniform</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried.">program</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the uniform variable to be queried.">idx</span>
+	</span>
+	<span class="comment">Return information about an active uniform variable. Returns an object: { size: ..., type: ..., name: ... }.</span>
+</span>
+
+<span class="method ff-notimp webkit-notimp">
+	<span class="return">Array</span>
+	<span class="name">getUniformf<sup>2</sup></span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried.">program</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the location of the uniform variable to be queried.">location</span>
+	</span>
+</span>
+
+<!-- not implemented 
+<span class="method">
+	<span class="return">float</span>
+	<span class="name">getUniformf</span>
+	<span class="args-small"><span class="arg-type">Object</span> <span class="arg-name">program</span>, <span class="arg-type">ulong</span> <span class="arg-name">location</span></span>
+</span>
+<span class="method">
+	<span class="return">long</span>
+	<span class="name">getUniformi</span>
+	<span class="args-small"><span class="arg-type">Object</span> <span class="arg-name">program</span>, <span class="arg-type">ulong</span> <span class="arg-name">location</span></span>
+</span>
+<span class="method">
+	<span class="return">Array</span>
+	<span class="name">getUniformfv</span>
+	<span class="args-small"><span class="arg-type">Object</span> <span class="arg-name">program</span>, <span class="arg-type">ulong</span> <span class="arg-name">location</span></span>
+</span>
+<span class="method">
+	<span class="return">Array</span>
+	<span class="name">getUniformiv</span>
+	<span class="args-small"><span class="arg-type">Object</span> <span class="arg-name">program</span>, <span class="arg-type">ulong</span> <span class="arg-name">location</span></span>
+</span>
+-->
+
+<span class="method">
+	<span class="comment">Return the value of a uniform variable</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">uniform[1234][if]</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the location of the uniform variable to be modified.">location</span>, 
+		...
+	</span>
+	<span class="comment">Specify 1-4 float or int values of a uniform variable.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">uniform[1234][if]v</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the location of the uniform variable to be modified.">location</span>, 
+		<span class="arg-type">Array</span> <span class="arg-name" title="Specifies the new values to be used for the specified uniform variable.">v</span>
+	</span>
+	<span class="comment">Specify the value of a uniform variable as an array of 1-4 float or int values.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">uniformMatrix[234]fv</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the location of the uniform variable to be modified.">location</span>,
+	</span><span class="args">
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specifies whether to transpose the matrix as the values are loaded into the uniform variable. Must be FALSE.">transpose</span>, 
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the new values to be used for the specified uniform variable.">value</span>
+	</span>
+	<span class="comment">Specify the value of a matrix uniform variable using arrays of float values.</span>
+</span>
+
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul>
+			<li title="Returns one value, the maximum number four-element floating-point vectors available for interpolating varying variables used by vertex and fragment shaders. Varying variables declared as matrices or arrays will consume multiple interpolators. The value must be at least 8.">MAX_VERTEX_UNIFORM_VECTORS</li>
+			<li title="Returns one value, the maximum number of four-element floating-point, integer, or boolean vectors that can be held in uniform variable storage for a fragment shader. The value must be at least 16.">MAX_FRAGMENT_UNIFORM_VECTORS</li>
+		</ul>
+	</span>
+</span>
+
+<h2>Attribute variables</h2>
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">getAttribLocation</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried.">program</span>, 
+		<span class="arg-type">string</span> <span class="arg-name" title="Specifies a string containing the name of the attribute variable whose location is to be queried.">name</span>
+	</span>
+	<span class="comment">Return the location of an attribute variable.</span>
+</span>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">getActiveAttrib</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object to be queried.">program</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the attribute variable to be queried.">idx</span>
+	</span>
+	<span class="comment">Return information about an active attribute variable. Returns an object: { size: ..., type: ..., name: ... }.</span>
+</span>
+
+<span class="method ff-notimp">
+	<span class="return">float</span>
+	<span class="name">getVertexAttribf<sup>2</sup></span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the generic vertex attribute parameter to be queried.">idx</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the vertex attribute parameter to be queried.">pname</span>
+	</span>
+</span>
+
+<span class="method ff-notimp">
+	<span class="return">long</span>
+	<span class="name">getVertexAttribi<sup>2</sup></span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the generic vertex attribute parameter to be queried.">idx</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the vertex attribute parameter to be queried.">pname</span>
+	</span>
+</span>
+
+<span class="method ff-notimp">
+	<span class="return">Object</span>
+	<span class="name">getVertexAttribfv<sup>2</sup></span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the generic vertex attribute parameter to be queried.">idx</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the vertex attribute parameter to be queried.">pname</span>
+	</span>
+</span>
+
+<span class="method ff-notimp">
+	<span class="return">Object</span>
+	<span class="name">getVertexAttribiv<sup>2</sup></span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the generic vertex attribute parameter to be queried.">idx</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the vertex attribute parameter to be queried.">pname</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="comment">Return a generic vertex attribute parameter. Accepted pname values are:
+		<ul>
+			<li title="Returns a single value that is non-zero (true) if the vertex attribute array for index is enabled and 0 (false) if it is disabled. The initial value is FALSE.">VERTEX_ATTRIB_ARRAY_ENABLED</li>
+			<li title="Returns a single value, the size of the vertex attribute array for index. The size is the number of values for each element of the vertex attribute array, and it will be 1, 2, 3, or 4. The initial value is 4.">VERTEX_ATTRIB_ARRAY_SIZE</li>
+			<li title="Returns a single value, the array stride for (number of bytes between successive elements in) the vertex attribute array for index. A value of 0 indicates that the array elements are stored sequentially in memory. The initial value is 0.">VERTEX_ATTRIB_ARRAY_STRIDE</li>
+			<li title="Returns a single value, a symbolic constant indicating the array type for the vertex attribute array for index. Possible values are BYTE, UNSIGNED_BYTE, SHORT, UNSIGNED_SHORT, FIXED, and FLOAT. The initial value is FLOAT.">VERTEX_ATTRIB_ARRAY_TYPE</li>
+			<li title="Returns a single value that is non-zero (true) if fixed-point data types for the vertex attribute array indicated by index are normalized when they are converted to floating point, and 0 (false) otherwise. The initial value is FALSE.">VERTEX_ATTRIB_ARRAY_NORMALIZED</li>
+			<li title="Returns a single value, the name of the buffer object currently bound to the binding point corresponding to generic vertex attribute array index. If no buffer object is bound, 0 is returned. The initial value is 0.">VERTEX_ATTRIB_ARRAY_BUFFER_BINDING</li>
+			<li title="Returns four values that represent the current value for the generic vertex attribute specified by index. Generic vertex attribute 0 is unique in that it has no current state, so an error will be generated if index is 0. The initial value for all other generic vertex attributes is (0,0,0,1).">CURRENT_VERTEX_ATTRIB</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">vertexAttribPointer</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the generic vertex attribute parameter to be modified.">idx</span>, 
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the number of components per generic vertex attribute. Must be 1, 2, 3, or 4. The initial value is 4.">size</span>,
+	</span>
+	<span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the data type of each component in the array.">type</span>,
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specifies whether fixed-point data values should be normalized (TRUE) or converted directly as fixed-point values (FALSE) when they are accessed.">norm</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array. The initial value is 0.">stride</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="">offset</span>
+	</span>
+	<span class="comment">Define an array of generic vertex attribute data. Accepted type values are:
+		<ul class="really-compact">
+			<li title="">FIXED</li>
+			<li title="">BYTE</li>
+			<li title="">UNSIGNED_BYTE</li>
+			<li title="">FLOAT</li>
+			<li title="">SHORT</li>
+			<li title="">UNSIGNED_SHORT</li>
+		</ul>
+	</span>
+
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">vertexAttrib[1234]f</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the generic vertex attribute to be modified.">idx</span>, 
+		...
+	</span>
+	<span class="comment">Specify 1-4 float values of a generic vertex attribute.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">vertexAttrib[1234]fv</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the generic vertex attribute to be modified.">idx</span>, 
+		<span class="arg-type">Array</span> <span class="arg-name" title="Specifies the new value to be used for the specified vertex attribute.">v</span>
+	</span>
+	<span class="comment">Specify the value of a generic vertex attribute as an array of 1-4 float values.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bindAttribLocation</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the program object in which the association is to be made.">program</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the generic vertex attribute to be bound.">idx</span>,
+	</span><span class="args">
+		<span class="arg-type">string</span> <span class="arg-name" title="Specifies a string containing the name of the vertex shader attribute variable to which index is to be bound.">name</span>
+	</span>
+	<span class="comment">Associate a generic vertex attribute index with a named attribute variable.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enableVertexAttribArray</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the generic vertex attribute to be enabled.">idx</span></span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">disableVertexAttribArray</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the index of the generic vertex attribute to be disabled.">idx</span></span>
+</span>
+
+<span class="method">
+	<span class="comment">Enable or disable a generic vertex attribute array</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul>
+			<li title="Returns one value, the maximum number of 4-component generic vertex attributes accessible to a vertex shader. The value must be at least 8. See vertexAttrib[if].">MAX_VERTEX_ATTRIBS</li>
+		</ul>
+	</span>
+</span>
+
+
+
+</span>
+
+</div>
+
+<div class="page">
+
+<span class="column column-left">
+
+<h2>Blending</h2>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small"><span class="arg-value">BLEND</span></span>
+	<span class="comment">Enable/disable blending</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">blendFunc</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies how the red, green, blue, and alpha source blending factors are computed.">sfactor</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies how the red, green, blue, and alpha destination blending factors are computed.">dfactor</span>
+	</span>
+	<span class="comment">Specify pixel arithmetic. Accepted values for sfactor and dfactor are:
+		<ul class="compact">
+			<li>ZERO</li>
+			<li>ONE</li>
+			<li>SRC_COLOR</li>
+			<li>DST_COLOR</li>
+			<li>SRC_ALPHA</li>
+			<li>DST_ALPHA</li>
+			<li>CONSTANT_COLOR</li>
+			<li>CONSTANT_ALPHA</li>
+			<li>ONE_MINUS_SRC_ALPHA</li>
+			<li>ONE_MINUS_DST_ALPHA</li>
+			<li>ONE_MINUS_SRC_COLOR</li>
+			<li>ONE_MINUS_DST_COLOR</li>
+			<li style="display:block;">ONE_MINUS_CONSTANT_COLOR</li>
+			<li style="display:block;">ONE_MINUS_CONSTANT_ALPHA</li>
+		</ul>
+	</span>
+	<span class="comment">In addition, sfactor can also be <span class="arg-inline-value">SRC_ALPHA_SATURATE</span></span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">blendFuncSeparate</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies how the red, green, and blue blending factors are computed. The initial value is ONE.">srcRGB</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies how the red, green, and blue destination blending factors are computed. The initial value is ZERO.">dstRGB</span>, <br/>
+	</span>
+	<span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specified how the alpha source blending factor is computed. The initial value is ONE.">srcAlpha</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specified how the alpha destination blending factor is computed. The initial value is ZERO.">dstAlpha</span>
+	</span>
+	<span class="comment">Specify pixel arithmetic for RGB and alpha components separately.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">blendEquation</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies how source and destination colors are combined. The initial value is FUNC_ADD">mode</span>
+	</span>
+	<span class="comment">Specify the equation used for both the RGB blend equation and the Alpha blend equation. Accepted values for mode are:
+		<ul class="really-compact">
+			<li>FUNC_ADD</li>
+			<li>FUNC_SUBTRACT</li>
+			<li style="display:block;">FUNC_REVERSE_SUBTRACT</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">blendEquationSeparate</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the RGB blend equation, how the red, green, and blue components of the source and destination colors are combined.">modeRGB</span>, 
+	</span>
+	<span class="args"><span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the alpha blend equation, how the alpha component of the source and destination colors are combined.">modeAlpha</span></span>
+	<span class="comment">Set the RGB blend equation and the alpha blend equation separately.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">blendColor</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the red component of BLEND_COLOR">red</span>, 
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the green component of BLEND_COLOR">green</span>, 
+	</span>
+	<span class="args">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the blue component of BLEND_COLOR">blue</span>, 
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the alpha component of BLEND_COLOR">alpha</span>
+	</span>
+	<span class="comment">Set the blend color</span>
+</span>
+
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul class="compact">
+			<li title="Returns a single boolean value indicating whether blending is enabled. The initial value is FALSE. See blendFunc.">BLEND</li>
+			<li title="Returns four values, the red, green, blue, and alpha values which are the components of the blend color. See blendColor. ">BLEND_COLOR</li>
+			<li title="Returns one value, the symbolic constant identifying the RGB destination blend function. The initial value is ZERO. See blendFunc and blendFuncSeparate.">BLEND_DST_RGB</li>
+			<li title="Returns one value, the symbolic constant identifying the RGB source blend function. The initial value is ONE. See blendFunc and blendFuncSeparate.">BLEND_SRC_RGB</li>
+			<li title="Returns one value, the symbolic constant identifying the alpha destination blend function. The initial value is ZERO. See blendFunc and blendFuncSeparate.">BLEND_DST_ALPHA</li>
+			<li title="Returns one value, the symbolic constant identifying the alpha source blend function. The initial value is ONE. See blendFunc and blendFuncSeparate.">BLEND_SRC_ALPHA</li>
+			<li title="Returns one value, a symbolic constant indicating whether the RGB blend equation is FUNC_ADD, FUNC_SUBTRACT, or FUNC_REVERSE_SUBTRACT. See blendEquationSeparate.">BLEND_EQUATION_RGB</li>
+			<li title="Returns one value, a symbolic constant indicating whether the Alpha blend equation is FUNC_ADD, FUNC_SUBTRACT, or FUNC_REVERSE_SUBTRACT. See blendEquationSeparate.">BLEND_EQUATION_ALPHA</li>
+		</ul>
+	</span>
+</span>
+
+
+
+<h2>Depth buffer</h2>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small"><span class="arg-value">DEPTH_TEST</span></span>
+</span>
+
+<span class="method">
+	<span class="comment">Enable/disable depth testing.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">depthFunc</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the conditions under which the pixel will be drawn. The initial value is ALWAYS.">func</span>
+	</span>
+	<span class="comment">Specify the value used for depth buffer comparisons. Parameter func is one of:
+		<ul class="ultra-compact">
+			<li title="Never passes.">NEVER</li>
+			<li title="Passes if the incoming depth value is less than the stored depth value.">LESS</li>
+			<li title="Passes if the incoming depth value is equal to the stored depth value.">EQUAL</li>
+			<li title="Passes if the incoming depth value is less than or equal to the stored depth value.">LEQUAL</li>
+			<li title="Passes if the incoming depth value is greater than the stored depth value.">GREATER</li>
+			<li title="Passes if the incoming depth value is not equal to the stored depth value.">NOTEQUAL</li>
+			<li title="Passes if the incoming depth value is greater than or equal to the stored depth value.">GEQUAL</li>
+			<li title="Always passes.">ALWAYS</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">depthMask</span>
+	<span class="args-small">
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specifies whether the depth buffer is enabled for writing. If flag is FALSE, depth buffer writing is disabled. Otherwise, it is enabled. Initially, depth buffer writing is enabled.">flag</span>
+	</span>
+	<span class="comment">Enable or disable writing into the depth buffer.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">depthRange</span>
+	<span class="args-small">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the mapping of the near clipping plane to window coordinates. The initial value is 0.">nearVal</span>, 
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the mapping of the far clipping plane to window coordinates. The initial value is 1.">farVal</span>
+	</span>
+	<span class="comment">Specify mapping of depth values from normalized device coordinates to window coordinates.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">clearDepth</span>
+	<span class="args-small">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the depth value used when the depth buffer is cleared. The initial value is 1.">depth</span>
+	</span>
+	<span class="comment">Specify the clear value for the depth buffer</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small"><span class="arg-value">POLYGON_OFFSET_FILL</span></span>
+	<span class="comment">Enable/disable polygon offset.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">polygonOffset</span>
+	<span class="args-small">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies a scale factor that is used to create a variable depth offset for each polygon. The initial value is 0.">factor</span>, 
+		<span class="arg-type">float</span> <span class="arg-name" title="Is multiplied by an implementation-specific value to create a constant depth offset. The initial value is 0.">units</span>
+	</span>
+	<span class="comment">Set the scale and units used to calculate depth values.</span>
+</span>
+
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small"><span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span></span>
+	<span class="comment">Relevant parameters:
+		<ul class="compact">
+			<li title="Returns a single boolean value indicating whether depth testing of fragments is enabled. The initial value is FALSE. See depthFunc and depthRange.">DEPTH_TEST</li>
+			<li title="Returns two values: the near and far mapping limits for the depth buffer. Integer values, if requested, are linearly mapped from the internal floating-point representation such that 1.0 returns the most positive representable integer value, and -1.0 returns the most negative representable integer value. The initial value is (0, 1). See depthRange.">DEPTH_RANGE</li>
+			<li title="Returns a single boolean value indicating if the depth buffer is enabled for writing. The initial value is TRUE. See depthMask. ">DEPTH_WRITEMASK</li>
+			<li title="Returns one value, the value that is used to clear the depth buffer. Integer values, if requested, are linearly mapped from the internal floating-point representation such that 1.0 returns the most positive representable integer value, and -1.0 returns the most negative representable integer value. The initial value is 1. See clearDepth.">DEPTH_CLEAR_VALUE</li>
+			<li title="Returns one value, the symbolic constant that indicates the depth comparison function. The initial value is LESS. See depthFunc.">DEPTH_FUNC</li>
+			<li title="Returns one value, the number of bitplanes in the depth buffer of the currently bound framebuffer.">DEPTH_BITS</li>
+			<li title="Returns one value. This value is multiplied by an implementation-specific value and then added to the depth value of each fragment generated when a polygon is rasterized. The initial value is 0. See polygonOffset.">POLYGON_OFFSET_UNITS</li>
+			<li title="Returns one value, the scaling factor used to determine the variable offset that is added to the depth value of each fragment generated when a polygon is rasterized. The initial value is 0. See polygonOffset.">POLYGON_OFFSET_FACTOR</li>
+		</ul>
+	</span>
+</span>
+
+</span>
+<span class="column column-right">
+
+
+<h2>Stencil buffer</h2>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small"><span class="arg-value">STENCIL_TEST</span></span>
+	<span class="comment">Enable/disable stencil testing.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">stencilFunc</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the test function.">func</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the reference value for the stencil test. ref is clamped to the range [0, 2^n - 1], where n is the number of bitplanes in the stencil buffer. The initial value is 0.">ref</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.">mask</span>
+	</span>
+	<span class="comment">Set front and back function and reference value for stencil testing. Parameter func is one of:
+		<ul class="ultra-compact">
+			<li title="Always fails.">NEVER</li>
+			<li title="Passes if ( ref & mask ) < ( stencil & mask ).">LESS</li>
+			<li title="Passes if ( ref & mask ) = ( stencil & mask ).">EQUAL</li>
+			<li title="Passes if ( ref & mask ) <= ( stencil & mask ).">LEQUAL</li>
+			<li title="Passes if ( ref & mask ) > ( stencil & mask ).">GREATER</li>
+			<li title="Passes if ( ref & mask ) != ( stencil & mask ).">NOTEQUAL</li>
+			<li title="Passes if ( ref & mask ) >= ( stencil & mask ).">GEQUAL</li>
+			<li title="Always passes.">ALWAYS</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">stencilFuncSeparate</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies whether front and/or back stencil state is updated.">face</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the test function. The initial value is ALWAYS.">func</span>,
+	</span><span class="args">
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the reference value for the stencil test. ref is clamped to the range [0, 2^n - 1], where n is the number of bitplanes in the stencil buffer. The initial value is 0.">ref</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies a mask that is ANDed with both the reference value and the stored stencil value when the test is done. The initial value is all 1's.">mask</span>
+	</span>
+	<span class="comment">Set front and/or back function and reference value for stencil testing. Accepted values for face are:
+		<ul class="really-compact">
+			<li title="">FRONT</li>
+			<li title="">BACK</li>
+			<li title="">FRONT_AND_BACK</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">stencilMask</span>
+	<span class="args-small"><span class="arg-type">ulong</span> <span class="arg-name" title="Specifies a bit mask to enable and disable writing of individual bits in the stencil planes. Initially, the mask is all 1's.">mask</span></span>
+	<span class="comment">Control the front and back writing of individual bits in the stencil planes.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">stencilMaskSeparate</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies whether the front and/or back stencil writemask is updated.">face</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies a bit mask to enable and disable writing of individual bits in the stencil planes. Initially, the mask is all 1's.">mask</span>
+	</span>
+	<span class="comment">Control the front and/or back writing of individual bits in the stencil planes.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">stencilOp</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the action to take when the stencil test fails. The initial value is KEEP.">sfail</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the stencil action when the stencil test passes, but the depth test fails. The initial value is KEEP.">dpfail</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and either there is no depth buffer or depth testing is not enabled. The initial value is KEEP.">dppass</span>
+	</span>
+	<span class="comment">Set front and back stencil test actions. Accepted values for sfail, dpfail and dppass are:
+		<ul class="ultra-compact">
+			<li title="Keeps the current value.">KEEP</li>
+			<li title="Sets the stencil buffer value to 0.">ZERO</li>
+			<li title="Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.">INCR</li>
+			<li title="Increments the current stencil buffer value. Wraps stencil buffer value to zero when incrementing the maximum representable unsigned value.">INCR_WRAP</li>
+			<li title="Sets the stencil buffer value to ref, as specified by stencilFunc.">REPLACE</li>
+			<li title="Bitwise inverts the current stencil buffer value.">INVERT</li>
+			<li title="Decrements the current stencil buffer value. Clamps to 0.">DECR</li>
+			<li title="Decrements the current stencil buffer value. Wraps stencil buffer value to the maximum representable unsigned value when decrementing a stencil buffer value of zero.">DECR_WRAP</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">stencilOpSeparate</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies whether front and/or back stencil state is updated.">face</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the action to take when the stencil test fails. The initial value is KEEP.">sfail</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the stencil action when the stencil test passes, but the depth test fails. The initial value is KEEP.">dpfail</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and either there is no depth buffer or depth testing is not enabled. The initial value is KEEP.">dppass</span>
+	</span>
+	<span class="comment">Set front and/or back stencil test actions.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">clearStencil</span>
+	<span class="args-small">
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the index used when the stencil buffer is cleared. The initial value is 0.">s</span>
+	</span>
+	<span class="comment">Specify the clear value for the stencil buffer.</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small"><span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span></span>
+	<span class="comment">Relevant parameters:
+		<ul class="compact">
+			<li title="Returns a single boolean value indicating whether stencil testing of fragments is enabled. The initial value is FALSE. See stencilFunc and stencilOp.">STENCIL_TEST</li>
+			<li title="Returns one value, the index to which the stencil bitplanes are cleared. The initial value is 0. See clearStencil.">STENCIL_CLEAR_VALUE</li>
+			<li title="Returns one value, a symbolic constant indicating what function is used to compare the stencil reference value with the stencil buffer value for front-facing polygons and non-polygons. The initial value is ALWAYS. See stencilFunc and stencilFuncSeparate.">STENCIL_FUNC</li>
+			<li title="Returns one value, a symbolic constant indicating what action is taken when the stencil test fails for front-facing polygons and non-polygons. The initial value is KEEP. See stencilOp and stencilOpSeparate.">STENCIL_FAIL</li>
+			<li title="Returns one value, the reference value that is compared with the contents of the stencil buffer for front-facing polygons and non-polygons. The initial value is 0. See stencilFunc and stencilFuncSeparate.">STENCIL_REF</li>
+			<li title="Returns one value, the mask that is used to mask both the stencil reference value and the stencil buffer value before they are compared for front-facing polygons and non-polygons. The initial value is all 1's. See stencilFunc and stencilFuncSeparate.">STENCIL_VALUE_MASK</li>
+			<li title="Returns one value, the mask that controls writing of the stencil bitplanes for front-facing polygons and non-polygons. The initial value is all 1's. See stencilMask and stencilMaskSeparate.">STENCIL_WRITEMASK</li>
+			<li title="Returns one value, a symbolic constant indicating what function is used for back-facing polygons to compare the stencil reference value with the stencil buffer value. The initial value is ALWAYS. See stencilFuncSeparate.">STENCIL_BACK_FUNC</li>
+			<li title="Returns one value, a symbolic constant indicating what action is taken for back-facing polygons when the stencil test fails. The initial value is KEEP. See stencilOpSeparate.">STENCIL_BACK_FAIL</li>
+			<li title="Returns one value, the reference value that is compared with the contents of the stencil buffer for back-facing polygons. The initial value is 0. See stencilFuncSeparate.">STENCIL_BACK_REF</li>
+			<li title="Returns one value, the number of bitplanes in the stencil buffer of the currently bound framebuffer.">STENCIL_BITS</li>
+
+			<li title="Returns one value, the mask that controls writing of the stencil bitplanes for back-facing polygons. The initial value is all 1's. See stencilMaskSeparate.">STENCIL_BACK_WRITEMASK</li>
+			<li style="display:block;" title="Returns one value, the mask that is used for back-facing polygons to mask both the stencil reference value and the stencil buffer value before they are compared. The initial value is all 1's. See stencilFuncSeparate.">STENCIL_BACK_VALUE_MASK</li>
+			<li style="display:block;" title="Returns one value, a symbolic constant indicating what action is taken for back-facing polygons when the stencil test passes, but the depth test fails. The initial value is KEEP. See stencilOpSeparate.">STENCIL_BACK_PASS_DEPTH_FAIL</li>
+			<li style="display:block;" title="Returns one value, a symbolic constant indicating what action is taken for back-facing polygons when the stencil test passes and the depth test passes. The initial value is KEEP. See stencilOpSeparate.">STENCIL_BACK_PASS_DEPTH_PASS</li>
+			<li style="display:block;" title="Returns one value, a symbolic constant indicating what action is taken when the stencil test passes, but the depth test fails for front-facing polygons and non-polygons. The initial value is KEEP. See stencilOp and stencilOpSeparate.">STENCIL_PASS_DEPTH_FAIL</li>
+			<li style="display:block;" title="Returns one value, a symbolic constant indicating what action is taken when the stencil test passes and the depth test passes for front-facing polygons and non-polygons. The initial value is KEEP. See stencilOp and stencilOpSeparate.">STENCIL_PASS_DEPTH_PASS</li>
+		</ul>
+	</span>
+</span>
+
+
+<h2>Array data</h2>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createFloatArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of float values">values</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createByteArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of byte values">values</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createUnsignedByteArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of unsigned byte values">values</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createShortArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of short values">values</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createUnsignedShortArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of unsigned short values">values</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createIntArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of int values">values</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createUnsignedIntArray</span>
+	<span class="args-small">
+		<span class="arg-type">Array</span> <span class="arg-name" title="Array of unsigned int values">values</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="comment">Create WebGL array objects from JS arrays.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">drawArrays</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies what kind of primitives to render.">mode</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the starting index in the enabled arrays.">first</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the number of indices to be rendered.">count</span>
+	</span>
+	<span class="comment">Render primitives from array data. Accepted mode values are:
+		<ul class="really-compact">
+			<li title="">POINTS</li>
+			<li title="">LINES</li>
+			<li title="">LINE_LOOP</li>
+			<li title="">LINE_STRIP</li>
+			<li title="">TRIANGLES</li>
+			<li title="">TRIANGLE_STRIP</li>
+			<li title="">TRIANGLE_FAN</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">drawElements</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies what kind of primitives to render.">mode</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the number of elements to be rendered.">count</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the type of the values in indices.">type</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the starting index in the enabled arrays.">offset</span>
+	</span>
+	<span class="comment">Render primitives from array data. Accepted type values are:
+		<ul class="compact">
+			<li title="">UNSIGNED_BYTE</li>
+			<li title="">UNSIGNED_SHORT</li>
+		</ul>
+	</span>
+</span>
+
+
+
+
+</span>
+</div>
+
+<div class="page">
+<span class="column column-left">
+
+<h2>Textures</h2>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">createTexture</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span><br/>
+	<span class="comment">Create a texture</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">deleteTexture</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the texture to be deleted.">texture</span>
+	</span>
+	<span class="comment">Delete a texture.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">bindTexture</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target to which the texture is bound.">target</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the texture.">texture</span>
+	</span>
+	<span class="comment">Bind a texture to a texturing target. Accepted values for target are:
+		<ul class="compact">
+			<li title="">TEXTURE_2D</li>
+			<li title="">TEXTURE_CUBE_MAP</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">activeTexture</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies which texture unit to make active. The number of texture units is implementation dependent, but must be at least two. texture must be one of TEXTURE[i], where [i] ranges from 0 to (MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1). The initial value is TEXTURE0.">texture</span>
+	</span>
+	<span class="comment">Select active texture unit.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">float</span>
+	<span class="name">getTexParameterf</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the target texture.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a texture parameter.">pname</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">long</span>
+	<span class="name">getTexParameteri</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the target texture.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a texture parameter.">pname</span>
+	</span>
+</span>
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">getTexParameterfv</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the target texture.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a texture parameter.">pname</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">Object</span>
+	<span class="name">getTexParameteriv</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the target texture.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a texture parameter.">pname</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="comment">Return parameter, pname, of a texture:
+		<ul class="compact">
+			<li title="Returns the single-valued wrapping function for texture coordinate s, a symbolic constant (one of REPEAT, CLAMP, CLAMP_TO_EDGE). The initial value is REPEAT.">TEXTURE_WRAP_S</li>
+			<li title="Returns the single-valued texture magnification filter, a symbolic constant (one of NEAREST, LINEAR). The initial value is LINEAR.">TEXTURE_MAG_FILTER</li>
+			<li title="Returns the single-valued wrapping function for texture coordinate t, a symbolic constant (one of REPEAT, CLAMP, CLAMP_TO_EDGE). The initial value is REPEAT">TEXTURE_WRAP_T</li>
+			<li title="Returns the single-valued texture minification filter, a symbolic constant (one of NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR). The initial value is NEAREST_MIPMAP_LINEAR">TEXTURE_MIN_FILTER</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">texParameterf</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the target texture.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a texture parameter.">pname</span>,
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the value of pname.">v</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">texParameteri</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of the target texture.">target</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the symbolic name of a texture parameter.">pname</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the value of pname.">v</span>
+	</span>
+</span>
+
+<span class="method">
+	<span class="comment">Set texture parameters.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">texImage2D</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target texture.">target</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.">level</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the image data.">data</span>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">texImage2D</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target texture.">target</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.">level</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the internal format of the texture.">intformat</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the width of the texture image.">width</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the height of the texture image.">height</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the width of the border. Must be 0.">border</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the format of the texel data. Must match internalformat.">format</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the data type of the texel data.">type</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the image data.">data</span>
+	</span>
+	<span class="comment">Specify a two-dimensional texture image. See readPixels for accepted type values.
+		Accepted values for intformat and format are:
+		<ul class="really-compact">
+			<li title="Each element is a single alpha component. The GL converts it to floating point and assembles it into an RGBA element by attaching 0 for red, green, and blue. Each component is then clamped to the range [0,1].">ALPHA</li>
+			<li title="Each element is an RGB triple. The GL converts it to floating point and assembles it into an RGBA element by attaching 1 for alpha. Each component is then clamped to the range [0,1].">RGB</li>
+			<li title="Each element contains all four components.  The GL converts it to floating point, then each component is clamped to the range [0,1].">RGBA</li>
+			<li title="Each element is a single luminance value. The GL converts it to floating point, then assembles it into an RGBA element by replicating the luminance value three times for red, green, and blue and attaching 1 for alpha. Each component is then clamped to the range [0,1]. ">LUMINANCE</li>
+			<li title="Each element is a luminance/alpha pair. The GL converts it to floating point, then assembles it into an RGBA element by replicating the luminance value three times for red, green, and blue. Each component is then clamped to the range [0,1].">LUMINANCE_ALPHA</li>
+		</ul>
+	</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">texSubImage2D</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target texture.">target</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.">level</span>,
+	</span><span class="args">
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies a texel offset in the x direction within the texture array.">xoffset</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies a texel offset in the y direction within the texture array.">yoffset</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the width of the texture subimage.">width</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the height of the texture subimage.">height</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the format of the pixel data.">format</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the data type of the pixel data.">type</span>,
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies the image data.">data</span>
+	</span>
+	<span class="comment">Specify a two-dimensional texture subimage.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">copyTexImage2D</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target texture.">target</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.">level</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the internal format of the texture.">intformat</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the window coordinates of the lower left corner of the rectangular region of pixels to be copied.">x</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the window coordinates of the lower left corner of the rectangular region of pixels to be copied.">y</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the width of the texture image. All implementations support 2D texture images that are at least 64 texels wide and cube-mapped texture images that are at least 16 texels wide.">width</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the height of the texture image. All implementations support 2D texture images that are at least 64 texels high and cube-mapped texture images that are at least 16 texels high.">height</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the width of the border. Must be 0.">border</span>
+	</span>
+	<span class="comment">Copy pixels into a 2D texture image. See framebufferTexture2D for accepted target values.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">copyTexSubImage2D</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target texture.">target</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.">level</span>,
+	</span><span class="args">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the internal format of the texture.">intformat</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies a texel offset in the x direction within the texture array.">xoffset</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specifies a texel offset in the y direction within the texture array.">yoffset</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the window coordinates of the lower left corner of the rectangular region of pixels to be copied.">x</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the window coordinates of the lower left corner of the rectangular region of pixels to be copied.">y</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the width of the texture image. All implementations support 2D texture images that are at least 64 texels wide and cube-mapped texture images that are at least 16 texels wide.">width</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the height of the texture image. All implementations support 2D texture images that are at least 64 texels high and cube-mapped texture images that are at least 16 texels high.">height</span>
+	</span>
+	<span class="comment">Copy a two-dimensional texture subimage.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">generateMipmap</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the target texture.">target</span>
+	</span>
+	<span class="comment">Generate a complete set of mipmaps for a texture.</span>
+</span>
+
+<span class="method">
+	<span class="return">bool</span>
+	<span class="name">isTexture</span>
+	<span class="args-small">
+		<span class="arg-type">Object</span> <span class="arg-name" title="Specifies a potential framebuffer object.">buffer</span>
+	</span>
+	<span class="comment">Determine if an object is a texture.</span>
+</span>
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul>
+			<li title="Returns a single value, the name of the texture currently bound to the target TEXTURE_2D for the active multitexture unit. The initial value is 0. See bindTexture.">TEXTURE_BINDING_2D</li>
+			<li title="Returns a single value, the name of the texture currently bound to the target TEXTURE_CUBE_MAP for the active multitexture unit. The initial value is 0. See bindTexture.">TEXTURE_BINDING_CUBE_MAP</li>
+			<li title="Returns one value. The value gives a rough estimate of the largest texture that the GL can handle. The value must be at least 64. See texImage2D.">MAX_TEXTURE_SIZE</li>
+			<li title="Returns one value. The value gives a rough estimate of the largest cube-map texture that the GL can handle. The value must be at least 16. See texImage2D.">MAX_CUBE_MAP_TEXTURE_SIZE</li>
+			<li title="Returns a single value indicating the active multitexture unit. The initial value is TEXTURE0. See activeTexture.">ACTIVE_TEXTURE</li>
+			<li title="Returns one value, the maximum supported texture image units that can be used to access texture maps from the fragment shader. The value must be at least 8. See activeTexture.">MAX_TEXTURE_IMAGE_UNITS</li>
+			<li title="Returns one value, the maximum supported texture image units that can be used to access texture maps from the vertex shader. The value may be 0. See activeTexture.">MAX_VERTEX_TEXTURE_IMAGE_UNITS</li>
+			<li title="Returns one value, the maximum supported texture image units that can be used to access texture maps from the vertex shader and the fragment processor combined. If both the vertex shader and the fragment processing stage access the same texture image unit, then that counts as using two texture image units against this limit. The value must be at least 8. See activeTexture.">MAX_COMBINED_TEXTURE_IMAGE_UNITS</li>
+		</ul>
+	</span>
+</span>
+
+
+</span>
+<span class="column column-right">
+
+<h2>Multisampling</h2>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small">
+		<span class="arg-value">SAMPLE_COVERAGE</span>
+	</span>
+	<span class="comment">If enabled, the fragment's coverage is ANDed with the temporary coverage value.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small">
+		<span class="arg-value">SAMPLE_ALPHA_TO_COVERAGE</span>
+	</span>
+	<span class="comment">If enabled, use the alpha value at the corresponding sample location to determine each bit.</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">sampleCoverage</span>
+	<span class="args-small">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specify a single floating-point sample coverage value. The value is clamped to the range [0,1]. The initial value is 1.0.">value</span>, 
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specify a single boolean value representing if the coverage masks should be inverted. TRUE and FALSE are accepted.  The initial value is FALSE.">invert</span>
+	</span>
+	<span class="comment">Specify multisample coverage parameters.</span>
+</span>
+
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Relevant parameters:
+		<ul>
+			<li title="Returns a single positive floating-point value indicating the current sample coverage value. See sampleCoverage.">SAMPLE_COVERAGE_VALUE</li>
+			<li title="Returns a single boolean value indicating if the temporary coverage value should be inverted. See sampleCoverage.">SAMPLE_COVERAGE_INVERT</li>
+			<li title="Returns a single integer value indicating the number of sample buffers associated with the currently bound framebuffer. See sampleCoverage.">SAMPLE_BUFFERS</li>
+			<li title="Returns a single integer value indicating the coverage mask size of the currently bound framebuffer. See sampleCoverage.">SAMPLES</li>
+		</ul>
+	</span>
+</span>
+
+<h2>Misc.</h2>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">viewport</span>
+	<span class="args-small">
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the lower left corner of the viewport rectangle, in pixels. The initial value is (0,0).">x</span>,
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the lower left corner of the viewport rectangle, in pixels. The initial value is (0,0).">y</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specify the width of the viewport.">w</span>,
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specify the height of the viewport.">h</span>
+	</span>
+	<span class="comment">Set the viewport.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">lineWidth</span>
+	<span class="args-small">
+		<span class="arg-type">float</span> <span class="arg-name" title="Specifies the width of rasterized lines. The initial value is 1.">width</span>
+	</span>
+	<span class="comment">Specify the width of rasterized lines.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">flush</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span>
+	<span class="comment">Force execution of GL commands in finite time.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">finish</span>
+	<span class="args-small">
+		<span class="arg-type">void</span>
+	</span>
+	<span class="comment">Block until all GL execution is complete.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">clear</span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Bitwise OR of masks that indicate the buffers to be cleared.">mask</span>
+	</span>
+	<span class="comment">Clear buffers to preset values, mask is the bitwise OR of one or more of 
+		<ul class="compact">
+			<li title="Indicates the buffers currently enabled for color writing">COLOR_BUFFER_BIT</li>
+			<li title="Indicates the depth buffer">DEPTH_BUFFER_BIT</li>
+			<li title="Indicates the stencil buffer">STENCIL_BUFFER_BIT</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">enable|disable</span>
+	<span class="args-small">
+		<span class="arg-value">DITHER</span>
+	</span>
+	<span class="comment">Enable/disable dithering of color comps or indices.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">colorMask</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specify whether red can or cannot be written into the frame buffer. The initial value is TRUE, indicating that the color component can be written.">red</span>,
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specify whether green can or cannot be written into the frame buffer. The initial value is TRUE, indicating that the color component can be written.">green</span>,
+	</span>
+	<span class="args">
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specify whether blue can or cannot be written into the frame buffer. The initial value is TRUE, indicating that the color component can be written.">blue</span>,
+		<span class="arg-type">bool</span> <span class="arg-name" title="Specify whether alpha can or cannot be written into the frame buffer. The initial value is TRUE, indicating that the color component can be written.">alpha</span>
+	</span>
+	<span class="comment">Enable and disable writing of frame buffer color components.</span>
+</span>
+
+
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">clearColor</span>
+	<span class="args-small args-first-line">
+		<span class="arg-type">float</span> <span class="arg-name">red</span>,
+		<span class="arg-type">float</span> <span class="arg-name">green</span>,
+	</span>
+	<span class="args">
+		<span class="arg-type">float</span> <span class="arg-name">blue</span>,
+		<span class="arg-type">float</span> <span class="arg-name">alpha</span>
+	</span>
+	<span class="comment">Specify clear values for the color buffers.</span>
+</span>
+
+<span class="method">
+	<span class="return">void</span>
+	<span class="name">scissor</span>
+	<span class="args-small">
+		<span class="arg-type">long</span> <span class="arg-name" title="Specify the lower left corner of the scissor box. Initially (0, 0).">x</span>, <span class="arg-type">long</span> <span class="arg-name" title="Specify the lower left corner of the scissor box.Initially (0, 0).">y</span>, 
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specify the width of the scissor box.">width</span>, <span class="arg-type">ulong</span> <span class="arg-name" title="Specify the height of the scissor box.">height</span>
+	</span>
+	<span class="comment">Define the scissor box.</span>
+</span>
+
+<span class="method">
+	<span class="return">ulong</span>
+	<span class="name">getError</span>
+	<span class="args-small"><span class="arg-type">void</span></span>
+	<span class="comment">Return error information. Error values are:
+		<ul>
+			<li title="No error has been recorded. The value of this symbolic constant is guaranteed to be 0.">NO_ERROR</li>
+			<li title="An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.">INVALID_ENUM</li>
+			<li title="A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.">INVALID_VALUE</li>
+			<li title="The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.">INVALID_OPERATION</li>
+			<li title="The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from checkFramebufferStatus is not FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.">INVALID_FRAMEBUFFER_OPERATION</li>
+			<li title="There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.">OUT_OF_MEMORY</li>
+		</ul>
+	</span>
+</span>
+
+
+<span class="method with-note">
+	<span class="return">Object</span>
+	<span class="name">getParameter<sup>1</sup></span>
+	<span class="args-small">
+		<span class="arg-type">ulong</span> <span class="arg-name" title="Specifies the parameter value to be returned.">pname</span>
+	</span>
+	<span class="comment">Parameters values:
+		<ul>
+			<li title="Returns four values: the x and y window coordinates of the viewport, followed by its width and height. Initially the x and y window coordinates are both set to 0, and the width and height are set to the width and height of the window into which the GL will do its rendering. See viewport.">VIEWPORT</li>
+			<li title="Returns two values: the maximum supported width and height of the viewport. These must be at least as large as the visible dimensions of the display being rendered to. See viewport.">MAX_VIEWPORT_DIMS</li>
+			<li title="Returns four values: the red, green, blue, and alpha values used to clear the color buffers. Integer values, if requested, are linearly mapped from the internal floating-point representation such that 1.0 returns the most positive representable integer value, and -1.0 returns the most negative representable integer value. The initial value is (0, 0, 0, 0). See clearColor.">COLOR_CLEAR_VALUE</li>
+			<li title="Returns four values: the x and y window coordinates of the scissor box, followed by its width and height. Initially the x and y window coordinates are both 0 and the width and height are set to the size of the window. See scissor.">SCISSOR_BOX</li>
+			<li title="Returns one value, the line width as specified with lineWidth. The initial value is 1.">LINE_WIDTH</li>
+			<li title="Returns two values, the smallest and largest supported sizes for aliased points. The range must include size 1.">ALIASED_POINT_SIZE_RANGE</li>
+			<li title="Returns two values, the smallest and largest supported widths for aliased lines. The range must include width 1.">ALIASED_LINE_WIDTH_RANGE</li>
+			<li title="Returns four boolean values: the red, green, blue, and alpha write enables for the color buffers. The initial value is (TRUE, TRUE, TRUE, TRUE). See colorMask.">COLOR_WRITEMASK</li>
+			<li title="Returns one value, an estimate of the number of bits of subpixel resolution that are used to position rasterized geometry in window coordinates. The value must be at least 4.">SUBPIXEL_BITS</li>
+		</ul>
+	</span>
+</span>
+
+</span>
+
+<div class="footer">
+<div class="footer-space"></div>
+<hr>
+<div>
+<span>Notes:</span>
+<ul id="notes">
+	<li>[1] Use getFloat, getFloatv, getInteger, and getIntegerv in WebKit</li>
+	<li>[2] Not implemented in either Firefox og WebKit</li>
+</ul>
+<br/>
+<span>Sources:</span>
+<ul id="sources">
+	<li><a href="http://www.khronos.org/opengles/sdk/docs/man/">http://www.khronos.org/opengles/sdk/docs/man/</a> (2009-10-23)</li>
+	<li><a href="http://mxr.mozilla.org/mozilla-central/source/content/canvas/src/WebGLContextGL.cpp">http://mxr.mozilla.org/mozilla-central/source/content/canvas/src/WebGLContextGL.cpp</a> (2009-10-23)</li>
+	<li><a href="http://trac.webkit.org/browser/trunk/WebCore/html/canvas/CanvasRenderingContext3D.h">http://trac.webkit.org/browser/trunk/WebCore/html/canvas/CanvasRenderingContext3D.h</a> (2009-10-24)
+</ul>
+</div>
+</div>
+
+</div>
+
+</body>
+</html>
