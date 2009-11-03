@@ -56,15 +56,15 @@
 }
 
 - (void)mouseDragged:(CPEvent)anEvent {
-	[[self window] propagateCurrentEvent:YES];
+    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
 }
 
 - (void)mouseDown:(CPEvent)anEvent {
-	[[self window] propagateCurrentEvent:YES];
+    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
 }
 
 - (void)mouseUp:(CPEvent)anEvent {
-	[[self window] propagateCurrentEvent:YES];
+    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
 }
 
 - (DOMElement)_context {
