@@ -47,16 +47,24 @@
 	return _DOMCanvasElement.height;
 }
 
+- (void)keyDown:(CPEvent *)theEvent
+{
+}
+
+- (void)keyUp:(NSEvent *)theEvent
+{
+}
+
 - (void)mouseDragged:(CPEvent)anEvent {
-	[[[self window] platformWindow] _propagateCurrentDOMEvent:YES];
+	[[self window] propagateCurrentEvent:YES];
 }
 
 - (void)mouseDown:(CPEvent)anEvent {
-	[[[self window] platformWindow] _propagateCurrentDOMEvent:YES];
+	[[self window] propagateCurrentEvent:YES];
 }
 
 - (void)mouseUp:(CPEvent)anEvent {
-	[[[self window] platformWindow] _propagateCurrentDOMEvent:YES];
+	[[self window] propagateCurrentEvent:YES];
 }
 
 - (DOMElement)_context {

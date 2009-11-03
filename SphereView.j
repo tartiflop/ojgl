@@ -16,6 +16,7 @@
 	SphereBurst _colorSphere;
 	float _angle;
 	BOOL _ready;
+    Matrix4D _lookAt;
 }
 
 - (id)initWithFrame:(CGRect)aFrame {
@@ -33,6 +34,11 @@
 	}
 	
 	return self;
+}
+
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
 }
 
 - (void)initTextureRenderer {
@@ -64,18 +70,32 @@
 
 	// Initialise projection matrix
 //	var ortho = [GLU ortho:-16 right:16 bottom:-12 top:12 near:1 far:10000];
-	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
-    var lookat = new Matrix4D(); lookat.tz = -25;
+	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:0.1 far:1000];
+    _lookAt = new Matrix4D(); _lookAt.tz = 0;
     [_textureRenderer setActive];
 	[_textureRenderer setProjectionMatrix:perspective];
-	[_textureRenderer setViewMatrix:lookat];
+	[_textureRenderer setViewMatrix:_lookAt];
 	
 	// Send projection matrices to the renderers (shaders)
 	[_colorRenderer setActive];
 	[_colorRenderer setProjectionMatrix:perspective];
-	[_colorRenderer setViewMatrix:lookat];
+	[_colorRenderer setViewMatrix:_lookAt];
 
 	_ready = YES;
+}
+
+- (void)keyDown:(CPEvent *)theEvent
+{
+    switch ([theEvent characters]) {
+        case "&": _lookAt.tz += 0.1; break;
+        case "(": _lookAt.tz -= 0.1; break;
+        case "%": _lookAt.tz -= 0.1; break;
+        case "'": _lookAt.tz += 0.1; break;
+    }
+	[_textureRenderer setViewMatrix:_lookAt];
+	[_colorRenderer setViewMatrix:_lookAt];
+
+//    console.log([theEvent characters]);
 }
 
 - (void)drawRect:(CPRect)dirtyRect {
@@ -85,7 +105,7 @@
 		return;
 	}
 	// recalculate rotation matrix
-	_angle = (_angle + 0.5) % 90;
+	_angle = (_angle + 0.5) % 360;
 	[_textureSphere resetTransformation];
 	[_textureSphere rotate:_angle-45 x:0 y:1 z:0];
 	[_colorSphere resetTransformation];
@@ -100,7 +120,7 @@
 			for (var i = 0; i < 5; i++) {
                 if ((i + j + k) % 2 == 0) {
 					// Translate sphere, activate the texture renderer and render the texture sphere
-                    [_textureSphere translateTo:((i - 2) * 4) y:((j - 1) * 3) z:(k * 5)];
+                    [_textureSphere translateTo:((i - 2) * 4) y:((j - 2) * 4) z:((k - 2) * 4)];
 					[_textureSphere render:_textureRenderer];
 				}
 			}
@@ -115,7 +135,7 @@
 			for (var i = 0; i < 5; i++) {
 				if ((i + j + k) % 2 == 1) {
 					// Translate sphere, activate the color renderer and render the color sphere
-					[_colorSphere translateTo:((i - 2) * 4) y:((j - 1) * 3) z:(k * 5)];
+                    [_colorSphere translateTo:((i - 2) * 4) y:((j - 2) * 4) z:((k - 2) * 4)];
 					[_colorSphere render:_colorRenderer];
 				}
 			}

@@ -69,7 +69,7 @@
 - (void)setModelMatrix:(Matrix4D)modelMatrix {
     _modelMatrix = modelMatrix;
     var mvMatrix = _modelMatrix; mvMatrix.multiply(_viewMatrix);
-	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
+	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:modelMatrix];
 }
 
 - (void)setVertexBufferData:(int)bufferId {

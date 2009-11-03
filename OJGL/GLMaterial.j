@@ -1,7 +1,7 @@
 @import <Foundation/CPObject.j>
 @import "GLContext.j"
 @import "GLRenderer.j"
-@import "GLPrimitive.J"
+@import "GLPrimitive.j"
 
 @implementation GLMaterial : CPObject {
 	GLPrimitive _primitive @accessors(property=primitive);

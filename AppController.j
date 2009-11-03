@@ -7,6 +7,7 @@
 	CPLabel _label;
 	SphereView _sphereView;
 	Framerate _framerate;
+    int _speed;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification {
@@ -36,7 +37,8 @@
 	// Add timer for fps label update
 	[CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 	// Timer to redraw
-	[CPTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+    _speed = 25;
+	[CPTimer scheduledTimerWithTimeInterval:1/_speed target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 
 	[theWindow orderFront:self];
 app = self;
@@ -46,8 +48,11 @@ app = self;
 	// update framerate
 	[_framerate tick];
 	[_sphereView setNeedsDisplay:YES];
-	[CPTimer scheduledTimerWithTimeInterval:1/32 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+	[CPTimer scheduledTimerWithTimeInterval:1/_speed target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 }
+
+- (void)slow { _speed = 2;  }
+- (void)fast { _speed = 25; }
 
 - (void)fps {
 	[_label setStringValue:@"fps: " + [_framerate fps]];
