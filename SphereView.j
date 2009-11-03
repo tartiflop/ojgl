@@ -17,6 +17,7 @@
 	float _angle;
 	BOOL _ready;
     Matrix4D _lookAt;
+    float _keyX, _keyY, _keyZ;
 }
 
 - (id)initWithFrame:(CGRect)aFrame {
@@ -24,13 +25,13 @@
 	
 	if (self) {
 		_ready = NO;
-		
+		_keyX = _keyY = _keyZ = 0;
 		// Get the OpenGL Context
 		_glContext = [self glContext];
 
 		// Initialise the color renderer, load texture renderer when ready
 		_colorRenderer = [[SimpleColorRenderer alloc] initWithContext:_glContext];
-		[_colorRenderer load:self onComplete:@selector(initTextureRenderer)]
+		[_colorRenderer load:self onComplete:@selector(initTextureRenderer)];
 	}
 	
 	return self;
@@ -87,15 +88,23 @@
 - (void)keyDown:(CPEvent *)theEvent
 {
     switch ([theEvent characters]) {
-        case "&": _lookAt.tz += 0.1; break;
-        case "(": _lookAt.tz -= 0.1; break;
-        case "%": _lookAt.tz -= 0.1; break;
-        case "'": _lookAt.tz += 0.1; break;
+        case "&": _keyZ =  0.1; break;
+        case "(": _keyZ = -0.1; break;
+        case "%": _keyX = -0.1; break;
+        case "'": _keyX =  0.1; break;
     }
-	[_textureRenderer setViewMatrix:_lookAt];
-	[_colorRenderer setViewMatrix:_lookAt];
 
 //    console.log([theEvent characters]);
+}
+
+- (void)keyUp:(CPEvent *)theEvent
+{
+    switch ([theEvent characters]) {
+        case "&": _keyZ = 0; break;
+        case "(": _keyZ = 0; break;
+        case "%": _keyX = 0; break;
+        case "'": _keyX = 0; break;
+    }
 }
 
 - (void)drawRect:(CPRect)dirtyRect {
@@ -104,6 +113,11 @@
 	if (!_ready) {
 		return;
 	}
+    _lookAt.tx += _keyX;
+    _lookAt.ty += _keyY;
+    _lookAt.tz += _keyZ;
+	[_textureRenderer setViewMatrix:_lookAt];
+	[_colorRenderer setViewMatrix:_lookAt];
 	// recalculate rotation matrix
 	_angle = (_angle + 0.5) % 360;
 	[_textureSphere resetTransformation];
