@@ -1,10 +1,7 @@
 @import "../OJGL/GLRenderer.j"
 
 @implementation SimpleTexRenderer : GLRenderer {
-	int _vertexAttributeLocation;
 	int _texCoordAttributeLocation;
-	int _mvMatrixUniformLocation;
-	int _perspectiveUniformLocation;
 	int _samplerUniformLocation;
 }
 
@@ -15,35 +12,16 @@
 
 
 - (void)onShadersLoaded {
-	
-	// Add shaders to program and link
-	[_glProgram addShaderText:[_glShadersLoader vertexShader] shaderType:GL_VERTEX_SHADER];
-	[_glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
-	[_glProgram linkProgram];
+    [super onShadersLoaded];
 
 	// Get attribute locations
-	_vertexAttributeLocation = [_glProgram getAttributeLocation:"aVertex"];
 	_texCoordAttributeLocation = [_glProgram getAttributeLocation:"aTexCoord"];
-	_mvMatrixUniformLocation = [_glProgram getUniformLocation:"mvMatrix"];
-	_perspectiveUniformLocation = [_glProgram getUniformLocation:"pMatrix"];
 
 	// Set up the texture sampler
 	[_glContext setUniformSampler:[_glProgram getUniformLocation:"sTexture"]];
 
 	// Callback
 	[super callback]
-}
-
-
-- (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
-	// Set the projection matrix
-	[_glContext setUniformMatrix:_perspectiveUniformLocation matrix:projectionMatrix];
-
-}
-
-- (void)setVertexBufferData:(int)bufferId {
-	// Bind the vertex buffer data to the vertex attribute
-	[_glContext bindBufferToAttribute:bufferId attributeLocation:_vertexAttributeLocation size:3];
 }
 
 - (void)setTexCoordBufferData:(int)bufferId {

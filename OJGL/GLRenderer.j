@@ -9,9 +9,11 @@
 	GLProgram _glProgram;
 	GLContext _glContext;
 	GLShadersLoader _glShadersLoader;
-
 	CPString _vertexShaderFile;
 	CPString _fragmentShaderFile;
+	int _perspectiveUniformLocation;
+    int _mvMatrixUniformLocation;
+	int _vertexAttributeLocation;
     Matrix4D _viewMatrix;
     Matrix4D _modelMatrix;
 }
@@ -40,6 +42,14 @@
 }
 
 - (void)onShadersLoaded {
+	// Add shaders to program and link
+	[_glProgram addShaderText:[_glShadersLoader vertexShader] shaderType:GL_VERTEX_SHADER];
+	[_glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
+	[_glProgram linkProgram];
+
+	_perspectiveUniformLocation = [_glProgram getUniformLocation:"pMatrix"];
+    _mvMatrixUniformLocation = [_glProgram getUniformLocation:"mvMatrix"];
+	_vertexAttributeLocation = [_glProgram getAttributeLocation:"aVertex"];
 }
 
 - (void)callback {
@@ -58,6 +68,8 @@
 }
 
 - (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
+	// Set the projection matrix
+	[_glContext setUniformMatrix:_perspectiveUniformLocation matrix:projectionMatrix];
 }
 
 - (void)setViewMatrix:(Matrix4D)viewMatrix {
@@ -73,6 +85,8 @@
 }
 
 - (void)setVertexBufferData:(int)bufferId {
+	// Bind the vertex buffer data to the vertex attribute
+	[_glContext bindBufferToAttribute:bufferId attributeLocation:_vertexAttributeLocation size:3];
 }
 
 - (void)setTexCoordBufferData:(int)bufferId {

@@ -1,10 +1,7 @@
 @import "../OJGL/GLRenderer.j"
 
 @implementation SimpleColorRenderer : GLRenderer {
-	int _vertexAttributeLocation;
 	int _colorAttributeLocation;
-	int _mvMatrixUniformLocation;
-	int _perspectiveUniformLocation;
 }
 
 - (id)initWithContext:(GLContext)context {
@@ -14,31 +11,13 @@
 
 
 - (void)onShadersLoaded {
-	
-	// Add shaders to program and link
-	[_glProgram addShaderText:[_glShadersLoader vertexShader] shaderType:GL_VERTEX_SHADER];
-	[_glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
-	[_glProgram linkProgram];
+	[super onShadersLoaded];
 
 	// Get attribute locations
-	_vertexAttributeLocation = [_glProgram getAttributeLocation:"aVertex"];
 	_colorAttributeLocation = [_glProgram getAttributeLocation:"aColor"];
-	_mvMatrixUniformLocation = [_glProgram getUniformLocation:"mvMatrix"];
-	_perspectiveUniformLocation = [_glProgram getUniformLocation:"pMatrix"];
 
 	// Callback
 	[super callback]
-}
-
-- (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
-	// Set the projection matrix
-	[_glContext setUniformMatrix:_perspectiveUniformLocation matrix:projectionMatrix];
-
-}
-
-- (void)setVertexBufferData:(int)bufferId {
-	// Bind the vertex buffer data to the vertex attribute
-	[_glContext bindBufferToAttribute:bufferId attributeLocation:_vertexAttributeLocation size:3];
 }
 
 - (void)setTexCoordBufferData:(int)bufferId {
