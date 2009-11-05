@@ -9,7 +9,6 @@
 	return self;
 }
 
-
 - (void)onShadersLoaded {
 	[super onShadersLoaded];
 
@@ -20,23 +19,8 @@
 	[super callback]
 }
 
-- (void)setTexCoordBufferData:(int)bufferId {
-	CPLog.error("setTexCoordBufferData not available in SimpleColorRenderer")
-}
-
 - (void)setColorBufferData:(int)bufferId {
 	// Bind the vertex buffer data to the vertex attribute
 	[_glContext bindBufferToAttribute:bufferId attributeLocation:_colorAttributeLocation size:4];
 }
-
-- (void)setElementBufferData:(int)bufferId {
-	// Bind element index buffer
-	[_glContext bindElementBuffer:bufferId];
-}
-
-- (void)setTexture:(int)textureId {
-	// Bind the texture
-	[_glContext bindTexture:textureId];
-}
-
 @end

@@ -10,7 +10,6 @@
 	return self;
 }
 
-
 - (void)onShadersLoaded {
     [super onShadersLoaded];
 
@@ -27,15 +26,6 @@
 - (void)setTexCoordBufferData:(int)bufferId {
 	// Bind the texture coordinates buffer data to the texcoord attribute
 	[_glContext bindBufferToAttribute:bufferId attributeLocation:_texCoordAttributeLocation size:2];
-}
-
-- (void)setColorBufferData:(int)bufferId {
-	CPLog.error("setColorBufferData not available in SimpleTexRenderer")
-}
-
-- (void)setElementBufferData:(int)bufferId {
-	// Bind element index buffer
-	[_glContext bindElementBuffer:bufferId];
 }
 
 - (void)setTexture:(int)textureId {

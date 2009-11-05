@@ -116,19 +116,17 @@
     _lookAt.tx += _keyX;
     _lookAt.ty += _keyY;
     _lookAt.tz += _keyZ;
-	[_textureRenderer setViewMatrix:_lookAt];
-	[_colorRenderer setViewMatrix:_lookAt];
 	// recalculate rotation matrix
 	_angle = (_angle + 0.5) % 360;
-	[_textureSphere resetTransformation];
-	[_textureSphere rotate:_angle-45 x:0 y:1 z:0];
-	[_colorSphere resetTransformation];
-	[_colorSphere rotate:_angle-45 x:0 y:1 z:0];
 
 	// Clear context
 	[_glContext clearBuffer];
+
 	// Multiple renderings of texture sphere
 	[_textureRenderer setActive];
+	[_textureSphere resetTransformation];
+	[_textureRenderer setViewMatrix:_lookAt];
+	[_textureSphere rotate:_angle x:0 y:1 z:0];
 	for (var k = 0; k < 5; k++) {
 		for (var j = 0; j < 5; j++) {
 			for (var i = 0; i < 5; i++) {
@@ -143,7 +141,9 @@
 	
 	// Multiple renderings of color sphere
 	[_colorRenderer setActive];
-	[_colorSphere translateTo:-6 y:-6 z:0];
+	[_colorSphere resetTransformation];
+	[_colorRenderer setViewMatrix:_lookAt];
+	[_colorSphere rotate:_angle x:0 y:1 z:0];
 	for (var k = 0; k < 5; k++) {
 		for (var j = 0; j < 5; j++) {
 			for (var i = 0; i < 5; i++) {

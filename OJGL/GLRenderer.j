@@ -26,7 +26,8 @@
 		_glProgram = [_glContext createProgram];
 		_vertexShaderFile = vertexShaderFile;
 		_fragmentShaderFile = fragmentShaderFile;
-       	_modelMatrix = new Matrix4D(); _viewMatrix = new Matrix4D();
+       	_modelMatrix = new Matrix4D();
+        _viewMatrix = new Matrix4D();
 	}
 	
 	return self;
@@ -89,16 +90,8 @@
 	[_glContext bindBufferToAttribute:bufferId attributeLocation:_vertexAttributeLocation size:3];
 }
 
-- (void)setTexCoordBufferData:(int)bufferId {
-}
-
-- (void)setColorBufferData:(int)bufferId {
-}
-
 - (void)setElementBufferData:(int)bufferId {
+	// Bind element index buffer
+	[_glContext bindElementBuffer:bufferId];
 }
-
-- (void)setTexture:(int)textureId {
-}
-
 @end
