@@ -123,7 +123,7 @@ GL_FRAGMENT_SHADER = 1;
 	if (!compiled) {
 		// Something went wrong during compilation; get the error
 		var error = _gl.getShaderInfoLog(shader);
-		CPLog.error(@"Error compiling shader '" + shaderId + "':" + error);
+		CPLog.error(@"Error compiling " + ((shaderType == _gl.VERTEX_SHADER) ? "vertex" : "fragment") + " shader:" + error);
 		_gl.deleteShader(shader);
 		return nil;
 	}

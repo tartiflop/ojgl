@@ -10,6 +10,7 @@
 	Array _indices;
 	
 	int _vertexBufferId;
+	int _normalBufferId;
 	int _uvBufferId;
 	int _indicesBufferId;
 
@@ -53,6 +54,11 @@
 	_uvBufferId = [glContext createBufferFromArray:_uvs];
 }
 
+- (void)prepareNormals:(GLContext)glContext  {
+	// Create and initialise normal buffer data
+	_normalBufferId = [glContext createBufferFromArray:_normals];
+}
+
 - (void)render:(GLRenderer)renderer {
 	
 	// Prepare the material to be rendered
@@ -69,10 +75,6 @@
 
 	// render elements
 	[renderer drawElements:_indices.length];
-}
-
-- (void)getUVBufferId {
-	return _uvBufferId;
 }
 
 /**
@@ -122,6 +124,14 @@
 
 - (int)numberOfVertices {
 	return _vertices.length;
+}
+
+- (int)getUVBufferId {
+	return _uvBufferId;
+}
+
+- (int)getNormalBufferId {
+	return _normalBufferId;
 }
 
 

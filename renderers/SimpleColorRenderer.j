@@ -13,7 +13,7 @@
 	[super onShadersLoaded];
 
 	// Get attribute locations
-	_colorAttributeLocation = [_glProgram getAttributeLocation:"aColor"];
+	_colorAttributeLocation = [_glProgram getAttributeLocation:"a_color"];
 
 	// Callback
 	[super callback]

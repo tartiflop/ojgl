@@ -2,10 +2,11 @@
 @import <Foundation/CPRunLoop.j>
 @import "utils/Framerate.j"
 @import "SphereView.j"
+@import "demos/pointLight/LightingView.j"
 
 @implementation AppController : CPObject {
 	CPLabel _label;
-	SphereView _sphereView;
+	GLView _view;
 	Framerate _framerate;
     int _speed;
 }
@@ -14,12 +15,13 @@
 
 	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
-	
+	[contentView setBackgroundColor:[CPColor colorWithHexString:@"EEEEEE"]];
+
 	// Create GL View
-	_sphereView = [[SphereView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
-	[_sphereView setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
-	[_sphereView setCenter:[contentView center]];
-	[contentView addSubview:_sphereView];
+	_view = [[LightingView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	[_view setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
+	[_view setCenter:[contentView center]];
+	[contentView addSubview:_view];
 	
 	// FPS label
 	_label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
@@ -41,13 +43,14 @@
 	[CPTimer scheduledTimerWithTimeInterval:1/_speed target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 
 	[theWindow orderFront:self];
-app = self;
+	
+	app = self;
 }
 
 - (void)run {
 	// update framerate
 	[_framerate tick];
-	[_sphereView setNeedsDisplay:YES];
+	[_view setNeedsDisplay:YES];
 	[CPTimer scheduledTimerWithTimeInterval:1/_speed target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 }
 

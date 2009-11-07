@@ -96,6 +96,15 @@ Matrix4D.prototype.getAsArray = function() {
 										  this.tx,  this.ty,  this.tz,  this.tw]);
 }
 
+/**
+ * Returns a column major canvas float array, specifically for passing to opengl
+ */
+Matrix4D.prototype.getAs3x3ColumnMajorCanvasFloatArray = function() {
+	return new CanvasFloatArray([this.sxx, this.syx, this.szx,
+								  this.sxy, this.syy, this.szy,
+								  this.sxz, this.syz, this.szz]);
+}
+
 
 
 Matrix4D.prototype.makeIdentity = function() {
@@ -118,6 +127,14 @@ Matrix4D.prototype.determinant = function() {
 			- (this.syx * this.swy - this.swx * this.syy) * (this.sxz * this.tz - this.szz * this.tx) 
 			+ (this.szx * this.swy - this.swx * this.szy) * (this.sxz * this.ty - this.syz * this.tx);
 }
+
+Matrix4D.prototype.determinant3x3 = function() {
+	
+	return	(this.sxx * this.syy - this.syx * this.sxy) * this.szz 
+			- (this.sxx * this.szy - this.szx * this.sxy) * this.syz 
+			+ (this.syx * this.szy - this.szx * this.syy) * this.sxz 
+}
+
 
 Matrix4D.prototype.invert = function() {
 	// If the determinant is zero then no inverse exists
@@ -167,6 +184,43 @@ Matrix4D.prototype.invert = function() {
 	this.swz = -invDet * (m11 * (m22 * m43 - m42 * m23) - m21 * (m12 * m43 - m42 * m13) + m41 * (m12 * m23 - m22 * m13));
 	this.tw  =  invDet * (m11 * (m22 * m33 - m32 * m23) - m21 * (m12 * m33 - m32 * m13) + m31 * (m12 * m23 - m22 * m13));	
 	
+}
+
+Matrix4D.prototype.invert3x3 = function() {
+	// If the determinant is zero then no inverse exists
+	var det = this.determinant3x3();
+
+	if (Math.abs(det) < 1e-8) {
+		CPLog.error("Matrix4D: matrix invert3x3 request fails")
+		return;
+	}
+	
+	var invDet = 1 / det;
+
+	var m11 = this.sxx;
+	var m12 = this.sxy;
+	var m13 = this.sxz;
+	var m21 = this.syx;
+	var m22 = this.syy;
+	var m23 = this.syz;
+	var m31 = this.szx;
+	var m32 = this.szy;
+	var m33 = this.szz;
+
+	this.sxx =  invDet * (m22 * m33 - m32 * m23),
+	this.sxy = -invDet * (m12 * m33 - m32 * m13),
+	this.sxz =  invDet * (m12 * m23 - m22 * m13),
+	this.syx = -invDet * (m21 * m33 - m31 * m23),
+	this.syy =  invDet * (m11 * m33 - m31 * m13),
+	this.syz = -invDet * (m11 * m23 - m21 * m13),
+	this.szx =  invDet * (m21 * m32 - m31 * m22),
+	this.szy = -invDet * (m11 * m32 - m31 * m12),
+	this.szz =  invDet * (m11 * m22 - m21 * m12),
+
+
+	this.swx = this.swy = this.swz = 0;
+	this.tx = this.ty = this.tz = 0;
+	this.tw = 1;
 }
 
 
@@ -384,6 +438,25 @@ Matrix4D.prototype.multiply = function(matrix) {
 	this.tw  = m141 * m214 + m142 * m224 + m143 * m234 + m144 * m244;
 }
 
+Matrix4D.prototype.multVec = function(array) {
+	
+	if (array.length != 4) {
+		return null;
+	}
+	
+	var ax = array[0];
+	var ay = array[1];
+	var az = array[2];
+	var aw = array[3];
+	
+	var vx = this.sxx * ax + this.sxy * ay + this.sxz * az + this.tx * aw;
+	var vy = this.syx * ax + this.syy * ay + this.syz * az + this.ty * aw;
+	var vz = this.szx * ax + this.szy * ay + this.szz * az + this.tz * aw;
+	var vw = this.swx * ax + this.swy * ay + this.swz * az + this.tw * aw;
+	
+	return [vx, vy, vz, vw];
+}
+
 
 /**
 * Result is: this = matrix x this
@@ -442,9 +515,16 @@ Matrix4D.prototype._multiplyOnLeft = function(matrix) {
 	this.tw  = m141 * m214 + m142 * m224 + m143 * m234 + m144 * m244;
 }
 
-Matrix4D.InverseMatrix = function (matrix) {
-	var matrix = new Matrix4D(matrix);
+Matrix4D.InverseMatrix = function (inMatrix) {
+	var matrix = new Matrix4D(inMatrix);
 	matrix.invert();
+	
+	return matrix;
+}
+
+Matrix4D.Inverse3x3Matrix = function (inMatrix) {
+	var matrix = new Matrix4D(inMatrix);
+	matrix.invert3x3();
 	
 	return matrix;
 }
@@ -470,8 +550,8 @@ Matrix4D.ScaleMatrix = function (x, y, z) {
 	return matrix;
 }
 
-Matrix4D.TransposeMatrix = function (matrix) {
-	var matrix = new Matrix4D(matrix);
+Matrix4D.TransposeMatrix = function (inMatrix) {
+	var matrix = new Matrix4D(inMatrix);
 	matrix.transpose();
 	
 	return matrix;

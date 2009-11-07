@@ -11,11 +11,15 @@
 	GLShadersLoader _glShadersLoader;
 	CPString _vertexShaderFile;
 	CPString _fragmentShaderFile;
-	int _perspectiveUniformLocation;
     int _mvMatrixUniformLocation;
+    int _mvpMatrixUniformLocation;
 	int _vertexAttributeLocation;
-    Matrix4D _viewMatrix;
-    Matrix4D _modelMatrix;
+	
+	Matrix4D _viewMatrix;
+	Matrix4D _modelMatrix;
+	Matrix4D _projectionMatrix;
+	Matrix4D _mvMatrix;
+	Matrix4D _mvpMatrix;
 }
 
 - (id)initWithContext:(GLContext)context vertexShaderFile:(CPString)vertexShaderFile fragmentShaderFile:(CPString)fragmentShaderFile {
@@ -26,8 +30,12 @@
 		_glProgram = [_glContext createProgram];
 		_vertexShaderFile = vertexShaderFile;
 		_fragmentShaderFile = fragmentShaderFile;
+		
        	_modelMatrix = new Matrix4D();
         _viewMatrix = new Matrix4D();
+        _projectionMatrix = new Matrix4D();
+       	_mvMatrix = new Matrix4D();
+       	_mvpMatrix = new Matrix4D();
 	}
 	
 	return self;
@@ -48,9 +56,9 @@
 	[_glProgram addShaderText:[_glShadersLoader fragmentShader] shaderType:GL_FRAGMENT_SHADER];
 	[_glProgram linkProgram];
 
-	_perspectiveUniformLocation = [_glProgram getUniformLocation:"pMatrix"];
-    _mvMatrixUniformLocation = [_glProgram getUniformLocation:"mvMatrix"];
-	_vertexAttributeLocation = [_glProgram getAttributeLocation:"aVertex"];
+    _mvMatrixUniformLocation = [_glProgram getUniformLocation:"u_mvMatrix"];
+    _mvpMatrixUniformLocation = [_glProgram getUniformLocation:"u_mvpMatrix"];
+	_vertexAttributeLocation = [_glProgram getAttributeLocation:"a_vertex"];
 }
 
 - (void)callback {
@@ -68,24 +76,40 @@
 	[_glContext drawElements:numberOfElements];
 }
 
+
 - (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
-	// Set the projection matrix
-	[_glContext setUniformMatrix:_perspectiveUniformLocation matrix:projectionMatrix];
+	_projectionMatrix = projectionMatrix;
+	
+	[self setupMatrices];
 }
 
 - (void)setViewMatrix:(Matrix4D)viewMatrix {
-    _viewMatrix = viewMatrix;
-    var mvMatrix = new Matrix4D(_viewMatrix); 
-    mvMatrix.multiply(_modelMatrix);
-	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
+	_viewMatrix = viewMatrix;
+	
+	[self setupMatrices];
 }
 
 - (void)setModelMatrix:(Matrix4D)modelMatrix {
-    _modelMatrix = modelMatrix;
-    var mvMatrix = new Matrix4D(_viewMatrix); 
-    mvMatrix.multiply(_modelMatrix);
-	[_glContext setUniformMatrix:_mvMatrixUniformLocation matrix:mvMatrix];
+	_modelMatrix = modelMatrix;
+	
+	[self setupMatrices];
 }
+
+- (void)setupMatrices {
+	
+	// calculate model-view matrix
+	_mvMatrix = new Matrix4D(_viewMatrix);
+	_mvMatrix.multiply(_modelMatrix);
+	
+	// calculate model-view-projection
+	_mvpMatrix = new Matrix4D(_projectionMatrix);
+	_mvpMatrix.multiply(_mvMatrix);
+	
+	// Set the matrices
+	[_glContext setUniformMatrix4:_mvpMatrixUniformLocation matrix:_mvpMatrix];
+	[_glContext setUniformMatrix4:_mvMatrixUniformLocation matrix:_mvMatrix];
+}
+
 
 - (void)setVertexBufferData:(int)bufferId {
 	// Bind the vertex buffer data to the vertex attribute
@@ -96,4 +120,5 @@
 	// Bind element index buffer
 	[_glContext bindElementBuffer:bufferId];
 }
+
 @end

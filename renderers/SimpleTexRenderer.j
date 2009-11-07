@@ -14,10 +14,10 @@
     [super onShadersLoaded];
 
 	// Get attribute locations
-	_texCoordAttributeLocation = [_glProgram getAttributeLocation:"aTexCoord"];
+	_texCoordAttributeLocation = [_glProgram getAttributeLocation:"a_texCoord"];
 
 	// Set up the texture sampler
-	[_glContext setUniformSampler:[_glProgram getUniformLocation:"sTexture"]];
+	[_glContext setUniformSampler:[_glProgram getUniformLocation:"s_texture"]];
 
 	// Callback
 	[super callback]

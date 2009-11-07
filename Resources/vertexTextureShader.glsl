@@ -1,15 +1,12 @@
-// model view matrix
-uniform mat4 mvMatrix;
+uniform mat4 u_mvMatrix;
+uniform mat4 u_mvpMatrix;
 
-// perspective matrix
-uniform mat4 pMatrix;
+attribute vec4 a_vertex;
+attribute vec2 a_texCoord;
 
-attribute vec4 aVertex;
-attribute vec2 aTexCoord;
-
-varying vec2 vTexCoord;
+varying vec2 v_texCoord;
 
 void main(void) {
-	vTexCoord = aTexCoord;
-	gl_Position = pMatrix * mvMatrix * aVertex;
+	v_texCoord = a_texCoord;
+	gl_Position = u_mvpMatrix * a_vertex;
 }

@@ -134,8 +134,28 @@
 	_gl.bindTexture(_gl.TEXTURE_2D, textureIndex);
 }
 
-- (void)setUniformMatrix:(int)uniformIndex matrix:(Matrix4D)matrix {
+- (void)setUniformMatrix3:(int)uniformIndex matrix:(Matrix4D)matrix {
+	_gl.uniformMatrix3fv(uniformIndex, false, matrix.getAs3x3ColumnMajorCanvasFloatArray());
+}
+
+- (void)setUniformMatrix4:(int)uniformIndex matrix:(Matrix4D)matrix {
 	_gl.uniformMatrix4fv(uniformIndex, false, matrix.getAsColumnMajorCanvasFloatArray());
+}
+
+- (void)setUniform1i:(int)uniformIndex value:(int)value {
+	_gl.uniform1i(uniformIndex, value);
+}
+
+- (void)setUniform1f:(int)uniformIndex value:(float)value {
+	_gl.uniform1f(uniformIndex, value);
+}
+
+- (void)setUniform3f:(int)uniformIndex values:(Array)values {
+	_gl.uniform3f(uniformIndex, values[0], values[1], values[2]);
+}
+
+- (void)setUniform4f:(int)uniformIndex values:(Array)values {
+	_gl.uniform4f(uniformIndex, values[0], values[1], values[2], values[3]);
 }
 
 - (void)setUniformSampler:(int)samplerIndex {
