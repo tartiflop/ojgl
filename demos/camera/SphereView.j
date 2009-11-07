@@ -1,11 +1,11 @@
-@import "OJGL/GLView.j"
-@import "OJGL/GLU.j"
-@import "primitives/Sphere.j"
-@import "primitives/SphereBurst.j"
-@import "materials/TextureMaterial.j"
-@import "materials/RandomColorMaterial.j"
-@import "renderers/SimpleTexRenderer.j"
-@import "renderers/SimpleColorRenderer.j"
+@import "../../OJGL/GLView.j"
+@import "../../OJGL/GLU.j"
+@import "../../primitives/Sphere.j"
+@import "../../primitives/SphereBurst.j"
+@import "../../materials/TextureMaterial.j"
+@import "../../materials/RandomColorMaterial.j"
+@import "../../renderers/SimpleTexRenderer.j"
+@import "../../renderers/SimpleColorRenderer.j"
 
 @implementation SphereView : GLView {
 	GLContext _glContext;

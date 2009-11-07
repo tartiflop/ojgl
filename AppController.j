@@ -1,7 +1,7 @@
 @import <Foundation/CPObject.j>
 @import <Foundation/CPRunLoop.j>
 @import "utils/Framerate.j"
-@import "SphereView.j"
+@import "demos/camera/SphereView.j"
 @import "demos/pointLight/LightingView.j"
 
 @implementation AppController : CPObject {
@@ -18,7 +18,7 @@
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"EEEEEE"]];
 
 	// Create GL View
-	_view = [[LightingView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	_view = [[SphereView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
 	[_view setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[_view setCenter:[contentView center]];
 	[contentView addSubview:_view];
