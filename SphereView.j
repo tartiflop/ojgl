@@ -88,10 +88,10 @@
 - (void)keyDown:(CPEvent *)theEvent
 {
     switch ([theEvent characters]) {
-        case "&": _keyZ =  0.1; break;
-        case "(": _keyZ = -0.1; break;
-        case "%": _keyX = -0.1; break;
-        case "'": _keyX =  0.1; break;
+        case "z": _keyZ =  0.1; break;
+        case "s": _keyZ = -0.1; break;
+        case "d": _keyX = -0.1; break;
+        case "a": _keyX =  0.1; break;
     }
 
 //    console.log([theEvent characters]);
@@ -100,10 +100,10 @@
 - (void)keyUp:(CPEvent *)theEvent
 {
     switch ([theEvent characters]) {
-        case "&": _keyZ = 0; break;
-        case "(": _keyZ = 0; break;
-        case "%": _keyX = 0; break;
-        case "'": _keyX = 0; break;
+        case "z": _keyZ = 0; break;
+        case "s": _keyZ = 0; break;
+        case "d": _keyX = 0; break;
+        case "a": _keyX = 0; break;
     }
 }
 
