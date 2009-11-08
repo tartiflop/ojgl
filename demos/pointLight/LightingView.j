@@ -1,7 +1,7 @@
 @import "../../OJGL/GLView.j"
 @import "../../OJGL/GLU.j"
 @import "../../OJGL/GLLight.j"
-@import "../../primitives/Sphere.j"
+@import "../../primitives/SphereBurst.j"
 @import "../../materials/ShadedColorMaterial.j"
 @import "../../renderers/SimpleLightRenderer.j"
 
@@ -13,7 +13,7 @@
 	GLLight _light3;
 	float _angle;
 	
-	Sphere _sphere;
+	SphereBurst _sphere;
 	BOOL _ready;
 }
 
@@ -44,7 +44,7 @@
 
 	// Create sphere with Color material
 	var colorMaterial = [[ShadedColorMaterial alloc] initWithHexColors:"111111" diffuse:"BBBBBB" specular:"BBBBBB" shininess:0.7];
-	var _sphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
+	var _sphere = [[SphereBurst alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
 	[_sphere prepareGL:_glContext];
 	
 	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];
