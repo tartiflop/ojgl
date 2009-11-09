@@ -24,7 +24,7 @@
 }
 
 - (id)initWithContext:(GLContext)context {
-	self = [super initWithContext:context vertexShaderFile:@"Resources/pointLighting.vsh" fragmentShaderFile:@"Resources/pointLighting.fsh"];
+	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/pointLighting.vsh" fragmentShaderFile:@"Resources/shaders/pointLighting.fsh"];
 	
 	if (self) {
 		_lights = [];

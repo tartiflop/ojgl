@@ -6,7 +6,7 @@
 }
 
 - (id)initWithContext:(GLContext)context {
-	self = [super initWithContext:context vertexShaderFile:@"Resources/vertexTextureShader.glsl" fragmentShaderFile:@"Resources/fragmentTextureShader.glsl"];
+	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/basicTexture.vsh" fragmentShaderFile:@"Resources/shaders/basicTexture.fsh"];
 	return self;
 }
 

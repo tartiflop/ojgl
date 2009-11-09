@@ -57,7 +57,7 @@
 	[_glContext enableTexture];
 
 	// Create sphere with Texture material
-	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/mars.jpg"];
+	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg"];
 	var _textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:1.2 longs:25 lats:25];
 	[_textureSphere prepareGL:_glContext];
 	

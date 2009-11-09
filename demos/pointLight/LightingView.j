@@ -1,7 +1,7 @@
 @import "../../OJGL/GLView.j"
 @import "../../OJGL/GLU.j"
 @import "../../OJGL/GLLight.j"
-@import "../../primitives/SphereBurst.j"
+@import "../../primitives/Sphere.j"
 @import "../../materials/ShadedColorMaterial.j"
 @import "../../renderers/SimpleLightRenderer.j"
 
@@ -43,8 +43,8 @@
 	[_glContext enableBackfaceCulling];
 
 	// Create sphere with Color material
-	var colorMaterial = [[ShadedColorMaterial alloc] initWithHexColors:"111111" diffuse:"BBBBBB" specular:"BBBBBB" shininess:0.7];
-	var _sphere = [[SphereBurst alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
+	var colorMaterial = [[ShadedColorMaterial alloc] initWithHexColors:"111111" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
+	var _sphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
 	[_sphere prepareGL:_glContext];
 	
 	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];
@@ -58,23 +58,17 @@
 	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF"];
 	[_light3 setAttenuation:0.05];
 	[_lightRenderer addLight:_light3];
-	
+
 	// reshape 
 	[_glContext reshape:[self width] height:[self height]];
 
-	// Initialise projection matrix
+	// Initialise view and projection matrices
+	[_lightRenderer setActive];
 	var lookat = [GLU lookAt:0 eyey:0 eyez:15 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	[_lightRenderer setViewMatrix:lookat];
 	
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
-
-	var projectionMatrix = new Matrix4D(perspective);
-	projectionMatrix.multiply(lookat);
-	
-	// Send projection matrices to the renderers (shaders)
-	[_lightRenderer setActive];
-	[_lightRenderer setViewMatrix:lookat];
 	[_lightRenderer setProjectionMatrix:perspective];
-	//[_lightRenderer setProjectionMatrix:projectionMatrix];
 
 	_ready = YES;
 }

@@ -5,7 +5,7 @@
 }
 
 - (id)initWithContext:(GLContext)context {
-	self = [super initWithContext:context vertexShaderFile:@"Resources/vertexShader.glsl" fragmentShaderFile:@"Resources/fragmentShader.glsl"];
+	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/basicColor.vsh" fragmentShaderFile:@"Resources/shaders/basicColor.fsh"];
 	return self;
 }
 
