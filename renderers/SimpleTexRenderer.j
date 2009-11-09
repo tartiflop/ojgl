@@ -23,6 +23,11 @@
 	[super callback]
 }
 
+- (void)setNormalBufferData:(int)bufferId {
+	// Bind the vertex buffer data to the vertex attribute
+//	[_glContext bindBufferToAttribute:bufferId attributeLocation:_normalAttributeLocation size:3];
+}
+
 - (void)setTexCoordBufferData:(int)bufferId {
 	// Bind the texture coordinates buffer data to the texcoord attribute
 	[_glContext bindBufferToAttribute:bufferId attributeLocation:_texCoordAttributeLocation size:2];

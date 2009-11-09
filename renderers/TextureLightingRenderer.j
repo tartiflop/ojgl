@@ -1,6 +1,9 @@
 @import "../OJGL/GLRenderer.j"
 
-@implementation SimpleLightRenderer : GLRenderer {
+@implementation TextureLightingRenderer : GLRenderer {
+	int _texCoordAttributeLocation;
+	int _samplerUniformLocation;
+
 	int _normalAttributeLocation;
 	int _normalMatrixUniformLocation;
 	
@@ -14,28 +17,22 @@
 	Array _lightAttenuationFactorLocation;
 	Array _lightEnabledLocation;
 
-	// material characteristics
-	int _materialAmbientLocation;
-	int _materialDiffuseLocation;
-	int _materialSpecularLocation;
-	int _materialShininessLocation;
-	
 	Array _lights;
 }
 
 - (id)initWithContext:(GLContext)context {
-	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/pointLighting.vsh" fragmentShaderFile:@"Resources/shaders/pointLighting.fsh"];
+	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/pointLightingTexture.vsh" fragmentShaderFile:@"Resources/shaders/pointLightingTexture.fsh"];
 	
 	if (self) {
 		_lights = [];
 	}
-	
+
 	return self;
 }
 
-
 - (void)onShadersLoaded {
-	[super onShadersLoaded];
+    [super onShadersLoaded];
+
 
 	// Get attribute/uniform locations
 	_normalAttributeLocation = [_glProgram getAttributeLocation:"a_normal"];
@@ -63,15 +60,15 @@
 		_lightEnabledLocation.push([_glProgram getUniformLocation:lightEnabled]);
 	}
 	
-	_materialAmbientLocation = [_glProgram getUniformLocation:"u_material.ambientColor"];
-	_materialDiffuseLocation = [_glProgram getUniformLocation:"u_material.diffuseColor"];
-	_materialSpecularLocation = [_glProgram getUniformLocation:"u_material.specularColor"];
-	_materialShininessLocation = [_glProgram getUniformLocation:"u_material.shininess"];
 	
+	_texCoordAttributeLocation = [_glProgram getAttributeLocation:"a_texCoord"];
+
+	// Set up the texture sampler
+	[_glContext setUniformSampler:[_glProgram getUniformLocation:"s_texture"]];
+
 	// Callback
 	[super callback]
 }
-
 
 - (void)setupMatrices {
 	[super setupMatrices];
@@ -83,6 +80,16 @@
 - (void)setNormalBufferData:(int)bufferId {
 	// Bind the vertex buffer data to the vertex attribute
 	[_glContext bindBufferToAttribute:bufferId attributeLocation:_normalAttributeLocation size:3];
+}
+
+- (void)setTexCoordBufferData:(int)bufferId {
+	// Bind the texture coordinates buffer data to the texcoord attribute
+	[_glContext bindBufferToAttribute:bufferId attributeLocation:_texCoordAttributeLocation size:2];
+}
+
+- (void)setTexture:(int)textureId {
+	// Bind the texture
+	[_glContext bindTexture:textureId];
 }
 
 - (int)addLight:(GLLight)light {
@@ -116,15 +123,9 @@
 	}
 	
 	// Set scene ambient levels
-	[_glContext setUniform4f:_sceneAmbientUniformLocation values:[0.1, 0.1, 0.1, 1.0]];
+	[_glContext setUniform4f:_sceneAmbientUniformLocation values:[0.15, 0.15, 0.15, 1.0]];
 }
 
-- (void)setMaterialData:(Array)ambientColor diffuseColor:(Array)diffuseColor specularColor:(Array)specularColor shininess:(float)shininess {
-	[_glContext setUniform4f:_materialAmbientLocation values:ambientColor];
-	[_glContext setUniform4f:_materialDiffuseLocation values:diffuseColor];
-	[_glContext setUniform4f:_materialSpecularLocation values:specularColor];
-	[_glContext setUniform1f:_materialShininessLocation value:shininess];
-	
-}
+
 
 @end

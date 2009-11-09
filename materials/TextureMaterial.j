@@ -24,6 +24,9 @@
 
 	// Tell primitive to use UV data and associate it with a buffer
 	[_primitive prepareUVs:glContext];
+
+	// Tell primitive to use normal data and associate it with a buffer
+	[_primitive prepareNormals:glContext];
 }
 
 - (void)prepareRenderer:(GLRenderer)renderer {
@@ -32,6 +35,7 @@
 	// Bind the texture
 	[renderer setTexture:[_texture textureId]];
 
+	[renderer setNormalBufferData:[_primitive getNormalBufferId]];
 }
 
 

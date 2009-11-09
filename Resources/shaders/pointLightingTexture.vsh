@@ -18,6 +18,7 @@ struct Material {
 
 attribute vec4 a_vertex;
 attribute vec3 a_normal;
+attribute vec2 a_texCoord;
 
 uniform mat4 u_mvpMatrix;
 uniform mat4 u_mvMatrix;
@@ -31,6 +32,7 @@ uniform int u_lightEnabled[MAX_LIGHTS];
 
 varying vec4 v_color;
 varying vec4 v_specular;
+varying vec2 v_texCoord;
 
 const float	c_zero = 0.0;
 const float	c_one = 1.0;
@@ -119,12 +121,19 @@ void main(void) {
 
 	normal = normalize(normal);
 	
-	materialAmbient = u_material.ambientColor;
-	materialDiffuse = u_material.diffuseColor;
-	materialSpecular = u_material.specularColor;
-	materialShininess = u_material.shininess;
+//	materialAmbient = u_material.ambientColor;
+//	materialDiffuse = u_material.diffuseColor;
+//	materialSpecular = u_material.specularColor;
+//	materialShininess = u_material.shininess;
+	
+	materialAmbient = vec4(c_one, c_one, c_one, c_one);
+	materialDiffuse = vec4(c_one, c_one, c_one, c_one);
+	materialSpecular = vec4(c_one, c_one, c_one, c_one);
+	materialShininess = 0.7;
+	
 	
 	doLighting();
 
 	gl_Position = u_mvpMatrix * a_vertex;
+	v_texCoord = a_texCoord;
 }

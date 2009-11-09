@@ -3,9 +3,9 @@
 @import "../../OJGL/GLLight.j"
 @import "../../primitives/Sphere.j"
 @import "../../materials/ShadedColorMaterial.j"
-@import "../../renderers/SimpleLightRenderer.j"
+@import "../../renderers/TextureLightingRenderer.j"
 
-@implementation LightingView : GLView {
+@implementation TextureLightingView : GLView {
 	GLContext _glContext;
 	SimpleLightRenderer _lightRenderer;
 	GLLight _light1;
@@ -27,7 +27,7 @@
 		_glContext = [self glContext];
 
 		// Initialise the light renderer
-		_lightRenderer = [[SimpleLightRenderer alloc] initWithContext:_glContext];
+		_lightRenderer = [[TextureLightingRenderer alloc] initWithContext:_glContext];
 		[_lightRenderer load:self onComplete:@selector(initScene)];
 		
 		_angle = 0;
@@ -41,10 +41,11 @@
 	// Prepare (initialise) context
 	[_glContext prepare:[0.0, 0.0, 0.0, 1] clearDepth:1.0];
 	[_glContext enableBackfaceCulling];
+	[_glContext enableTexture];
 
 	// Create sphere with Color material
-	var colorMaterial = [[ShadedColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
-	var _sphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
+	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg"];
+	var _sphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:4 longs:100 lats:100];
 	[_sphere prepareGL:_glContext];
 	
 	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];
@@ -52,11 +53,11 @@
 	[_lightRenderer addLight:_light1];
 	
 	_light2 = [[GLLight alloc] initWithHexColor:"FF0000" specularColor:"FFFFFF"];
-	[_light2 setAttenuation:0.05];
+	[_light2 setAttenuation:0.02];
 	[_lightRenderer addLight:_light2];
 	
 	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF"];
-	[_light3 setAttenuation:0.05];
+	[_light3 setAttenuation:0.02];
 	[_lightRenderer addLight:_light3];
 
 	// reshape 
