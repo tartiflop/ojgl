@@ -88,23 +88,35 @@
 - (void)keyDown:(CPEvent *)theEvent
 {
     switch ([theEvent characters]) {
-        case "z": _keyZ =  0.1; break;
+        case "w": _keyZ =  0.1; break;
         case "s": _keyZ = -0.1; break;
         case "d": _keyX = -0.1; break;
         case "a": _keyX =  0.1; break;
     }
-
-//    console.log([theEvent characters]);
+    console.log([theEvent keyCode]);
+    console.log([theEvent characters]);
 }
 
 - (void)keyUp:(CPEvent *)theEvent
 {
     switch ([theEvent characters]) {
-        case "z": _keyZ = 0; break;
+        case "w": _keyZ = 0; break;
         case "s": _keyZ = 0; break;
         case "d": _keyX = 0; break;
         case "a": _keyX = 0; break;
     }
+}
+
+- (void)mouseDragged:(CPEvent)anEvent {
+    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
+}
+
+- (void)mouseDown:(CPEvent)anEvent {
+    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
+}
+
+- (void)mouseUp:(CPEvent)anEvent {
+    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
 }
 
 - (void)drawRect:(CPRect)dirtyRect {
@@ -127,12 +139,12 @@
 	[_textureSphere resetTransformation];
 	[_textureRenderer setViewMatrix:_lookAt];
 	[_textureSphere rotate:_angle x:0 y:1 z:0];
-	for (var k = 0; k < 5; k++) {
-		for (var j = 0; j < 5; j++) {
-			for (var i = 0; i < 5; i++) {
+	for (var k = 0; k < 3; k++) {
+		for (var j = 0; j < 3; j++) {
+			for (var i = 0; i < 3; i++) {
                 if ((i + j + k) % 2 == 0) {
 					// Translate sphere, activate the texture renderer and render the texture sphere
-                    [_textureSphere translateTo:((i - 2) * 4) y:((j - 2) * 4) z:((k - 2) * 4)];
+                    [_textureSphere translateTo:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
 					[_textureSphere render:_textureRenderer];
 				}
 			}
@@ -144,12 +156,12 @@
 	[_colorSphere resetTransformation];
 	[_colorRenderer setViewMatrix:_lookAt];
 	[_colorSphere rotate:_angle x:0 y:1 z:0];
-	for (var k = 0; k < 5; k++) {
-		for (var j = 0; j < 5; j++) {
-			for (var i = 0; i < 5; i++) {
+	for (var k = 0; k < 3; k++) {
+		for (var j = 0; j < 3; j++) {
+			for (var i = 0; i < 3; i++) {
 				if ((i + j + k) % 2 == 1) {
 					// Translate sphere, activate the color renderer and render the color sphere
-                    [_colorSphere translateTo:((i - 2) * 4) y:((j - 2) * 4) z:((k - 2) * 4)];
+                    [_colorSphere translateTo:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
 					[_colorSphere render:_colorRenderer];
 				}
 			}

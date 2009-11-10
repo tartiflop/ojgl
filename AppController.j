@@ -13,6 +13,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification {
+app = self;
 
 	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
@@ -40,13 +41,11 @@
 	// Add timer for fps label update
 	[CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 	// Timer to redraw
-    _speed = 25;
-	[CPTimer scheduledTimerWithTimeInterval:1/_speed target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+    [app fast];
+	[CPTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 
 	[theWindow orderFront:self];
-	
-	app = self;
-}
+	}
 
 - (void)run {
 	// update framerate
