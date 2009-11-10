@@ -12,13 +12,14 @@
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification {
+app = self;
 
 	var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
         contentView = [theWindow contentView];
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"EEEEEE"]];
 
 	// Create GL View
-	_view = [[LightingView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	_view = [[SphereView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
 	[_view setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[_view setCenter:[contentView center]];
 	[contentView addSubview:_view];
@@ -39,13 +40,11 @@
 	// Add timer for fps label update
 	[CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 	// Timer to redraw
-    _speed = 25;
-	[CPTimer scheduledTimerWithTimeInterval:1/_speed target:self selector:@selector(run) userInfo:nil repeats:NO]; 
+    [app fast];
+	[CPTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 
 	[theWindow orderFront:self];
-	
-	app = self;
-}
+	}
 
 - (void)run {
 	// update framerate

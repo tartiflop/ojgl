@@ -47,26 +47,6 @@
 	return _DOMCanvasElement.height;
 }
 
-- (void)keyDown:(CPEvent *)theEvent
-{
-}
-
-- (void)keyUp:(NSEvent *)theEvent
-{
-}
-
-- (void)mouseDragged:(CPEvent)anEvent {
-    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
-}
-
-- (void)mouseDown:(CPEvent)anEvent {
-    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
-}
-
-- (void)mouseUp:(CPEvent)anEvent {
-    [[CPDOMWindowBridge sharedDOMWindowBridge] _propagateCurrentDOMEvent:YES];
-}
-
 - (DOMElement)_context {
 	
 	var gl;
