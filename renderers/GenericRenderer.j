@@ -1,6 +1,6 @@
 @import "../OJGL/GLRenderer.j"
 
-@implementation TextureLightingRenderer : GLRenderer {
+@implementation GenericRenderer : GLRenderer {
 	int _texCoordAttributeLocation;
 	int _samplerUniformLocation;
 
@@ -8,6 +8,9 @@
 	int _normalMatrixUniformLocation;
 	
 	int _sceneAmbientUniformLocation;
+	int _useMaterialUniformLocation;
+	int _includeSpecularUniformLocation;
+	int _lightingEnabledUniformLocation;
 	
 	// light characteristics
 	Array _lightPositionLocation;
@@ -17,14 +20,24 @@
 	Array _lightAttenuationFactorLocation;
 	Array _lightEnabledLocation;
 
+	// material characteristics
+	int _materialAmbientLocation;
+	int _materialDiffuseLocation;
+	int _materialSpecularLocation;
+	int _materialShininessLocation;
+	
 	Array _lights;
+	Array _sceneAmbient;
+	BOOL _lightingEnabled;
 }
 
 - (id)initWithContext:(GLContext)context {
-	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/pointLightingTexture.vsh" fragmentShaderFile:@"Resources/shaders/pointLightingTexture.fsh"];
+	self = [super initWithContext:context vertexShaderFile:@"Resources/shaders/pointLighting.vsh" fragmentShaderFile:@"Resources/shaders/pointLighting.fsh"];
 	
 	if (self) {
 		_lights = [];
+		_sceneAmbient = [0.0, 0.0, 0.0, 1.0];
+		_lightingEnabled = YES;
 	}
 
 	return self;
@@ -40,6 +53,9 @@
 	_normalMatrixUniformLocation = [_glProgram getUniformLocation:"u_normalMatrix"];
 
 	_sceneAmbientUniformLocation = [_glProgram getUniformLocation:"u_sceneAmbientColor"];
+	_useMaterialUniformLocation = [_glProgram getUniformLocation:"u_useMaterial"];
+	_includeSpecularUniformLocation = [_glProgram getUniformLocation:"u_includeSpecular"];
+	_lightingEnabledUniformLocation = [_glProgram getUniformLocation:"u_lightingEnabled"];
 
 	_lightPositionLocation = [];
 	_lightAmbientLocation = [];
@@ -60,6 +76,10 @@
 		_lightEnabledLocation.push([_glProgram getUniformLocation:lightEnabled]);
 	}
 	
+	_materialAmbientLocation = [_glProgram getUniformLocation:"u_material.ambientColor"];
+	_materialDiffuseLocation = [_glProgram getUniformLocation:"u_material.diffuseColor"];
+	_materialSpecularLocation = [_glProgram getUniformLocation:"u_material.specularColor"];
+	_materialShininessLocation = [_glProgram getUniformLocation:"u_material.shininess"];
 	
 	_texCoordAttributeLocation = [_glProgram getAttributeLocation:"a_texCoord"];
 
@@ -74,7 +94,14 @@
 	[super setupMatrices];
 	
 	[_glContext setUniformMatrix3:_normalMatrixUniformLocation matrix:_mvMatrix];
+}
 
+- (void)setSceneAmbient:(String)ambient {
+	_sceneAmbient = hexToRGB(ambient);
+}
+
+- (void)setLightingEnabled:(BOOL)lightingEnabled {
+	_lightingEnabled = lightingEnabled;
 }
 
 - (void)setNormalBufferData:(int)bufferId {
@@ -90,6 +117,27 @@
 - (void)setTexture:(int)textureId {
 	// Bind the texture
 	[_glContext bindTexture:textureId];
+	[_glContext setUniform1i:_useMaterialUniformLocation value:0];
+	[_glContext setUniform1i:_includeSpecularUniformLocation value:0];
+}
+
+- (void)setTextureWithShininess:(int)textureId shininess:(float)shininess {
+	// Bind the texture
+	[_glContext bindTexture:textureId];
+
+	[_glContext setUniform1f:_materialShininessLocation value:shininess];
+	[_glContext setUniform1i:_useMaterialUniformLocation value:0];
+	[_glContext setUniform1i:_includeSpecularUniformLocation value:1];
+}
+
+- (void)setMaterialData:(Array)ambientColor diffuseColor:(Array)diffuseColor specularColor:(Array)specularColor shininess:(float)shininess {
+	[_glContext setUniform4f:_materialAmbientLocation values:ambientColor];
+	[_glContext setUniform4f:_materialDiffuseLocation values:diffuseColor];
+	[_glContext setUniform4f:_materialSpecularLocation values:specularColor];
+	[_glContext setUniform1f:_materialShininessLocation value:shininess];
+
+	[_glContext setUniform1i:_useMaterialUniformLocation value:1];
+	[_glContext setUniform1i:_includeSpecularUniformLocation value:1];
 }
 
 - (int)addLight:(GLLight)light {
@@ -101,6 +149,12 @@
 }
 
 - (void)renderLights {
+	if (_lights.length == 0) {
+		[_glContext setUniform1i:_lightingEnabledUniformLocation value:0];
+		return;
+	}
+	
+	[_glContext setUniform1i:_lightingEnabledUniformLocation value:_lightingEnabled ? 1 : 0];
 	for (var i = 0; i < 8; i++) {
 		if (i < _lights.length) {
 			// enable light
@@ -123,9 +177,8 @@
 	}
 	
 	// Set scene ambient levels
-	[_glContext setUniform4f:_sceneAmbientUniformLocation values:[0.15, 0.15, 0.15, 1.0]];
+	[_glContext setUniform4f:_sceneAmbientUniformLocation values:_sceneAmbient];
 }
-
 
 
 @end

@@ -1,6 +1,6 @@
 @import "../OJGL/GLMaterial.j"
 
-@implementation ShadedColorMaterial : GLMaterial {
+@implementation ColorMaterial : GLMaterial {
 
 	Array _ambientColor;
 	Array _diffuseColor;

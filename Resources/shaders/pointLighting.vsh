@@ -18,6 +18,7 @@ struct Material {
 
 attribute vec4 a_vertex;
 attribute vec3 a_normal;
+attribute vec2 a_texCoord;
 
 uniform mat4 u_mvpMatrix;
 uniform mat4 u_mvMatrix;
@@ -29,8 +30,13 @@ uniform Material u_material;
 uniform Light u_light[MAX_LIGHTS];
 uniform int u_lightEnabled[MAX_LIGHTS];
 
+uniform bool u_useMaterial;
+uniform bool u_includeSpecular;
+uniform bool u_lightingEnabled;
+
 varying vec4 v_color;
 varying vec4 v_specular;
+varying vec2 v_texCoord;
 
 const float	c_zero = 0.0;
 const float	c_one = 1.0;
@@ -79,19 +85,18 @@ void pointLight(in int lightIndex,
 	if (nDotVP > c_zero) {
 		diffuse += u_light[lightIndex].diffuseColor * nDotVP * attenuation;
 	
-		// reflected vector					
-		reflectVector = normalize(reflect(-VP, normal));
+		if (u_includeSpecular) {
+			// reflected vector					
+			reflectVector = normalize(reflect(-VP, normal));
+			
+			// angle between eye and reflected vector
+			eDotRV = max(c_zero, dot(eye, reflectVector));
+			eDotRV = pow(eDotRV, 16.0);
 		
-		// angle between eye and reflected vector
-		eDotRV = max(c_zero, dot(eye, reflectVector));
-		eDotRV = pow(eDotRV, 16.0);
-	
-		pf = pow(eDotRV, materialShininess);
-		specular += u_light[lightIndex].specularColor * pf * attenuation;
+			pf = pow(eDotRV, materialShininess);
+			specular += u_light[lightIndex].specularColor * pf * attenuation;
+		}
 	}
-	
-	
-
 }
 
 void doLighting() {
@@ -100,16 +105,21 @@ void doLighting() {
 	vec4 diff = vec4(c_zero);
 	vec4 spec = vec4(c_zero);
 
-	for (i = int(c_zero); i < MAX_LIGHTS; i++) {
-		if (u_lightEnabled[i] == 1) {
-			pointLight(i, amb, diff, spec);
-		} 	
+	if (u_lightingEnabled) {
+		for (i = int(c_zero); i < MAX_LIGHTS; i++) {
+			if (u_lightEnabled[i] == 1) {
+				pointLight(i, amb, diff, spec);
+			} 	
+		}
+
+		v_color = (u_sceneAmbientColor + amb) * materialAmbient + diff * materialDiffuse;
+		v_color.a = materialDiffuse.a;
+		v_specular = spec * materialSpecular;
+		v_specular.a = materialSpecular.a;
+	} else {
+		v_color = materialDiffuse;
+		v_specular = spec;
 	}
-	
-	v_color = (u_sceneAmbientColor + amb) * materialAmbient + diff * materialDiffuse;
-	v_color.a = materialDiffuse.a;
-	v_specular = spec * materialSpecular;
-	v_specular.a = materialSpecular.a;
 }
 
 
@@ -119,12 +129,22 @@ void main(void) {
 
 	normal = normalize(normal);
 	
-	materialAmbient = u_material.ambientColor;
-	materialDiffuse = u_material.diffuseColor;
-	materialSpecular = u_material.specularColor;
-	materialShininess = u_material.shininess;
+	
+	if (u_useMaterial) {
+		materialAmbient = u_material.ambientColor;
+		materialDiffuse = u_material.diffuseColor;
+		materialSpecular = u_material.specularColor;
+		materialShininess = u_material.shininess;
+		
+	} else {
+		materialAmbient = vec4(c_one, c_one, c_one, c_one);
+		materialDiffuse = vec4(c_one, c_one, c_one, c_one);
+		materialSpecular = vec4(c_one, c_one, c_one, c_one);
+		materialShininess = u_material.shininess;
+	}	
 	
 	doLighting();
 
 	gl_Position = u_mvpMatrix * a_vertex;
+	v_texCoord = a_texCoord;
 }

@@ -5,6 +5,9 @@
 
 	GLTexture _texture;
 	CPString _textureFilename;
+	float _shininess;
+	BOOL _shiny;
+	
 }
 
 - (id)initWithTextureFile:(CPString)textureFilename {
@@ -12,7 +15,19 @@
 	
 	if (self) {
 		_textureFilename = textureFilename;
+		_shiny = NO;
+	}
+	
+	return self;
+}
 
+- (id)initWithTextureFileAndShininess:(CPString)textureFilename shininess:(float)shininess {
+	self = [super init];
+	
+	if (self) {
+		_textureFilename = textureFilename;
+		_shininess = shininess;
+		_shiny = YES;
 	}
 	
 	return self;
@@ -33,7 +48,11 @@
 	[renderer setTexCoordBufferData:[_primitive getUVBufferId]];
 
 	// Bind the texture
-	[renderer setTexture:[_texture textureId]];
+	if (_shiny) {
+		[renderer setTextureWithShininess:[_texture textureId] shininess:_shininess];
+	} else {
+		[renderer setTexture:[_texture textureId]];
+	}
 
 	[renderer setNormalBufferData:[_primitive getNormalBufferId]];
 }
