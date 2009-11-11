@@ -30,7 +30,6 @@ uniform Material u_material;
 uniform Light u_light[MAX_LIGHTS];
 uniform int u_lightEnabled[MAX_LIGHTS];
 
-uniform bool u_useMaterial;
 uniform bool u_includeSpecular;
 uniform bool u_lightingEnabled;
 
@@ -43,12 +42,7 @@ const float	c_one = 1.0;
 
 vec4 ecPosition3;
 vec3 normal;
-
-vec4 materialAmbient;
-vec4 materialDiffuse;
-vec4 materialSpecular;
-float materialShininess;
-
+vec3 eye;
 
 void pointLight(in int lightIndex,
 				inout vec4 ambient,
@@ -64,8 +58,6 @@ void pointLight(in int lightIndex,
 	vec3 reflectVector;
 
 
-	vec3 eye = -vec3(normalize(ecPosition3));
-	
 	// Vector between light position and vertex
 	VP = vec3(u_light[lightIndex].position - ecPosition3);
 	
@@ -93,7 +85,7 @@ void pointLight(in int lightIndex,
 			eDotRV = max(c_zero, dot(eye, reflectVector));
 			eDotRV = pow(eDotRV, 16.0);
 		
-			pf = pow(eDotRV, materialShininess);
+			pf = pow(eDotRV, u_material.shininess);
 			specular += u_light[lightIndex].specularColor * pf * attenuation;
 		}
 	}
@@ -112,12 +104,12 @@ void doLighting() {
 			} 	
 		}
 
-		v_color = (u_sceneAmbientColor + amb) * materialAmbient + diff * materialDiffuse;
-		v_color.a = materialDiffuse.a;
-		v_specular = spec * materialSpecular;
-		v_specular.a = materialSpecular.a;
+		v_color = (u_sceneAmbientColor + amb) * u_material.ambientColor + diff * u_material.diffuseColor;
+		v_color.a = u_material.diffuseColor.a;
+		v_specular = spec * u_material.specularColor;
+		v_specular.a = u_material.specularColor.a;
 	} else {
-		v_color = materialDiffuse;
+		v_color = u_material.diffuseColor;
 		v_specular = spec;
 	}
 }
@@ -125,23 +117,10 @@ void doLighting() {
 
 void main(void) {
 	ecPosition3 = u_mvMatrix * a_vertex;
-	normal = u_normalMatrix * a_normal;
+	eye = -vec3(normalize(ecPosition3));
 
+	normal = u_normalMatrix * a_normal;
 	normal = normalize(normal);
-	
-	
-	if (u_useMaterial) {
-		materialAmbient = u_material.ambientColor;
-		materialDiffuse = u_material.diffuseColor;
-		materialSpecular = u_material.specularColor;
-		materialShininess = u_material.shininess;
-		
-	} else {
-		materialAmbient = vec4(c_one, c_one, c_one, c_one);
-		materialDiffuse = vec4(c_one, c_one, c_one, c_one);
-		materialSpecular = vec4(c_one, c_one, c_one, c_one);
-		materialShininess = u_material.shininess;
-	}	
 	
 	doLighting();
 

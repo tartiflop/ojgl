@@ -3,7 +3,7 @@
 @import "../../OJGL/GLLight.j"
 @import "../../primitives/Sphere.j"
 @import "../../materials/TextureMaterial.j"
-@import "../../renderers/GenericRenderer.j"
+@import "../../renderers/GenericPixelRenderer.j"
 
 @implementation TextureLightingView : GLView {
 	GLContext _glContext;
@@ -27,7 +27,7 @@
 		_glContext = [self glContext];
 
 		// Initialise the light renderer
-		_lightRenderer = [[GenericRenderer alloc] initWithContext:_glContext];
+		_lightRenderer = [[GenericPixelRenderer alloc] initWithContext:_glContext];
 		[_lightRenderer load:self onComplete:@selector(initScene)];
 		[_lightRenderer setSceneAmbient:"222222"];
 	//	[_lightRenderer setLightingEnabled:NO];
@@ -46,7 +46,7 @@
 
 	// Create sphere with Color material
 	var textureMaterial = [[TextureMaterial alloc] initWithTextureFileAndShininess:"Resources/images/mars.jpg" shininess:0.7];
-	var _sphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:4 longs:100 lats:100];
+	var _sphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:4 longs:6 lats:6];
 	[_sphere prepareGL:_glContext];
 	
 	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];

@@ -8,7 +8,7 @@
 	int _normalMatrixUniformLocation;
 	
 	int _sceneAmbientUniformLocation;
-	int _useMaterialUniformLocation;
+	int _useTextureUniformLocation;
 	int _includeSpecularUniformLocation;
 	int _lightingEnabledUniformLocation;
 	
@@ -53,7 +53,7 @@
 	_normalMatrixUniformLocation = [_glProgram getUniformLocation:"u_normalMatrix"];
 
 	_sceneAmbientUniformLocation = [_glProgram getUniformLocation:"u_sceneAmbientColor"];
-	_useMaterialUniformLocation = [_glProgram getUniformLocation:"u_useMaterial"];
+	_useTextureUniformLocation = [_glProgram getUniformLocation:"u_useTexture"];
 	_includeSpecularUniformLocation = [_glProgram getUniformLocation:"u_includeSpecular"];
 	_lightingEnabledUniformLocation = [_glProgram getUniformLocation:"u_lightingEnabled"];
 
@@ -117,7 +117,11 @@
 - (void)setTexture:(int)textureId {
 	// Bind the texture
 	[_glContext bindTexture:textureId];
-	[_glContext setUniform1i:_useMaterialUniformLocation value:0];
+
+	[_glContext setUniform1i:_useTextureUniformLocation value:1];
+	[_glContext setUniform4f:_materialAmbientLocation values:[1.0, 1.0, 1.0, 1.0]];
+	[_glContext setUniform4f:_materialDiffuseLocation values:[1.0, 1.0, 1.0, 1.0]];
+	[_glContext setUniform4f:_materialSpecularLocation values:[1.0, 1.0, 1.0, 1.0]];
 	[_glContext setUniform1i:_includeSpecularUniformLocation value:0];
 }
 
@@ -125,9 +129,13 @@
 	// Bind the texture
 	[_glContext bindTexture:textureId];
 
-	[_glContext setUniform1f:_materialShininessLocation value:shininess];
-	[_glContext setUniform1i:_useMaterialUniformLocation value:0];
+	[_glContext setUniform1i:_useTextureUniformLocation value:1];
+
+	[_glContext setUniform4f:_materialAmbientLocation values:[1.0, 1.0, 1.0, 1.0]];
+	[_glContext setUniform4f:_materialDiffuseLocation values:[1.0, 1.0, 1.0, 1.0]];
+	[_glContext setUniform4f:_materialSpecularLocation values:[1.0, 1.0, 1.0, 1.0]];
 	[_glContext setUniform1i:_includeSpecularUniformLocation value:1];
+	[_glContext setUniform1f:_materialShininessLocation value:shininess];
 }
 
 - (void)setMaterialData:(Array)ambientColor diffuseColor:(Array)diffuseColor specularColor:(Array)specularColor shininess:(float)shininess {
@@ -136,7 +144,7 @@
 	[_glContext setUniform4f:_materialSpecularLocation values:specularColor];
 	[_glContext setUniform1f:_materialShininessLocation value:shininess];
 
-	[_glContext setUniform1i:_useMaterialUniformLocation value:1];
+	[_glContext setUniform1i:_useTextureUniformLocation value:0];
 	[_glContext setUniform1i:_includeSpecularUniformLocation value:1];
 }
 
