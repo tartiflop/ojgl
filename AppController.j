@@ -20,7 +20,7 @@ app = self;
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"EEEEEE"]];
 
 	// Create GL View
-	_view = [[LightingView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	_view = [[TextureLightingView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
 	[_view setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[_view setCenter:[contentView center]];
 	[contentView addSubview:_view];

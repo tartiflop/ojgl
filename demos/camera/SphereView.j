@@ -66,7 +66,7 @@
 				
 				if ((i + j + k) % 2 == 0) {
 
-					var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg"];
+					var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg" shininess:0 precise:NO];
 					primitive = [[Sphere alloc] initWithGeometry:textureMaterial radius:1.2 longs:25 lats:25];
                     [primitive setTranslation:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
 
