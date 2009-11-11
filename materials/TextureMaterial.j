@@ -10,24 +10,22 @@
 	
 }
 
-- (id)initWithTextureFile:(CPString)textureFilename {
-	self = [super initWithRendererType:GENERIC_PIXEL_RENDERER_TYPE];
-	
-	if (self) {
-		_textureFilename = textureFilename;
-		_shiny = NO;
+- (id)initWithTextureFile:(CPString)textureFilename shininess:(float)shininess precise:(BOOL)precise {
+	if (precise) {
+		self = [super initWithRendererType:GENERIC_PIXEL_RENDERER_TYPE];
+	} else {
+		self = [super initWithRendererType:GENERIC_RENDERER_TYPE];
 	}
-	
-	return self;
-}
-
-- (id)initWithTextureFileAndShininess:(CPString)textureFilename shininess:(float)shininess {
-	self = [super initWithRendererType:GENERIC_PIXEL_RENDERER_TYPE];
 	
 	if (self) {
 		_textureFilename = textureFilename;
 		_shininess = shininess;
-		_shiny = YES;
+		
+		if (_shininess == 0) {
+			_shiny = NO;
+		} else {
+			_shiny = YES;
+		}
 	}
 	
 	return self;

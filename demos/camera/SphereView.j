@@ -153,7 +153,7 @@
 
 	// Rotate all spheres
 	for (var i = 0; i < _sceneObjects.length; i++) {
-		[_sceneObjects[i] setRotation:_angle x:0 y:1 z:0]
+		[_sceneObjects[i] setRotation:_angle x:0 y:1 z:0];
 	}
 	
 	// Render the scene

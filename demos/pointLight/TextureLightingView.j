@@ -12,7 +12,8 @@
 	GLLight _light1;
 	GLLight _light2;
 	GLLight _light3;
-	float _angle;
+	float _lightAngle;
+	float _sphereAngle;
 	
 	BOOL _ready;
 }
@@ -32,7 +33,7 @@
 		// build the scene
 		[self initScene];
 
-		_angle = 0;
+		_lightAngle = 0;
 	}
 	
 	return self;
@@ -45,19 +46,19 @@
 	[_glContext enableBackfaceCulling];
 
 	// Create sphere with Color material
-	var textureMaterial = [[TextureMaterial alloc] initWithTextureFileAndShininess:"Resources/images/mars.jpg" shininess:0.7];
-	var textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:2 longs:6 lats:6];
-	[textureSphere prepareGL:_glContext];
-	[textureSphere setTranslation:-4 y:0 z:0];
-	[[RendererManager getInstance] addPrimitive:textureSphere];
+	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg" shininess:0.7 precise:YES];
+	_textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:2 longs:6 lats:6];
+	[_textureSphere prepareGL:_glContext];
+	[_textureSphere setTranslation:-3 y:0 z:0];
+	[[RendererManager getInstance] addPrimitive:_textureSphere];
 	
 
 	// Create sphere with Color material
-	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
-	var colorSphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:2 longs:25 lats:25];
-	[colorSphere prepareGL:_glContext];
-	[colorSphere setTranslation:4 y:0 z:0];
-	[[RendererManager getInstance] addPrimitive:colorSphere];
+	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7 precise:YES];
+	_colorSphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:2 longs:25 lats:25];
+	[_colorSphere prepareGL:_glContext];
+	[_colorSphere setTranslation:3 y:0 z:0];
+	[[RendererManager getInstance] addPrimitive:_colorSphere];
 	
 
 	// Create the lights
@@ -78,7 +79,7 @@
 	
 
 	// Initialise view and projection matrices
-	var lookat = [GLU lookAt:0 eyey:0 eyez:15 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	var lookat = [GLU lookAt:0 eyey:0 eyez:10 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
 	[[RendererManager getInstance] setViewMatrix:lookat];
 	
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
@@ -100,14 +101,18 @@
 	// Clear context
 	[_glContext clearBuffer];
 
-	[_light1 setPosition:[2 * Math.cos(_angle * Math.PI / 90), 10 * Math.sin(_angle * Math.PI / 90), 5]];
-	[_light2 setPosition:[10 * Math.sin(_angle * Math.PI / 90), 2 * Math.cos(_angle * Math.PI / 30), 5]];
-	[_light3 setPosition:[5 * Math.cos(_angle * Math.PI / 60), 5 * Math.cos(_angle * Math.PI / 120), 5]];
+	// rotate spheres
+	[_textureSphere setRotation:_sphereAngle x:0 y:1 z:0];
+
+	[_light1 setPosition:[2 * Math.cos(_lightAngle * Math.PI / 90), 10 * Math.sin(_lightAngle * Math.PI / 90), 5]];
+	[_light2 setPosition:[10 * Math.sin(_lightAngle * Math.PI / 90), 2 * Math.cos(_lightAngle * Math.PI / 30), 5]];
+	[_light3 setPosition:[5 * Math.cos(_lightAngle * Math.PI / 60), 5 * Math.cos(_lightAngle * Math.PI / 120), 5]];
 
 	// Render the scene
 	[[RendererManager getInstance] render];
 
-	_angle = _angle + 1 % 360;
+	_sphereAngle = (_sphereAngle + 0.5) % 360;
+	_lightAngle = _lightAngle + 1 % 360;
 	
 	// flush
 	[_glContext flush];

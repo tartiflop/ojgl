@@ -9,8 +9,12 @@
 	
 }
 
-- (id)initWithHexColors:(String)ambient diffuse:(String)diffuse specular:(String)specular shininess:(float)shininess {
-	self = [super initWithRendererType:GENERIC_RENDERER_TYPE];
+- (id)initWithHexColors:(String)ambient diffuse:(String)diffuse specular:(String)specular shininess:(float)shininess precise:(BOOL)precise {
+	if (precise) {
+		self = [super initWithRendererType:GENERIC_PIXEL_RENDERER_TYPE];
+	} else {
+		self = [super initWithRendererType:GENERIC_RENDERER_TYPE];
+	}
 	
 	if (self) {
 		_ambientColor = hexToRGB(ambient);
