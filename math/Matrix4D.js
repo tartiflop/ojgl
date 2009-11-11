@@ -373,11 +373,28 @@ Matrix4D.prototype.transpose = function() {
     this.swz = tmp;
 }
 
-Matrix4D.prototype.translateTo = function(x, y, z) {
+Matrix4D.prototype.setTranslation = function(x, y, z) {
 
 	this.tx = x;
 	this.ty = y;
 	this.tz = z;
+}
+
+Matrix4D.prototype.setRotation = function(angle, x, y, z) {
+
+	var matrix = new Matrix4D();
+	matrix.rotate(angle, x, y, z);
+	
+	this.sxx = matrix.sxx;
+	this.sxy = matrix.sxy;
+	this.sxz = matrix.sxz;
+	this.syx = matrix.syx;
+	this.syy = matrix.syy;
+	this.syz = matrix.syz;
+	this.szx = matrix.szx;
+	this.szy = matrix.szy;
+	this.szz = matrix.szz;
+	
 }
 
 

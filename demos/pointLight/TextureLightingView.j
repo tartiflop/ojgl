@@ -3,17 +3,17 @@
 @import "../../OJGL/GLLight.j"
 @import "../../primitives/Sphere.j"
 @import "../../materials/TextureMaterial.j"
-@import "../../renderers/GenericPixelRenderer.j"
+@import "../../materials/ColorMaterial.j"
+@import "../../renderers/RendererManager.j"
 
 @implementation TextureLightingView : GLView {
 	GLContext _glContext;
-	GLRenderer _lightRenderer;
+
 	GLLight _light1;
 	GLLight _light2;
 	GLLight _light3;
 	float _angle;
 	
-	Sphere _sphere;
 	BOOL _ready;
 }
 
@@ -26,12 +26,12 @@
 		// Get the OpenGL Context
 		_glContext = [self glContext];
 
-		// Initialise the light renderer
-		_lightRenderer = [[GenericPixelRenderer alloc] initWithContext:_glContext];
-		[_lightRenderer load:self onComplete:@selector(initScene)];
-		[_lightRenderer setSceneAmbient:"222222"];
-	//	[_lightRenderer setLightingEnabled:NO];
+		// Initialise the renderer manager
+		[[RendererManager alloc] initWithContext:_glContext];
 		
+		// build the scene
+		[self initScene];
+
 		_angle = 0;
 	}
 	
@@ -46,31 +46,46 @@
 
 	// Create sphere with Color material
 	var textureMaterial = [[TextureMaterial alloc] initWithTextureFileAndShininess:"Resources/images/mars.jpg" shininess:0.7];
-	var _sphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:4 longs:6 lats:6];
-	[_sphere prepareGL:_glContext];
+	var textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:2 longs:6 lats:6];
+	[textureSphere prepareGL:_glContext];
+	[textureSphere setTranslation:-4 y:0 z:0];
+	[[RendererManager getInstance] addPrimitive:textureSphere];
 	
+
+	// Create sphere with Color material
+	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
+	var colorSphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:2 longs:25 lats:25];
+	[colorSphere prepareGL:_glContext];
+	[colorSphere setTranslation:4 y:0 z:0];
+	[[RendererManager getInstance] addPrimitive:colorSphere];
+	
+
+	// Create the lights
 	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];
 	[_light1 setAttenuation:0.02];
-	[_lightRenderer addLight:_light1];
+	[[RendererManager getInstance] addLight:_light1];
 	
 	_light2 = [[GLLight alloc] initWithHexColor:"FF0000" specularColor:"FFFFFF"];
 	[_light2 setAttenuation:0.02];
-	[_lightRenderer addLight:_light2];
+	[[RendererManager getInstance] addLight:_light2];
 	
 	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF"];
 	[_light3 setAttenuation:0.02];
-	[_lightRenderer addLight:_light3];
+	[[RendererManager getInstance] addLight:_light3];
+
+	// Set the scene ambient color
+	[[RendererManager getInstance] setSceneAmbient:"222222"];
+	
+
+	// Initialise view and projection matrices
+	var lookat = [GLU lookAt:0 eyey:0 eyez:15 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	[[RendererManager getInstance] setViewMatrix:lookat];
+	
+	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
+	[[RendererManager getInstance] setProjectionMatrix:perspective];
 
 	// reshape 
 	[_glContext reshape:[self width] height:[self height]];
-
-	// Initialise view and projection matrices
-	[_lightRenderer setActive];
-	var lookat = [GLU lookAt:0 eyey:0 eyez:15 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
-	[_lightRenderer setViewMatrix:lookat];
-	
-	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
-	[_lightRenderer setProjectionMatrix:perspective];
 
 	_ready = YES;
 }
@@ -85,24 +100,17 @@
 	// Clear context
 	[_glContext clearBuffer];
 
-	// Render the sphere
-	[_lightRenderer setActive];
-
-	[_sphere translateTo:0 y:0 z:0];
-	
 	[_light1 setPosition:[2 * Math.cos(_angle * Math.PI / 90), 10 * Math.sin(_angle * Math.PI / 90), 5]];
 	[_light2 setPosition:[10 * Math.sin(_angle * Math.PI / 90), 2 * Math.cos(_angle * Math.PI / 30), 5]];
 	[_light3 setPosition:[5 * Math.cos(_angle * Math.PI / 60), 5 * Math.cos(_angle * Math.PI / 120), 5]];
-	[_lightRenderer renderLights];
-	
-	[_sphere render:_lightRenderer];
+
+	// Render the scene
+	[[RendererManager getInstance] render];
 
 	_angle = _angle + 1 % 360;
-
 	
 	// flush
 	[_glContext flush];
 }
-
 
 @end

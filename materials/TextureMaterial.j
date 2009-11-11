@@ -11,7 +11,7 @@
 }
 
 - (id)initWithTextureFile:(CPString)textureFilename {
-	self = [super init];
+	self = [super initWithRendererType:GENERIC_PIXEL_RENDERER_TYPE];
 	
 	if (self) {
 		_textureFilename = textureFilename;
@@ -22,7 +22,7 @@
 }
 
 - (id)initWithTextureFileAndShininess:(CPString)textureFilename shininess:(float)shininess {
-	self = [super init];
+	self = [super initWithRendererType:GENERIC_PIXEL_RENDERER_TYPE];
 	
 	if (self) {
 		_textureFilename = textureFilename;
@@ -44,7 +44,10 @@
 	[_primitive prepareNormals:glContext];
 }
 
-- (void)prepareRenderer:(GLRenderer)renderer {
+- (void)prepareRenderer {
+	
+	var renderer = [[RendererManager getInstance] getRenderer:_rendererType];
+	
 	[renderer setTexCoordBufferData:[_primitive getUVBufferId]];
 
 	// Bind the texture

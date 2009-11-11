@@ -7,7 +7,7 @@
 }
 
 - (id)init {
-	self = [super init];
+	self = [super initWithRendererType:SIMPLE_COLOR_RENDERER_TYPE];
 	
 	if (self) {
 
@@ -31,7 +31,10 @@
 	_colorBufferId = [glContext createBufferFromArray:_colorData];
 }
 
-- (void)prepareRenderer:(GLRenderer)renderer {
+- (void)prepareRenderer {
+	
+	var renderer = [[RendererManager getInstance] getRenderer:_rendererType];
+
 	[renderer setColorBufferData:_colorBufferId];
 }
 

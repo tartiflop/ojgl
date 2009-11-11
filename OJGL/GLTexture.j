@@ -1,6 +1,8 @@
 @import <Foundation/CPObject.j>
 @import "GLContext.j"
 
+var _allImages = nil;
+
 @implementation GLTexture : CPObject {
 	CPString _filename;
 	Image _image;
@@ -16,6 +18,10 @@
 		_filename = filename;
 		_glContext = glContext;
 		
+		if (_allImages == nil) {
+			_allImages = [[CPDictionary alloc] init];
+		}
+		
 		[self load];
 			
 	}
@@ -24,6 +30,14 @@
 }
 
 - (void)load {
+	
+	// Only load files once: reuse image data if used for different textures
+	if ([[_allImages allKeys] containsObject:_filename]) {
+		_image = [_allImages objectForKey:_filename];
+		onLoad();
+		
+		return;
+	}
 	
 	_image = new Image();
 	
@@ -47,7 +61,11 @@
 }
 
 - (void)onLoad {
-	CPLog.info("Loaded texture data from " + _filename)
+	// Save image data
+	if (![[_allImages allKeys] containsObject:_filename]) {
+		CPLog.info("Loaded texture data from " + _filename)
+		[_allImages setObject:_image forKey:_filename];
+	}
 	
 	_textureId = [_glContext createTextureFromImage:_image];
 }

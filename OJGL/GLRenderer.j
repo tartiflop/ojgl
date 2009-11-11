@@ -20,6 +20,9 @@
 	Matrix4D _projectionMatrix;
 	Matrix4D _mvMatrix;
 	Matrix4D _mvpMatrix;
+	
+	
+	Array _primitivesToRender;
 }
 
 - (id)initWithContext:(GLContext)context vertexShaderFile:(CPString)vertexShaderFile fragmentShaderFile:(CPString)fragmentShaderFile {
@@ -36,6 +39,8 @@
         _projectionMatrix = new Matrix4D();
        	_mvMatrix = new Matrix4D();
        	_mvpMatrix = new Matrix4D();
+       	
+       	_primitivesToRender = [];
 	}
 	
 	return self;
@@ -78,19 +83,19 @@
 
 
 - (void)setProjectionMatrix:(Matrix4D)projectionMatrix {
-	_projectionMatrix = projectionMatrix;
+	_projectionMatrix = new Matrix4D(projectionMatrix);
 	
 	[self setupMatrices];
 }
 
 - (void)setViewMatrix:(Matrix4D)viewMatrix {
-	_viewMatrix = viewMatrix;
+	_viewMatrix = new Matrix4D(viewMatrix);
 	
 	[self setupMatrices];
 }
 
 - (void)setModelMatrix:(Matrix4D)modelMatrix {
-	_modelMatrix = modelMatrix;
+	_modelMatrix = new Matrix4D(modelMatrix);
 	
 	[self setupMatrices];
 }
@@ -119,6 +124,46 @@
 - (void)setElementBufferData:(int)bufferId {
 	// Bind element index buffer
 	[_glContext bindElementBuffer:bufferId];
+}
+
+
+- (void)addPrimitive:(GLPrimitive)primitive {
+	_primitivesToRender.push(primitive);
+}
+
+- (int)addLight:(GLLight)light {
+}
+
+- (void)setSceneAmbient:(String)ambient {
+}
+
+- (void)renderLights {
+}
+
+- (void)render {
+	// Set as active renderer
+	[self setActive];
+	
+	// Render lights if needed
+	[self renderLights];
+	
+	for (var i = 0; i < _primitivesToRender.length; i++) {
+
+		// Prepare the material to be rendered
+		[[_primitivesToRender[i] getMaterial] prepareRenderer];
+
+		// Set model view matrix
+		[self setModelMatrix:[_primitivesToRender[i] getTransformation]];
+		
+		// Send the vertex data to the renderer
+		[self setVertexBufferData:[_primitivesToRender[i] getVertexBufferId]];
+		
+		// Bind element index buffer
+		[self setElementBufferData:[_primitivesToRender[i] getIndicesBufferId]];
+
+		// render elements
+		[self drawElements:[_primitivesToRender[i] numberOfElements]];
+	}
 }
 
 @end

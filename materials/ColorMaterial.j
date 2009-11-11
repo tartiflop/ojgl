@@ -10,7 +10,7 @@
 }
 
 - (id)initWithHexColors:(String)ambient diffuse:(String)diffuse specular:(String)specular shininess:(float)shininess {
-	self = [super init];
+	self = [super initWithRendererType:GENERIC_RENDERER_TYPE];
 	
 	if (self) {
 		_ambientColor = hexToRGB(ambient);
@@ -28,7 +28,9 @@
 	[_primitive prepareNormals:glContext];
 }
 
-- (void)prepareRenderer:(GLRenderer)renderer {
+- (void)prepareRenderer {
+	
+	var renderer = [[RendererManager getInstance] getRenderer:_rendererType];
 	[renderer setNormalBufferData:[_primitive getNormalBufferId]];
 
 	[renderer setMaterialData:_ambientColor diffuseColor:_diffuseColor specularColor:_specularColor shininess:_shininess];

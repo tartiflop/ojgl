@@ -59,43 +59,20 @@
 	_normalBufferId = [glContext createBufferFromArray:_normals];
 }
 
-- (void)render:(GLRenderer)renderer {
-	
-	// Prepare the material to be rendered
-	[_material prepareRenderer:renderer];
-	
-	// Set model view matrix
-	[renderer setModelMatrix:_transformation];
-
-	// Send the vertex data to the renderer
-	[renderer setVertexBufferData:_vertexBufferId];
-	
-	// Bind element index buffer
-	[renderer setElementBufferData:_indicesBufferId];
-
-	// render elements
-	[renderer drawElements:_indices.length];
-}
-
-/**
- * Rotates by given angle about given vector
- */
 - (void)rotate:(float)angle x:(float)x y:(float)y z:(float)z {
 	_transformation.rotate(angle, x, y, z);
 }
 
-/**
- * Translates along given vector
- */
+- (void)setRotation:(float)angle x:(float)x y:(float)y z:(float)z {
+	_transformation.setRotation(angle, x, y, z);
+}
+
 - (void)translate:(float)x y:(float)y z:(float)z {
 	_transformation.translate(x, y, z);
 }
 
-/**
- * Translates to given position
- */
-- (void)translateTo:(float)x y:(float)y z:(float)z {
-	_transformation.translateTo(x, y, z);
+- (void)setTranslation:(float)x y:(float)y z:(float)z {
+	_transformation.setTranslation(x, y, z);
 }
 
 - (void)resetTransformation {
@@ -130,10 +107,25 @@
 	return _uvBufferId;
 }
 
+- (int)getVertexBufferId {
+	return _vertexBufferId;
+}
+
 - (int)getNormalBufferId {
 	return _normalBufferId;
 }
 
+- (int)getIndicesBufferId {
+	return _indicesBufferId;
+}
+
+- (GLMaterial)getMaterial {
+	return _material;
+}
+
+- (Matrix4D)getTransformation {
+	return _transformation;
+}
 
 
 @end

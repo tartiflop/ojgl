@@ -4,20 +4,18 @@
 @import "../../primitives/SphereBurst.j"
 @import "../../materials/TextureMaterial.j"
 @import "../../materials/RandomColorMaterial.j"
-@import "../../renderers/GenericRenderer.j"
-@import "../../renderers/SimpleColorRenderer.j"
+@import "../../renderers/RendererManager.j"
 
 @implementation SphereView : GLView {
 	GLContext _glContext;
-	GLRenderer _textureRenderer;
-	GLRenderer _colorRenderer;
 	
-	Sphere _textureSphere;
-	SphereBurst _colorSphere;
 	float _angle;
 	BOOL _ready;
     Matrix4D _lookAt;
     float _keyX, _keyY, _keyZ;
+    
+    Array _sceneObjects;
+    
 }
 
 - (id)initWithFrame:(CGRect)aFrame {
@@ -26,12 +24,17 @@
 	if (self) {
 		_ready = NO;
 		_keyX = _keyY = _keyZ = 0;
+		
+		_sceneObjects = [];
+		
 		// Get the OpenGL Context
 		_glContext = [self glContext];
 
-		// Initialise the color renderer, load texture renderer when ready
-		_colorRenderer = [[SimpleColorRenderer alloc] initWithContext:_glContext];
-		[_colorRenderer load:self onComplete:@selector(initTextureRenderer)];
+		// Initialise the renderer manager
+		[[RendererManager alloc] initWithContext:_glContext];
+		
+		// build the scene
+		[self initScene];
 	}
 	
 	return self;
@@ -55,32 +58,42 @@
 	[_glContext prepare:[0.0, 0.0, 0.0, 1] clearDepth:1.0];
 	[_glContext enableBackfaceCulling];
 	[_glContext enableTexture];
-
-	// Create sphere with Texture material
-	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg"];
-	var _textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:1.2 longs:25 lats:25];
-	[_textureSphere prepareGL:_glContext];
 	
-	// Create sphere with Color material
-	var colorMaterial = [[RandomColorMaterial alloc] init];
-	var _colorSphere = [[SphereBurst alloc] initWithGeometry:colorMaterial radius:1.2 longs:25 lats:25];
-	[_colorSphere prepareGL:_glContext];
+	for (var k = 0; k < 3; k++) {
+		for (var j = 0; j < 3; j++) {
+			for (var i = 0; i < 3; i++) {
+                var primitive;
+				
+				if ((i + j + k) % 2 == 0) {
+
+					var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg"];
+					primitive = [[Sphere alloc] initWithGeometry:textureMaterial radius:1.2 longs:25 lats:25];
+                    [primitive setTranslation:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
+
+				} else {
+					var colorMaterial = [[RandomColorMaterial alloc] init];
+					primitive = [[SphereBurst alloc] initWithGeometry:colorMaterial radius:1.2 longs:25 lats:25];
+                    [primitive setTranslation:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
+		
+				}
+
+				[primitive prepareGL:_glContext];
+				[[RendererManager getInstance] addPrimitive:primitive];
+				_sceneObjects.push(primitive);
+			}
+		}		
+	}		
+
 	
 	// reshape 
 	[_glContext reshape:[self width] height:[self height]];
 
-	// Initialise projection matrix
-//	var ortho = [GLU ortho:-16 right:16 bottom:-12 top:12 near:1 far:10000];
-	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:0.1 far:1000];
-    _lookAt = new Matrix4D(); _lookAt.tz = 0;
-    [_textureRenderer setActive];
-	[_textureRenderer setProjectionMatrix:perspective];
-	[_textureRenderer setViewMatrix:_lookAt];
+	// Initialise view and projection matrices
+	_lookAt = [GLU lookAt:0 eyey:0 eyez:15 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	[[RendererManager getInstance] setViewMatrix:_lookAt];
 	
-	// Send projection matrices to the renderers (shaders)
-	[_colorRenderer setActive];
-	[_colorRenderer setProjectionMatrix:perspective];
-	[_colorRenderer setViewMatrix:_lookAt];
+	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
+	[[RendererManager getInstance] setProjectionMatrix:perspective];
 
 	_ready = YES;
 }
@@ -125,52 +138,29 @@
 	if (!_ready) {
 		return;
 	}
-    _lookAt.tx += _keyX;
-    _lookAt.ty += _keyY;
-    _lookAt.tz += _keyZ;
+    
 	// recalculate rotation matrix
 	_angle = (_angle + 0.5) % 360;
 
 	// Clear context
 	[_glContext clearBuffer];
 
-	// Multiple renderings of texture sphere
-	[_textureRenderer setActive];
-	[_textureSphere resetTransformation];
-	[_textureRenderer setViewMatrix:_lookAt];
-	[_textureSphere rotate:_angle x:0 y:1 z:0];
-	for (var k = 0; k < 3; k++) {
-		for (var j = 0; j < 3; j++) {
-			for (var i = 0; i < 3; i++) {
-                if ((i + j + k) % 2 == 0) {
-					// Translate sphere, activate the texture renderer and render the texture sphere
-                    [_textureSphere translateTo:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
-					[_textureSphere render:_textureRenderer];
-				}
-			}
-		}		
-	}		
+	// Update camera position
+	_lookAt.tx += _keyX;
+	_lookAt.ty += _keyY;
+	_lookAt.tz += _keyZ;
+	[[RendererManager getInstance] setViewMatrix:_lookAt];
+
+	// Rotate all spheres
+	for (var i = 0; i < _sceneObjects.length; i++) {
+		[_sceneObjects[i] setRotation:_angle x:0 y:1 z:0]
+	}
 	
-	// Multiple renderings of color sphere
-	[_colorRenderer setActive];
-	[_colorSphere resetTransformation];
-	[_colorRenderer setViewMatrix:_lookAt];
-	[_colorSphere rotate:_angle x:0 y:1 z:0];
-	for (var k = 0; k < 3; k++) {
-		for (var j = 0; j < 3; j++) {
-			for (var i = 0; i < 3; i++) {
-				if ((i + j + k) % 2 == 1) {
-					// Translate sphere, activate the color renderer and render the color sphere
-                    [_colorSphere translateTo:((i - 1) * 4) y:((j - 1) * 4) z:((k - 1) * 4)];
-					[_colorSphere render:_colorRenderer];
-				}
-			}
-		}		
-	}		
-	
+	// Render the scene
+	[[RendererManager getInstance] render];
+
 	// flush
-//	[_glContext flush];
-// Flush performed in GLView?
+	[_glContext flush];
 }
 
 
