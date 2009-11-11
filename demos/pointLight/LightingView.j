@@ -44,7 +44,7 @@
 	[_glContext enableBackfaceCulling];
 
 	// Create sphere with Color material
-	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
+	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7 precise:YES];
 	var _sphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
 	[_sphere prepareGL:_glContext];
 	[[RendererManager getInstance] addPrimitive:_sphere];
