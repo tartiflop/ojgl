@@ -47,17 +47,17 @@
 
 	// Create sphere with Color material
 	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg" shininess:0.7 precise:YES];
-	_textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:2 longs:6 lats:6];
+	_textureSphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:2 longs:25 lats:25];
 	[_textureSphere prepareGL:_glContext];
-	[_textureSphere setTranslation:-3 y:0 z:0];
+	[_textureSphere setTranslation:-2.5 y:0 z:0];
 	[[RendererManager getInstance] addPrimitive:_textureSphere];
 	
 
 	// Create sphere with Color material
-	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7 precise:YES];
+	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.9 precise:YES];
 	_colorSphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:2 longs:25 lats:25];
 	[_colorSphere prepareGL:_glContext];
-	[_colorSphere setTranslation:3 y:0 z:0];
+	[_colorSphere setTranslation:2.5 y:0 z:0];
 	[[RendererManager getInstance] addPrimitive:_colorSphere];
 	
 
@@ -75,11 +75,11 @@
 	[[RendererManager getInstance] addLight:_light3];
 
 	// Set the scene ambient color
-	[[RendererManager getInstance] setSceneAmbient:"222222"];
+	[[RendererManager getInstance] setSceneAmbient:"333333"];
 	
 
 	// Initialise view and projection matrices
-	var lookat = [GLU lookAt:0 eyey:0 eyez:10 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
+	var lookat = [GLU lookAt:0 eyey:4 eyez:6 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
 	[[RendererManager getInstance] setViewMatrix:lookat];
 	
 	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
@@ -104,10 +104,12 @@
 	// rotate spheres
 	[_textureSphere setRotation:_sphereAngle x:0 y:1 z:0];
 
-	[_light1 setPosition:[2 * Math.cos(_lightAngle * Math.PI / 90), 10 * Math.sin(_lightAngle * Math.PI / 90), 5]];
-	[_light2 setPosition:[10 * Math.sin(_lightAngle * Math.PI / 90), 2 * Math.cos(_lightAngle * Math.PI / 30), 5]];
-	[_light3 setPosition:[5 * Math.cos(_lightAngle * Math.PI / 60), 5 * Math.cos(_lightAngle * Math.PI / 120), 5]];
+	[_light1 setPosition:[6 * Math.sin(_lightAngle * Math.PI / 60), 4 * Math.cos(_lightAngle * Math.PI / 60), 2]];
+	[_light2 setPosition:[6 * Math.cos(_lightAngle * Math.PI / 90), 4 * Math.sin(_lightAngle * Math.PI / 45), 3]];
+	[_light3 setPosition:[6 * Math.cos(_lightAngle * Math.PI / 60), 4 * Math.cos(_lightAngle * Math.PI / 120), 3]];
 
+	CPLog.info(5 * Math.cos(_lightAngle * Math.PI / 90));
+	
 	// Render the scene
 	[[RendererManager getInstance] render];
 

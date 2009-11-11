@@ -20,6 +20,7 @@
 		_ambientColor = hexToRGB(ambient);
 		_diffuseColor = hexToRGB(diffuse);
 		_specularColor = hexToRGB(specular);
+
 		_shininess = shininess; 
 	}
 	
