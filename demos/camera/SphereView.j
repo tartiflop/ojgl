@@ -4,13 +4,13 @@
 @import "../../primitives/SphereBurst.j"
 @import "../../materials/TextureMaterial.j"
 @import "../../materials/RandomColorMaterial.j"
-@import "../../renderers/SimpleTexRenderer.j"
+@import "../../renderers/GenericRenderer.j"
 @import "../../renderers/SimpleColorRenderer.j"
 
 @implementation SphereView : GLView {
 	GLContext _glContext;
-	SimpleTexRenderer _textureRenderer;
-	SimpleColorRenderer _colorRenderer;
+	GLRenderer _textureRenderer;
+	GLRenderer _colorRenderer;
 	
 	Sphere _textureSphere;
 	SphereBurst _colorSphere;
@@ -45,7 +45,7 @@
 - (void)initTextureRenderer {
 	
 	// Initialise the texture renderer, create scene when ready
-	_textureRenderer = [[SimpleTexRenderer alloc] initWithContext:_glContext];
+	_textureRenderer = [[GenericRenderer alloc] initWithContext:_glContext];
 	[_textureRenderer load:self onComplete:@selector(initScene)]
 }
 

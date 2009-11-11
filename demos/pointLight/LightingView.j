@@ -2,12 +2,12 @@
 @import "../../OJGL/GLU.j"
 @import "../../OJGL/GLLight.j"
 @import "../../primitives/Sphere.j"
-@import "../../materials/ShadedColorMaterial.j"
-@import "../../renderers/SimpleLightRenderer.j"
+@import "../../materials/ColorMaterial.j"
+@import "../../renderers/GenericRenderer.j"
 
 @implementation LightingView : GLView {
 	GLContext _glContext;
-	SimpleLightRenderer _lightRenderer;
+	GLRenderer _lightRenderer;
 	GLLight _light1;
 	GLLight _light2;
 	GLLight _light3;
@@ -27,8 +27,9 @@
 		_glContext = [self glContext];
 
 		// Initialise the light renderer
-		_lightRenderer = [[SimpleLightRenderer alloc] initWithContext:_glContext];
+		_lightRenderer = [[GenericRenderer alloc] initWithContext:_glContext];
 		[_lightRenderer load:self onComplete:@selector(initScene)];
+		[_lightRenderer setSceneAmbient:"191919"];
 		
 		_angle = 0;
 	}
@@ -43,7 +44,7 @@
 	[_glContext enableBackfaceCulling];
 
 	// Create sphere with Color material
-	var colorMaterial = [[ShadedColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
+	var colorMaterial = [[ColorMaterial alloc] initWithHexColors:"BBBBBB" diffuse:"FFFFFF" specular:"FFFFFF" shininess:0.7];
 	var _sphere = [[Sphere alloc] initWithGeometry:colorMaterial radius:4 longs:100 lats:100];
 	[_sphere prepareGL:_glContext];
 	

@@ -2,12 +2,12 @@
 @import "../../OJGL/GLU.j"
 @import "../../OJGL/GLLight.j"
 @import "../../primitives/Sphere.j"
-@import "../../materials/ShadedColorMaterial.j"
-@import "../../renderers/TextureLightingRenderer.j"
+@import "../../materials/TextureMaterial.j"
+@import "../../renderers/GenericRenderer.j"
 
 @implementation TextureLightingView : GLView {
 	GLContext _glContext;
-	SimpleLightRenderer _lightRenderer;
+	GLRenderer _lightRenderer;
 	GLLight _light1;
 	GLLight _light2;
 	GLLight _light3;
@@ -27,8 +27,10 @@
 		_glContext = [self glContext];
 
 		// Initialise the light renderer
-		_lightRenderer = [[TextureLightingRenderer alloc] initWithContext:_glContext];
+		_lightRenderer = [[GenericRenderer alloc] initWithContext:_glContext];
 		[_lightRenderer load:self onComplete:@selector(initScene)];
+		[_lightRenderer setSceneAmbient:"222222"];
+	//	[_lightRenderer setLightingEnabled:NO];
 		
 		_angle = 0;
 	}
@@ -41,10 +43,9 @@
 	// Prepare (initialise) context
 	[_glContext prepare:[0.0, 0.0, 0.0, 1] clearDepth:1.0];
 	[_glContext enableBackfaceCulling];
-	[_glContext enableTexture];
 
 	// Create sphere with Color material
-	var textureMaterial = [[TextureMaterial alloc] initWithTextureFile:"Resources/images/mars.jpg"];
+	var textureMaterial = [[TextureMaterial alloc] initWithTextureFileAndShininess:"Resources/images/mars.jpg" shininess:0.7];
 	var _sphere = [[Sphere alloc] initWithGeometry:textureMaterial radius:4 longs:100 lats:100];
 	[_sphere prepareGL:_glContext];
 	
