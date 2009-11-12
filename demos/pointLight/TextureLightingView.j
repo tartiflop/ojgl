@@ -62,16 +62,13 @@
 	
 
 	// Create the lights
-	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];
-	[_light1 setAttenuation:0.02];
+	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF" attenuation:0.02];
 	[[RendererManager getInstance] addLight:_light1];
 	
-	_light2 = [[GLLight alloc] initWithHexColor:"FF0000" specularColor:"FFFFFF"];
-	[_light2 setAttenuation:0.02];
+	_light2 = [[GLLight alloc] initWithHexColor:"FF0000" specularColor:"FFFFFF" attenuation:0.02];
 	[[RendererManager getInstance] addLight:_light2];
 	
-	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF"];
-	[_light3 setAttenuation:0.02];
+	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF" attenuation:0.02];
 	[[RendererManager getInstance] addLight:_light3];
 
 	// Set the scene ambient color
@@ -107,8 +104,6 @@
 	[_light1 setPosition:[6 * Math.sin(_lightAngle * Math.PI / 60), 4 * Math.cos(_lightAngle * Math.PI / 60), 2]];
 	[_light2 setPosition:[6 * Math.cos(_lightAngle * Math.PI / 90), 4 * Math.sin(_lightAngle * Math.PI / 45), 3]];
 	[_light3 setPosition:[6 * Math.cos(_lightAngle * Math.PI / 60), 4 * Math.cos(_lightAngle * Math.PI / 120), 3]];
-
-	CPLog.info(5 * Math.cos(_lightAngle * Math.PI / 90));
 	
 	// Render the scene
 	[[RendererManager getInstance] render];

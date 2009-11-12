@@ -49,16 +49,13 @@
 	[_sphere prepareGL:_glContext];
 	[[RendererManager getInstance] addPrimitive:_sphere];
 	
-	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF"];
-	[_light1 setAttenuation:0.02];
+	_light1 = [[GLLight alloc] initWithHexColor:"0000FF" specularColor:"FFFFFF" attenuation:0.02];
 	[[RendererManager getInstance] addLight:_light1];
 	
-	_light2 = [[GLLight alloc] initWithHexColor:"FF0000" specularColor:"FFFFFF"];
-	[_light2 setAttenuation:0.05];
+	_light2 = [[GLLight alloc] initWithHexColor:"FF0000" specularColor:"FFFFFF" attenuation:0.02];
 	[[RendererManager getInstance] addLight:_light2];
 	
-	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF"];
-	[_light3 setAttenuation:0.05];
+	_light3 = [[GLLight alloc] initWithHexColor:"00FF00" specularColor:"FFFFFF" attenuation:0.02];
 	[[RendererManager getInstance] addLight:_light3];
 
 	// Set the scene ambient color
