@@ -10,12 +10,12 @@
 	float _attenuation;
 }
 
-- (id)initWithHexColor:(String)color specularColor:(String)specularColor {
+- (id)initWithHexColor:(String)color specularColor:(String)specularColor attenuation:(float)attenuation {
 	self = [super init];
 	
 	if (self) {
 		_position = [0, 0, 0];
-		_attenuation = 0;
+		_attenuation = attenuation;
 		
 		_ambientLight = hexToRGB(color);
 		_diffuseLight = [_ambientLight[0], _ambientLight[1], _ambientLight[2], 1.0];

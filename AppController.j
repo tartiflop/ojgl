@@ -1,9 +1,7 @@
 @import <Foundation/CPObject.j>
 @import <Foundation/CPRunLoop.j>
 @import "utils/Framerate.j"
-@import "demos/camera/SphereView.j"
-@import "demos/pointLight/LightingView.j"
-@import "demos/pointLight/TextureLightingView.j"
+@import "demos/pointLight/LightingDemoView.j"
 
 @implementation AppController : CPObject {
 	CPLabel _label;
@@ -20,7 +18,7 @@ app = self;
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"EEEEEE"]];
 
 	// Create GL View
-	_view = [[TextureLightingView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	_view = [[LightingDemoView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
 	[_view setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[_view setCenter:[contentView center]];
 	[contentView addSubview:_view];
@@ -32,7 +30,6 @@ app = self;
 	[_label setFont:[CPFont boldSystemFontOfSize:16.0]];
     [_label setBackgroundColor:[CPColor colorWithHexString:@"FF0000"]];
 	[_label sizeToFit];
-//	[_label setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[contentView addSubview:_label];
 
 	// Framerate
