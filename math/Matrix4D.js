@@ -90,7 +90,7 @@ Matrix4D.prototype.getAsArray = function() {
  * Returns a column major canvas float array, specifically for passing to opengl
  */
  Matrix4D.prototype.getAsColumnMajorCanvasFloatArray = function() {
-	return new CanvasFloatArray([this.sxx, this.syx, this.szx, this.swx,
+	return new WebGLFloatArray([this.sxx, this.syx, this.szx, this.swx,
 										  this.sxy, this.syy, this.szy, this.swy,
 										  this.sxz, this.syz, this.szz, this.swz,
 										  this.tx,  this.ty,  this.tz,  this.tw]);
@@ -100,7 +100,7 @@ Matrix4D.prototype.getAsArray = function() {
  * Returns a column major canvas float array, specifically for passing to opengl
  */
 Matrix4D.prototype.getAs3x3ColumnMajorCanvasFloatArray = function() {
-	return new CanvasFloatArray([this.sxx, this.syx, this.szx,
+	return new WebGLFloatArray([this.sxx, this.syx, this.szx,
 								  this.sxy, this.syy, this.szy,
 								  this.sxz, this.syz, this.szz]);
 }

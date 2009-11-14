@@ -87,7 +87,7 @@
 	_gl.bindBuffer(_gl.ARRAY_BUFFER, bufferIndex);
 	
 	// Copy data from local memory
-	_gl.bufferData(_gl.ARRAY_BUFFER, new CanvasFloatArray(array), _gl.STATIC_DRAW);
+	_gl.bufferData(_gl.ARRAY_BUFFER, new WebGLFloatArray(array), _gl.STATIC_DRAW);
 	
 	return bufferIndex;
 }
@@ -98,7 +98,7 @@
 	_gl.bindBuffer(_gl.ELEMENT_ARRAY_BUFFER, bufferIndex);
 	
 	// Copy data from local memory
-	_gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, new CanvasUnsignedShortArray(array), _gl.STATIC_DRAW);
+	_gl.bufferData(_gl.ELEMENT_ARRAY_BUFFER, new WebGLUnsignedShortArray(array), _gl.STATIC_DRAW);
 	
 	return bufferIndex;
 }
