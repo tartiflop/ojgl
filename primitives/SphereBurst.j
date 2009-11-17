@@ -46,8 +46,8 @@
 			var u = 1 - (longNumber / _longs);
 			var v = latNumber / _lats;
 		
-			_vertices.push(_radius * x + Math.random());
-			_vertices.push(_radius * y + Math.random());
+			_vertices.push(_radius * x);
+			_vertices.push(_radius * y + Math.random()/2);
 			_vertices.push(_radius * z);
 			
 			_normals.push(x);

@@ -92,7 +92,7 @@
 	_lookAt = [GLU lookAt:0 eyey:0 eyez:15 centerx:0 centery:0 centerz:0 upx:0 upy:1 upz:0];
 	[[RendererManager getInstance] setViewMatrix:_lookAt];
 	
-	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:1 far:10000];
+	var perspective = [GLU perspective:60 aspect:[self width]/[self height] near:0.1 far:1000];
 	[[RendererManager getInstance] setProjectionMatrix:perspective];
 
 	_ready = YES;
