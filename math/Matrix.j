@@ -131,15 +131,12 @@ function Matrix_multiply( matrix1, m2) {
 	matrix1.m13 = m1.m1 * m2.m12 + m1.m5 * m2.m13 + m1.m9  * m2.m14 + m1.m13 * m2.m15;
 	matrix1.m14 = m1.m2 * m2.m12 + m1.m6 * m2.m13 + m1.m10 * m2.m14 + m1.m14 * m2.m15;
 	matrix1.m15 = m1.m3 * m2.m12 + m1.m7 * m2.m13 + m1.m11 * m2.m14 + m1.m15 * m2.m15;
-
-// C version mutates matrix1, might not want to keep this behaviour	
-//	return matrix1;
 }
 
-// C version for not mutating, doesn't translate well to Javascript
 function Matrix_multiplied( matrix1, matrix2) {
-	Matrix_multiply(matrix1, matrix2);
-	return matrix1;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_multiply(m1, matrix2);
+	return m1;
 }
 
 function Matrix_translate( matrix, x, y, z) {
@@ -153,8 +150,9 @@ function Matrix_translate( matrix, x, y, z) {
 }
 
 function Matrix_translated(matrix,  x,  y,  z) {
-	Matrix_translate(matrix, x, y, z);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_translate(m1, x, y, z);
+	return m1;
 }
 
 function Matrix_scale( matrix,  x,  y,  z) {
@@ -168,8 +166,9 @@ function Matrix_scale( matrix,  x,  y,  z) {
 }
 
 function Matrix_scaled( matrix,  x,  y,  z) {
-	Matrix_scale(matrix, x, y, z);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_scale(m1, x, y, z);
+	return m1;
 }
 
 function Matrix_rotate( matrix,  axis,  angle) {
@@ -182,8 +181,9 @@ function Matrix_rotate( matrix,  axis,  angle) {
 }
 
 function Matrix_rotated( matrix,  axis,  angle) {
-	Matrix_rotate(matrix, axis, angle);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_rotate(m1, axis, angle);
+	return m1;
 }
 
 function Matrix_shearX( matrix,  y,  z) {
@@ -196,8 +196,9 @@ function Matrix_shearX( matrix,  y,  z) {
 }
 
 function Matrix_shearedX( matrix,  y,  z) {
-	Matrix_shearX(matrix, y, z);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_shearX(m1, y, z);
+	return m1;
 }
 
 function Matrix_shearY( matrix,  x,  z) {
@@ -210,8 +211,9 @@ function Matrix_shearY( matrix,  x,  z) {
 }
 
 function Matrix_shearedY( matrix,  x,  z) {
-	Matrix_shearY(matrix, x, z);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_shearY(m1, x, z);
+	return m1;
 }
 
 function Matrix_shearZ( matrix,  x,  y) {
@@ -224,8 +226,9 @@ function Matrix_shearZ( matrix,  x,  y) {
 }
 
 function Matrix_shearedZ( matrix,  x,  y) {
-	Matrix_shearZ(matrix, x, y);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_shearZ(m1, x, y);
+	return m1;
 }
 
 function Matrix_applyPerspective( matrix,  fovY,  aspect,  zNear,  zFar) {
@@ -251,8 +254,9 @@ function Matrix_applyPerspective( matrix,  fovY,  aspect,  zNear,  zFar) {
 }
 
 function Matrix_perspective( matrix,  fovY,  aspect,  zNear,  zFar) {
-	Matrix_applyPerspective(matrix, fovY, aspect, zNear, zFar);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_applyPerspective(m1, fovY, aspect, zNear, zFar);
+	return m1;
 }
 
 function Matrix_transpose( matrix) {
@@ -263,8 +267,9 @@ function Matrix_transpose( matrix) {
 }
 
 function Matrix_transposed( matrix) {
-	Matrix_transpose(matrix);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_transpose(m1);
+	return m1;
 }
 
 // declared as static, intended to be private?
@@ -318,8 +323,9 @@ function Matrix_invert( matrix) {
 }
 
 function Matrix_inverted( matrix) {
-	Matrix_invert(matrix);
-	return matrix;
+	var m1 = Matrix_withMatrix(matrix1);
+	Matrix_invert(m1);
+	return m1;
 }
 
 function Matrix_multiplyVector( matrix,  vector) {

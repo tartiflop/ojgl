@@ -2,6 +2,7 @@
 @import <Foundation/CPRunLoop.j>
 @import "utils/Framerate.j"
 @import "demos/pointLight/LightingDemoView.j"
+@import "demos/camera/SphereView.j"
 
 @implementation AppController : CPObject {
 	CPLabel _label;
@@ -18,7 +19,7 @@ app = self;
 	[contentView setBackgroundColor:[CPColor colorWithHexString:@"EEEEEE"]];
 
 	// Create GL View
-	_view = [[LightingDemoView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
+	_view = [[SphereView alloc] initWithFrame:CGRectMake(0, 0, 1024, 768)];
 	[_view setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
 	[_view setCenter:[contentView center]];
 	[contentView addSubview:_view];
@@ -38,7 +39,7 @@ app = self;
 	// Add timer for fps label update
 	[CPTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(fps) userInfo:nil repeats:YES]; 
 	// Timer to redraw
-    [app fast];
+    [app slow];
 	[CPTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(run) userInfo:nil repeats:NO]; 
 
 	[theWindow orderFront:self];
