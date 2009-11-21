@@ -1,7 +1,6 @@
-#include "Vector.h"
 
-Vector Vector_withValues(float x, float y, float z) {
-	Vector vector;
+function Vector_withValues( x, y, z) {
+	var vector = {};
 	
 	vector.x = x;
 	vector.y = y;
@@ -9,42 +8,51 @@ Vector Vector_withValues(float x, float y, float z) {
 	return vector;
 }
 
-void Vector_normalize(Vector * vector) {
-	float magnitude;
-	
-	magnitude = sqrt((vector->x * vector->x) + (vector->y * vector->y) + (vector->z * vector->z));
-	vector->x /= magnitude;
-	vector->y /= magnitude;
-	vector->z /= magnitude;
+function Vector_withVector( vector) {
+    var result = {};
+
+	result.x = matrix.x;
+	result.y = matrix.y;
+	result.z = matrix.z;
+    return result;
 }
 
-Vector Vector_normalized(Vector vector) {
-	Vector_normalize(&vector);
+function Vector_normalize( vector) {
+	var magnitude;
+	
+	magnitude = Math.sqrt((vector.x * vector.x) + (vector.y * vector.y) + (vector.z * vector.z));
+	vector.x /= magnitude;
+	vector.y /= magnitude;
+	vector.z /= magnitude;
+}
+
+function Vector_normalized( vector) {
+	Vector_normalize(vector);
 	return vector;
 }
 
-float Vector_magnitude(Vector vector) {
+function Vector_magnitude( vector) {
 	return sqrt((vector.x * vector.x) + (vector.y * vector.y) + (vector.z * vector.z));
 }
 
-float Vector_magnitudeSquared(Vector vector) {
+function Vector_magnitudeSquared( vector) {
 	return ((vector.x * vector.x) + (vector.y * vector.y) + (vector.z * vector.z));
 }
 
-Vector Vector_add(Vector vector1, Vector vector2) {
+function Vector_add( vector1,  vector2) {
 	return Vector_withValues((vector1.x + vector2.x), (vector1.y + vector2.y), (vector1.z + vector2.z));
 }
 
-Vector Vector_subtract(Vector vector1, Vector vector2) {
+function Vector_subtract( vector1,  vector2) {
 	return Vector_withValues((vector1.x - vector2.x), (vector1.y - vector2.y), (vector1.z - vector2.z));
 }
 
-float Vector_dot(Vector vector1, Vector vector2) {
+function Vector_dot( vector1,  vector2) {
 	return ((vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z));
 }
 
-Vector Vector_cross(Vector vector1, Vector vector2) {
-	Vector result;
+function Vector_cross( vector1,  vector2) {
+	var result = {};
 	
 	result.x = ((vector1.y * vector2.z) - (vector1.z * vector2.y));
 	result.y = ((vector1.z * vector2.x) - (vector1.x * vector2.z));

@@ -6,6 +6,10 @@
 @import "../../materials/RandomColorMaterial.j"
 @import "../../renderers/RendererManager.j"
 
+@import "../../math/Matrix.j"
+@import "../../math/Vector.j"
+
+
 @implementation SphereView : GLView {
 	GLContext _glContext;
 	
